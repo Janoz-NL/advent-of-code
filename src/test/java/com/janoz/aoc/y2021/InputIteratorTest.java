@@ -23,12 +23,4 @@ public class InputIteratorTest {
         assertThat(cut.hasNext(), is(false));
     }
 
-    @Test
-    void testListWithLastNewline() throws Exception{
-        cut = new InputIterator("list.txt");
-
-        assertThat(cut.hasNext(), is(true));
-        assertThat(cut.next(), equalTo(1));
-        assertThat(cut.hasNext(), is(false));
-    }
 }

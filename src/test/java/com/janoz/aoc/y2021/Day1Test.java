@@ -22,13 +22,13 @@ public class Day1Test {
     @Test
     void testGivenIncrementExample() {
         Iterator<Integer> input = IntStream.of(199,200,208,210,200,207,240,269,260,263).boxed().iterator();
-        assertThat(cut.countIncreases(input), equalTo(Integer.valueOf(7)));
+        assertThat(cut.countIncreases(input), equalTo(7));
     }
 
     @Test
     void testGivenFilteredExample() {
         Iterator<Integer> input = IntStream.of(199,200,208,210,200,207,240,269,260,263).boxed().iterator();
-        assertThat(cut.countIncreases(new SlidingWindowIterator(input)), equalTo(Integer.valueOf(5)));
+        assertThat(cut.countIncreases(new SlidingWindowIterator(input)), equalTo(5));
 
     }
 }
