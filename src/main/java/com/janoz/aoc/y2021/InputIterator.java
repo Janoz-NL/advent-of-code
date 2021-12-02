@@ -4,15 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.function.Function;
 
-public class InputIterator implements Iterator<Integer> {
+public class InputIterator<T> implements Iterator<T> {
 
     private String next;
     private BufferedReader input;
+    private Function<String,T> mapper;
 
-    public InputIterator(String file) throws IOException {
+    public InputIterator(String file, Function<String,T> mapper) throws IOException {
         input = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(file)));
         next = input.readLine();
+        this.mapper = mapper;
     }
 
     @Override
@@ -21,9 +24,9 @@ public class InputIterator implements Iterator<Integer> {
     }
 
     @Override
-    public Integer next() {
+    public T next() {
         try {
-            Integer answer = Integer.parseInt(next);
+            T answer = mapper.apply(next);
             next = input.readLine();
             return answer;
         } catch (IOException e) {

@@ -10,7 +10,7 @@ public class Day1 {
         System.out.println(
                 new Day1().countIncreases(
                         new SlidingWindowIterator(
-                                new InputIterator("inputs/day1.txt"))));
+                                new InputIterator<>("inputs/day1.txt", Integer::valueOf))));
     }
 
 

@@ -8,11 +8,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InputIteratorTest {
 
-    InputIterator cut;
+    InputIterator<Integer> cut;
 
     @Test
     void testListWithoutLastNewline() throws Exception{
-        cut = new InputIterator("list.txt");
+        cut = new InputIterator<>("list.txt", Integer::valueOf);
 
         assertThat(cut.hasNext(), is(true));
         assertThat(cut.next(), equalTo(1));
