@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.function.Function;
 
-public class InputIterator<T> implements Iterator<T> {
+public class InputIterator<T> implements Iterator<T>, Iterable<T> {
 
     private String next;
     private BufferedReader input;
@@ -32,5 +32,10 @@ public class InputIterator<T> implements Iterator<T> {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(),e);
         }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return this;
     }
 }

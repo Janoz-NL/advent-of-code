@@ -1,7 +1,6 @@
 package com.janoz.aoc.y2021;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class Day2 {
 
@@ -11,11 +10,10 @@ public class Day2 {
                                 new InputIterator<>("inputs/day2.txt", Movement::new)));
     }
 
-    public int determinePosition1(Iterator<Movement> input) {
+    public int determinePosition1(Iterable<Movement> input) {
         int hor = 0;
         int depth = 0;
-        while (input.hasNext()) {
-            Movement m = input.next();
+        for(Movement m: input) {
             switch (m.direction) {
                 case FORWARD:
                     hor += m.length;
@@ -25,18 +23,16 @@ public class Day2 {
                     break;
                 case DOWN:
                     depth += m.length;
-
             }
         }
         return hor * depth;
     }
 
-    public int determinePosition2(Iterator<Movement> input) {
+    public int determinePosition2(Iterable<Movement> input) {
         int hor = 0;
         int aim = 0;
         int depth = 0;
-        while (input.hasNext()) {
-            Movement m = input.next();
+        for(Movement m: input) {
             switch (m.direction) {
                 case FORWARD:
                     hor += m.length;
