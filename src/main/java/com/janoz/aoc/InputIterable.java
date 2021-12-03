@@ -1,5 +1,7 @@
 package com.janoz.aoc;
 
+import com.janoz.aoc.y2021.day3.BitMapper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class InputIterable<T> implements Iterable<T> {
 
@@ -19,6 +23,10 @@ public class InputIterable<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return iterator;
+    }
+
+    public Stream<T> stream() {
+        return StreamSupport.stream(spliterator(),false);
     }
 
     private class InternalIterator implements Iterator<T> {
