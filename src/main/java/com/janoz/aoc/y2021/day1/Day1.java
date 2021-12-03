@@ -2,13 +2,12 @@ package com.janoz.aoc.y2021.day1;
 
 import com.janoz.aoc.InputIterable;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 public class Day1 {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println(
                 new Day1().countIncreases(
                         new SlidingWindowIterator(

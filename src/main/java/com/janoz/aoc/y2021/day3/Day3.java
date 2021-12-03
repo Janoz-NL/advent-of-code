@@ -2,13 +2,11 @@ package com.janoz.aoc.y2021.day3;
 
 import com.janoz.aoc.InputIterable;
 
-import java.io.IOException;
-
 public class Day3 {
 
     private final int bitmapSize;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println(new Day3(12)
                 .calculatePowerConsumption(
                         new InputIterable<>("inputs/day3.txt", new BitMapper())));

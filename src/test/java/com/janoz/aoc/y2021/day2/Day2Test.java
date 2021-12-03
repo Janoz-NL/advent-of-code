@@ -4,8 +4,6 @@ import com.janoz.aoc.InputIterable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -19,13 +17,13 @@ public class Day2Test {
     }
 
     @Test
-    public void testPart1() throws IOException {
+    public void testPart1() {
         int result = cut.determinePosition1(new InputIterable<>("inputs/day2example.txt", Movement::new));
         assertThat(result, equalTo(150));
     }
 
     @Test
-    public void testPart2() throws IOException {
+    public void testPart2() {
         int result = cut.determinePosition2(new InputIterable<>("inputs/day2example.txt", Movement::new));
         assertThat(result, equalTo(900));
     }
