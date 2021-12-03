@@ -1,18 +1,18 @@
-package com.janoz.aoc.y2021;
+package com.janoz.aoc;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class InputIteratorTest {
-
-    InputIterator<Integer> cut;
+public class InputIterableTest {
 
     @Test
-    void testListWithoutLastNewline() throws Exception{
-        cut = new InputIterator<>("list.txt", Integer::valueOf);
+    void testList() throws Exception{
+        Iterator<Integer> cut = new InputIterable<>("list.txt", Integer::valueOf).iterator();
 
         assertThat(cut.hasNext(), is(true));
         assertThat(cut.next(), equalTo(1));

@@ -1,4 +1,6 @@
-package com.janoz.aoc.y2021;
+package com.janoz.aoc.y2021.day2;
+
+import com.janoz.aoc.InputIterable;
 
 import java.io.IOException;
 
@@ -7,7 +9,7 @@ public class Day2 {
     public static void main(String[] args) throws IOException {
         System.out.println(
                 new Day2().determinePosition2(
-                                new InputIterator<>("inputs/day2.txt", Movement::new)));
+                                new InputIterable<>("inputs/day2.txt", Movement::new)));
     }
 
     public int determinePosition1(Iterable<Movement> input) {

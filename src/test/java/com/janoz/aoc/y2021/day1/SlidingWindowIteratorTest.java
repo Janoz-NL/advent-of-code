@@ -1,4 +1,4 @@
-package com.janoz.aoc.y2021;
+package com.janoz.aoc.y2021.day1;
 
 import org.junit.jupiter.api.Test;
 
