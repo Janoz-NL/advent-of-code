@@ -10,7 +10,7 @@ public class Board {
 
     int[][] numbers;
     int[][] positions;
-    int[][] flippedPositions;
+    int[][] transposedPositions;
 
     int winsInTurn;
 
@@ -25,7 +25,7 @@ public class Board {
                 positions[y][x] = positionMap[numbers[y][x]];
             }
         }
-        flippedPositions = flip(positions);
+        transposedPositions = transpose(positions);
         winsInTurn = winsInTurn();
     }
 
@@ -34,7 +34,7 @@ public class Board {
     }
 
 
-    private int[][] flip(int [][] input) {
+    private int[][] transpose(int [][] input) {
         int[][] output = new int[size][];
         for (int x = 0; x< size; x++) {
             output[x] = new int[size];
@@ -46,7 +46,7 @@ public class Board {
     }
 
     private int winsInTurn() {
-        return Math.min(winsInTurn(positions), winsInTurn(flippedPositions));
+        return Math.min(winsInTurn(positions), winsInTurn(transposedPositions));
     }
 
     public long getScore() {
