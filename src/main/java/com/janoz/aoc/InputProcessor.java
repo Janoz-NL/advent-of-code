@@ -1,22 +1,22 @@
 package com.janoz.aoc;
 
-import com.janoz.aoc.y2021.day3.BitMapper;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class InputIterable<T> implements Iterable<T> {
+public class InputProcessor<T> implements Iterable<T> {
 
     private InternalIterator iterator;
 
-    public InputIterable(String file, Function<String,T> mapper) {
+    public InputProcessor(String file, Function<String,T> mapper) {
         this.iterator = new InternalIterator(file, mapper);
     }
 
@@ -27,6 +27,10 @@ public class InputIterable<T> implements Iterable<T> {
 
     public Stream<T> stream() {
         return StreamSupport.stream(spliterator(),false);
+    }
+
+    public List<T> asList() {
+        return stream().collect(Collectors.toList());
     }
 
     private class InternalIterator implements Iterator<T> {
@@ -60,7 +64,5 @@ public class InputIterable<T> implements Iterable<T> {
                 throw new RuntimeException(e.getMessage(),e);
             }
         }
-
-
     }
 }

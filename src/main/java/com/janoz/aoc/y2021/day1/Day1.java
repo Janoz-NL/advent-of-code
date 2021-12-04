@@ -1,6 +1,6 @@
 package com.janoz.aoc.y2021.day1;
 
-import com.janoz.aoc.InputIterable;
+import com.janoz.aoc.InputProcessor;
 
 import java.util.Iterator;
 
@@ -11,7 +11,7 @@ public class Day1 {
         System.out.println(
                 new Day1().countIncreases(
                         new SlidingWindowIterator(
-                                new InputIterable<>("inputs/day1.txt", Integer::valueOf).iterator())));
+                                new InputProcessor<>("inputs/day1.txt", Integer::valueOf).iterator())));
     }
 
 

@@ -1,6 +1,6 @@
 package com.janoz.aoc.y2021.day3;
 
-import com.janoz.aoc.InputIterable;
+import com.janoz.aoc.InputProcessor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +16,11 @@ public class Day3 {
 
     public int part1(String input) {
         return calculatePowerConsumption(
-                        new InputIterable<>(input, new BitMapper()));
+                        new InputProcessor<>(input, new BitMapper()));
     }
 
     public int part2(String input) {
-        List<boolean[]> inputData = new InputIterable<>(input, new BitMapper()).stream().collect(Collectors.toList());
+        List<boolean[]> inputData = new InputProcessor<>(input, new BitMapper()).asList();
         return calculateOxygen(inputData) * calculateCo2(inputData);
     }
 
@@ -48,10 +48,6 @@ public class Day3 {
         return toDec(input.get(0));
     }
 
-
-    List<boolean[]> filter(List<boolean[]> input, int bitpos) {
-        return filter(input, bitpos,modusBits(input)[bitpos]);
-    }
 
     List<boolean[]> filter(List<boolean[]> input, int bitpos, boolean b) {
         return input.stream().filter(e -> e[bitpos] == b).collect(Collectors.toList());

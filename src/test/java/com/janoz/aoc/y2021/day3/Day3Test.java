@@ -1,11 +1,10 @@
 package com.janoz.aoc.y2021.day3;
 
-import com.janoz.aoc.InputIterable;
+import com.janoz.aoc.InputProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -19,7 +18,6 @@ public class Day3Test {
     void before() {
         cut = new Day3(5);
     }
-
 
     @Test
     public void testPart2() {
@@ -42,8 +40,10 @@ public class Day3Test {
 
     @Test
     public void testFilter() {
-        List<boolean[]> actual = cut.filter(getTestInputAsList(), 0);
-        assertThat(7, equalTo(actual.size()));
+        assertThat(cut.filter(getTestInputAsList(), 0, true).size(), equalTo(7));
+        assertThat(cut.filter(getTestInputAsList(), 0, false).size(), equalTo(5));
+        assertThat(cut.filter(getTestInputAsList(), 4, true).size(), equalTo(5));
+        assertThat(cut.filter(getTestInputAsList(), 4, false).size(), equalTo(7));
     }
 
     @Test
@@ -60,12 +60,11 @@ public class Day3Test {
     }
 
     private List<boolean[]> getTestInputAsList() {
-        return getTestInput().stream().collect(Collectors.toList());
+        return getTestInput().asList();
     }
 
-
-    private InputIterable<boolean[]> getTestInput() {
-        return new InputIterable<>("inputs/day3example.txt", new BitMapper());
+    private InputProcessor<boolean[]> getTestInput() {
+        return new InputProcessor<>("inputs/day3example.txt", new BitMapper());
     }
 
 }
