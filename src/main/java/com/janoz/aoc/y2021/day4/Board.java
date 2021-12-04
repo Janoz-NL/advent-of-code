@@ -6,19 +6,22 @@ import java.util.Arrays;
 
 public class Board {
 
-    private static final int SIZE = 5;
+    final int size;
 
-    int[][] numbers = new int[SIZE][];
-    int[][] positions = new int[SIZE][];
+    int[][] numbers;
+    int[][] positions;
     int[][] flippedPositions;
 
     int winsInTurn;
 
-    public Board(BufferedReader input, int[] positionMap) throws IOException {
-        for (int y=0;y<SIZE;y++) {
+    public Board(BufferedReader input, int[] positionMap, int size) throws IOException {
+        this.size = size;
+        numbers = new int[size][];
+        positions = new int[size][];
+        for (int y = 0; y< size; y++) {
             numbers[y] = fromLine(input.readLine().trim());
-            positions[y] = new int[SIZE];
-            for (int x=0;x<SIZE;x++) {
+            positions[y] = new int[size];
+            for (int x = 0; x< size; x++) {
                 positions[y][x] = positionMap[numbers[y][x]];
             }
         }
@@ -32,10 +35,10 @@ public class Board {
 
 
     private int[][] flip(int [][] input) {
-        int[][] output = new int[SIZE][];
-        for (int x=0;x<SIZE;x++) {
-            output[x] = new int[SIZE];
-            for (int y=0;y<SIZE;y++) {
+        int[][] output = new int[size][];
+        for (int x = 0; x< size; x++) {
+            output[x] = new int[size];
+            for (int y = 0; y< size; y++) {
                 output[x][y] = input[y][x];
             }
         }
@@ -46,10 +49,10 @@ public class Board {
         return Math.min(winsInTurn(positions), winsInTurn(flippedPositions));
     }
 
-    public int getScore() {
-        int score = 0;
-        for (int y=0;y<SIZE;y++) {
-            for (int x=0;x<SIZE;x++) {
+    public long getScore() {
+        long score = 0;
+        for (int y = 0; y< size; y++) {
+            for (int x = 0; x< size; x++) {
                 if (positions[y][x] > winsInTurn) {
                     score += numbers[y][x];
                 }
@@ -59,10 +62,12 @@ public class Board {
     }
 
     private int winsInTurn(int[][] values) {
+        //noinspection OptionalGetWithoutIsPresent
         return Arrays.stream(values).mapToInt(this::max).min().getAsInt();
     }
 
     private int max(int[] array) {
+        //noinspection OptionalGetWithoutIsPresent
         return Arrays.stream(array).max().getAsInt();
     }
 }

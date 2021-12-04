@@ -15,31 +15,31 @@ class Day4Test {
 
     @BeforeEach
     public void before() {
-        cut = new Day4();
+        cut = new Day4(5,100);
     }
 
     @Test
     public void testInitializing() throws IOException {
-        cut.init("inputs/day4example.txt");
+        cut.process("inputs/day4example.txt");
         assertThat(cut.winner.winsInTurn, equalTo(11));
     }
 
     @Test
     public void testBoardScore() throws IOException {
-        cut.init("inputs/day4example.txt");
-        assertThat(cut.winner.getScore(), equalTo(188));
+        cut.process("inputs/day4example.txt");
+        assertThat(cut.winner.getScore(), equalTo(188L));
     }
 
     @Test
     public void testScoreWinner() throws IOException {
-        cut.init("inputs/day4example.txt");
-        assertThat(cut.getScore(cut.winner), equalTo(4512));
+        cut.process("inputs/day4example.txt");
+        assertThat(cut.getScore(cut.winner), equalTo(4512L));
     }
 
     @Test
     public void testScoreLoser() throws IOException {
-        cut.init("inputs/day4example.txt");
-        assertThat(cut.getScore(cut.loser), equalTo(1924));
+        cut.process("inputs/day4example.txt");
+        assertThat(cut.getScore(cut.loser), equalTo(1924L));
     }
 
 

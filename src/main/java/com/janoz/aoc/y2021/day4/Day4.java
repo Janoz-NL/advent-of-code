@@ -9,23 +9,31 @@ import java.util.Objects;
 public class Day4 {
 
     public static void main(String[] args) throws IOException {
-        Day4 day4 = new Day4();
-        day4.init("inputs/day4.txt");
+//        Day4 day4 = new Day4(100,1000);
+//        day4.process("inputs/aoc-2021-day4-part2.txt");
+        Day4 day4 = new Day4(5,100);
+        day4.process("inputs/day4.txt");
         System.out.println(day4.getScore(day4.winner));
         System.out.println(day4.getScore(day4.loser));
     }
 
-    int[] positionMap = new int[100];
+    int[] positionMap;
     int[] numbers;
+    int size;
 
     Board winner;
     Board loser;
 
-    public void init(String file) throws IOException {
+    public Day4(int size, int mapSize) {
+        this.size = size;
+        positionMap = new int[mapSize];
+    }
+
+    public void process(String file) throws IOException {
         BufferedReader input = openStream(file);
         readNumbers(input);
         Board board;
-        int firstBingoInTurn = 101;
+        int firstBingoInTurn = Integer.MAX_VALUE;
         int lastBingoInTurn = 0;
         while ((board = readBoard(input)) != null) {
             if (board.winsInTurn < firstBingoInTurn) {
@@ -39,7 +47,7 @@ public class Day4 {
         }
     }
 
-    public int getScore(Board b) {
+    public long getScore(Board b) {
         return b.getScore()*numbers[b.winsInTurn];
     }
 
@@ -56,7 +64,7 @@ public class Day4 {
 
     private Board readBoard(BufferedReader input) throws IOException {
         if (input.readLine() == null) return null;
-        return new Board(input, positionMap);
+        return new Board(input, positionMap, size);
     }
 
 }
