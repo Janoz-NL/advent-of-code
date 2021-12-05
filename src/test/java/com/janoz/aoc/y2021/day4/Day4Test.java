@@ -15,7 +15,7 @@ class Day4Test {
 
     @BeforeEach
     public void before() {
-        cut = new Day4(5,100);
+        cut = new Day4(5);
     }
 
     @Test

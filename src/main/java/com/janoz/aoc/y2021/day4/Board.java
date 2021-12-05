@@ -4,70 +4,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static com.janoz.aoc.MatrixUtils.*;
+
 public class Board {
 
     final int size;
 
     int[][] numbers;
     int[][] positions;
-    int[][] transposedPositions;
 
     int winsInTurn;
 
     public Board(BufferedReader input, int[] positionMap, int size) throws IOException {
         this.size = size;
-        numbers = new int[size][];
-        positions = new int[size][];
-        for (int y = 0; y< size; y++) {
-            numbers[y] = fromLine(input.readLine().trim());
-            positions[y] = new int[size];
-            for (int x = 0; x< size; x++) {
-                positions[y][x] = positionMap[numbers[y][x]];
-            }
-        }
-        transposedPositions = transpose(positions);
-        winsInTurn = winsInTurn();
+        numbers = read(input,size);
+        positions = map(numbers,positionMap);
+        winsInTurn = Math.min(
+                winsInTurn(positions), //find first bingo in rows
+                winsInTurn(transpose(positions))); //find first bingo in columns
     }
 
-    private int[] fromLine(String line) {
-        return Arrays.stream(line.split("\\s+")).mapToInt(Integer::parseInt).toArray();
+    //find first row that gives bingo
+    private int winsInTurn(int[][] values) {
+        //noinspection OptionalGetWithoutIsPresent
+        return Arrays.stream(values).mapToInt(this::max).min().getAsInt();
     }
 
-
-    private int[][] transpose(int [][] input) {
-        int[][] output = new int[size][];
-        for (int x = 0; x< size; x++) {
-            output[x] = new int[size];
-            for (int y = 0; y< size; y++) {
-                output[x][y] = input[y][x];
-            }
-        }
-        return output;
-    }
-
-    private int winsInTurn() {
-        return Math.min(winsInTurn(positions), winsInTurn(transposedPositions));
+    //find last item which gives bingo
+    private int max(int[] array) {
+        //noinspection OptionalGetWithoutIsPresent
+        return Arrays.stream(array).max().getAsInt();
     }
 
     public long getScore() {
         long score = 0;
-        for (int y = 0; y< size; y++) {
-            for (int x = 0; x< size; x++) {
-                if (positions[y][x] > winsInTurn) {
-                    score += numbers[y][x];
+        for (int row = 0; row< size; row++) {
+            for (int col = 0; col< size; col++) {
+                if (positions[row][col] > winsInTurn) {
+                    score += numbers[row][col];
                 }
             }
         }
         return score;
     }
 
-    private int winsInTurn(int[][] values) {
-        //noinspection OptionalGetWithoutIsPresent
-        return Arrays.stream(values).mapToInt(this::max).min().getAsInt();
-    }
-
-    private int max(int[] array) {
-        //noinspection OptionalGetWithoutIsPresent
-        return Arrays.stream(array).max().getAsInt();
-    }
 }

@@ -9,9 +9,9 @@ import java.util.Objects;
 public class Day4 {
 
     public static void main(String[] args) throws IOException {
-//        Day4 day4 = new Day4(100,1000);
+//        Day4 day4 = new Day4(100);
 //        day4.process("inputs/aoc-2021-day4-part2.txt");
-        Day4 day4 = new Day4(5,100);
+        Day4 day4 = new Day4(5);
         day4.process("inputs/day4.txt");
         System.out.println(day4.getScore(day4.winner));
         System.out.println(day4.getScore(day4.loser));
@@ -24,9 +24,8 @@ public class Day4 {
     Board winner;
     Board loser;
 
-    public Day4(int size, int mapSize) {
+    public Day4(int size) {
         this.size = size;
-        positionMap = new int[mapSize];
     }
 
     public void process(String file) throws IOException {
@@ -57,6 +56,8 @@ public class Day4 {
 
     private void readNumbers(BufferedReader input) throws IOException {
          numbers = Arrays.stream(input.readLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        //noinspection OptionalGetWithoutIsPresent
+        positionMap = new int[Arrays.stream(numbers).max().getAsInt() + 1];
          for (int i=0;i<numbers.length;i++) {
              positionMap[numbers[i]] = i;
          }
