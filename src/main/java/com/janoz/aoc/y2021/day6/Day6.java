@@ -36,6 +36,7 @@ public class Day6 {
                         {0, 0, 0, 0, 0, 0, 1, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 1, 0}
                 });
+        //noinspection OptionalGetWithoutIsPresent
         return start.mul(reproductionMatrix.pow(days)).streamContent().reduce(BigInteger::add).get();
     }
 

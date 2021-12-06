@@ -1,7 +1,6 @@
 package com.janoz.aoc.y2021.day6;
 
 
-import com.janoz.aoc.Matrix;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
