@@ -2,7 +2,6 @@ package com.janoz.aoc.y2021.day6;
 
 import com.janoz.aoc.Matrix;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Day6 {
@@ -22,9 +21,9 @@ public class Day6 {
         System.out.println(day6.calculate(INPUT, 256));
     }
 
-    public BigInteger calculate(String input, long days) {
-        Matrix start = new Matrix(new int[][]{ initHistogram(input) });
-        Matrix reproductionMatrix = new Matrix(new int[][]
+    public long calculate(String input, long days) {
+        Matrix<Long> start = Matrix.longMatrix(new int[][]{ initHistogram(input) });
+        Matrix<Long> reproductionMatrix = Matrix.longMatrix(new int[][]
                 {
                         {0, 0, 0, 0, 0, 0, 1, 0, 1},
                         {1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -36,8 +35,7 @@ public class Day6 {
                         {0, 0, 0, 0, 0, 0, 1, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 1, 0}
                 });
-        //noinspection OptionalGetWithoutIsPresent
-        return start.mul(reproductionMatrix.pow(days)).streamContent().reduce(BigInteger::add).get();
+        return start.mul(reproductionMatrix.pow(days)).streamContent().reduce(Long::sum).get();
     }
 
     int[] initHistogram(String input) {
