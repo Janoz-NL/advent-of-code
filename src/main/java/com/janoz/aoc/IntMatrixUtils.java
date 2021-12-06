@@ -2,9 +2,11 @@ package com.janoz.aoc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
-public class MatrixUtils {
+public class IntMatrixUtils {
 
     public static int[][] transpose(int[][] input) {
         int rows = input.length;
@@ -18,6 +20,34 @@ public class MatrixUtils {
         }
         return output;
     }
+
+    public static boolean isSquare(int[][] input) {
+        return input.length == input[0].length;
+    }
+
+    public static int[][] mul(int[][] left, int[][] right) {
+        int rows = left.length;
+        int itt = right.length;
+        int cols = right[0].length;
+        int[][] result = new int[rows][];
+        for (int r=0; r < rows; r++) {
+            result[r] = new int[cols];
+            for (int c=0; c < cols; c++) {
+                result[r][c] = 0;
+                for (int i=0; i<itt; i++) {
+                    result[r][c] += left[r][i] * right[i][c];
+                }
+            }
+        }
+        return result;
+    }
+
+    public static int[][] pow(int[][] matrix, int pow) {
+        if (pow == 1) return matrix;
+        int half = pow/2;
+        return mul(pow(matrix, half), pow(matrix, pow-half));
+    }
+
 
     public static int[][] map(int[][] input, int[] map) {
         int rows = input.length;
@@ -52,7 +82,20 @@ public class MatrixUtils {
         }
     }
 
+    public static IntStream streamContent(int[][] input) {
+        return Arrays.stream(input).flatMapToInt(Arrays::stream);
+    }
+
     private static int[] readLine(String line) {
         return Arrays.stream(line.trim().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    public static void print(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int i : row) {
+                System.out.printf(" %5d", i);
+            }
+            System.out.println();
+        }
     }
 }
