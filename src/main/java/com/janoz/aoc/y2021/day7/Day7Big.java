@@ -14,20 +14,20 @@ public class Day7Big {
 
     public static void main(String[] args) throws IOException {
 
-
-
         Day7Big d = new Day7Big();
         long start = System.currentTimeMillis();
         d.readData(args[0]);
         System.out.println(System.currentTimeMillis() - start);
+
         BigInteger answer1 = d.scorePart1(d.bag.med());
         System.out.println(System.currentTimeMillis() - start);
 
         Cache<BigInteger, BigInteger> cache = new Cache<>();
         BigInteger answer2 = d.findLocalMinimum(cache.cached(d::scorePart2),d.bag.min(), d.bag.max());
         System.out.println(System.currentTimeMillis() - start);
-        System.out.println("Score for par 1: " + answer1);
-        System.out.println("Score for par 2: " + answer2);
+
+        System.out.println("Score for part 1: " + answer1);
+        System.out.println("Score for part 2: " + answer2);
     }
 
     SortedBag<BigInteger,BigInteger> bag = SortedBag.bigIntegerSortedBag();
@@ -35,7 +35,6 @@ public class Day7Big {
     private BigInteger findLocalMinimum(Function<BigInteger, BigInteger> scoreFunction, BigInteger bottom, BigInteger top) {
         BigInteger delta = top.add(bottom.negate());
         if (delta.compareTo(BigInteger.valueOf(4)) < 0) {
-
             return IntStream.rangeClosed(0,delta.intValue()).mapToObj(BigInteger::valueOf).map(bottom::add).map(scoreFunction).reduce(BigInteger::min).get();
         }
         BigInteger thirdWidth = delta.divide(BigInteger.valueOf(3));
