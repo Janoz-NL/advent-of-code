@@ -26,20 +26,6 @@ class Day7Test {
         assertThat(cut.part2b(), equalTo(168L));
     }
 
-
-    @Test
-    void testDataGhost() {
-        cut.resetCalc();
-        cut.initPositions("16,1,2,0,4,2,7,1,2,14,-50,-49,-48,-47,-46,-45,-44,-43,-42,-41,-37,-13");
-        System.out.print(cut.part2b());
-        System.out.println(" " + cut.calc);
-        cut.resetCalc();
-        cut.initPositions("16,1,2,0,4,2,7,1,2,14,999999999");
-        System.out.print(cut.part2b());
-        System.out.println(" " + cut.calc);
-    }
-
-
     @Test
     void testCost2() {
         assertThat(cut.cost2(16,5), equalTo(66L) );
