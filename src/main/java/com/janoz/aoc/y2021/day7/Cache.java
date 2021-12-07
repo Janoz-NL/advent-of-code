@@ -6,8 +6,13 @@ import java.util.function.Function;
 
 public class Cache<I,O> {
 
-    Map<I,O> cache = new HashMap<>();
-    Function<I, O> cached(Function<I, O> actual) {
+    private Map<I,O> cache = new HashMap<>();
+
+    public void clear() {
+        cache.clear();
+    }
+
+    public Function<I, O> cached(Function<I, O> actual) {
         return l -> {
             if (!cache.containsKey(l)) {
                 cache.put(l,actual.apply(l));
