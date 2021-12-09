@@ -1,4 +1,4 @@
-package com.janoz.aoc.y2021.day9;
+package com.janoz.aoc.collections;
 
 import java.util.HashMap;
 import java.util.Map;

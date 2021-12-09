@@ -1,7 +1,10 @@
 package com.janoz.aoc.y2021.day5;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.geo.GrowingGrid;
+import com.janoz.aoc.geo.Line;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Day5 {
@@ -20,9 +23,9 @@ public class Day5 {
     }
 
     private long calculate(Stream<Line> lines) {
-        Field<Integer> field = new Field<>(0);
-        lines.flatMap(Line::draw).forEach(p -> field.put(p, field.get(p)+1));
-        return field.getScore(i -> i > 1);
+        GrowingGrid<Integer> field = new GrowingGrid<>(0);
+        lines.flatMap(Line::draw).forEach(p -> p.putOn(field, (Function<Integer, Integer>) i -> (i+1) ));
+        return field.streamValues().filter(i -> i > 1).count();
 
     }
 

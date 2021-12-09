@@ -1,12 +1,10 @@
-package com.janoz.aoc.y2021.day9;
+package com.janoz.aoc.collections;
 
-import com.janoz.aoc.y2021.day8.Day8;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MergingMapTest {
 

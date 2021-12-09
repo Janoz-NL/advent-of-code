@@ -1,6 +1,6 @@
 package com.janoz.aoc.y2021.day9;
 
-import com.janoz.aoc.y2021.day5.Point;
+import com.janoz.aoc.geo.Point;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

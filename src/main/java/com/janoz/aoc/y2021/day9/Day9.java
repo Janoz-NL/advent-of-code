@@ -1,23 +1,23 @@
 package com.janoz.aoc.y2021.day9;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.y2021.day5.Point;
+import com.janoz.aoc.collections.MergingMap;
+import com.janoz.aoc.geo.Point;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Day9 {
 
     public static void main(String[] args) {
         Day9 d = fromFile("inputs/day9.txt");
-//        d.initValeys();
-//        System.out.println(d.scorePart1());
-//        d.createBasinIds();
-//        System.out.println(d.scorePart2());
+        d.initValeys();
+        System.out.println(d.scorePart1());
+        d.createBasinIds();
+        System.out.println(d.scorePart2());
 
+        d = fromFile("inputs/day9.txt");
         d.createBasinIds2();
         System.out.println(d.scorePart2b());
     }

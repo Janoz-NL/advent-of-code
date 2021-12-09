@@ -1,22 +1,24 @@
-package com.janoz.aoc.y2021.day5;
+package com.janoz.aoc.geo;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Automatically growing 2D field
  * @param <T> type of gridpoints
  */
-public class Field<T> {
+public class GrowingGrid<T> implements Grid<T>{
 
     int width=0;
     List<List<T>> rows = new ArrayList<>();
 
     private T emptyValue;
 
-    public Field(T emptyValue) {
+    public GrowingGrid(T emptyValue) {
         this.emptyValue = emptyValue;
     }
 
@@ -24,6 +26,14 @@ public class Field<T> {
         resizeTo(p);
         rows.get(p.y).set(p.x, value);
     }
+
+    public T put(Point p, Function<T,T> func) {
+        resizeTo(p);
+        T value = func.apply (rows.get(p.y).get(p.x));
+        rows.get(p.y).set(p.x, value);
+        return value;
+    }
+
 
     public T get(Point p) {
         resizeTo(p);
@@ -45,12 +55,9 @@ public class Field<T> {
         }
     }
 
-    /**
-     * @param successFilter empty fields should never match successfilter
-     * @return Return the amount of gridpoints matching the successfilter
-     */
-    public long getScore(Predicate<T> successFilter) {
-        return rows.stream().flatMap(Collection::stream).filter(successFilter).count();
+    @Override
+    public Stream<T> streamValues() {
+        return rows.stream().flatMap(Collection::stream);
     }
 
     public int getWidth() {

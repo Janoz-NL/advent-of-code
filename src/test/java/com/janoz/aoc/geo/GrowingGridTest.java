@@ -1,4 +1,4 @@
-package com.janoz.aoc.y2021.day5;
+package com.janoz.aoc.geo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,13 +7,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class FieldTest {
+public class GrowingGridTest {
 
-    Field<Integer> cut;
+    GrowingGrid<Integer> cut;
 
     @BeforeEach
     public void before() {
-        cut = new Field<>(0);
+        cut = new GrowingGrid<>(0);
     }
 
     @Test

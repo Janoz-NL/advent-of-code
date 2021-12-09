@@ -1,5 +1,6 @@
 package com.janoz.aoc.y2021.day5;
 
+import com.janoz.aoc.geo.Line;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

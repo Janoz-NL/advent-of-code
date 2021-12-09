@@ -1,4 +1,4 @@
-package com.janoz.aoc.y2021.day5;
+package com.janoz.aoc.geo;
 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
