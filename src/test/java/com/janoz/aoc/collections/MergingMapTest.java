@@ -27,4 +27,14 @@ class MergingMapTest {
 
     }
 
+    @Test
+    public void testEdgeCaseDay9() {
+        cut.addMapping(150,141);
+        cut.addMapping(150,142);
+        assertThat(cut.getActual(150), equalTo(141));
+        assertThat(cut.getActual(142), equalTo(141));
+        assertThat(cut.getActual(141), equalTo(141));
+
+    }
+
 }

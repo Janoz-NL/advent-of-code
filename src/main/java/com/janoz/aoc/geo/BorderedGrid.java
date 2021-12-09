@@ -10,11 +10,11 @@ public class BorderedGrid implements Grid<Integer>{
     private int height;
     private int[][] grid;
 
-    public BorderedGrid(int width, int height, int border) {
-        this.width = width;
-        this.height = height;
+    private BorderedGrid(int[][] grid, int border) {
+        this.width = grid[0].length;
+        this.height = grid.length;
         this.border = border;
-        grid = create2D(width, height);
+        this.grid = grid;
     }
 
 
@@ -37,10 +37,6 @@ public class BorderedGrid implements Grid<Integer>{
     public Integer get(Point p) {
         if (!contains(p)) return border;
         return grid[p.y][p.x];
-    }
-    @Override
-    public Stream<Integer> streamValues() {
-        return null;
     }
 
     @Override
@@ -65,6 +61,29 @@ public class BorderedGrid implements Grid<Integer>{
             result[y]=new int[width];
         }
         return result;
+    }
+
+
+    public static BorderedGrid from(int[][] grid, int border) {
+        return new BorderedGrid(grid,border);
+    }
+
+    public static BorderedGrid from(int width, int height, int border) {
+        return new BorderedGrid(create2D(width,height),border);
+    }
+
+    public static BorderedGrid from(Stream<int[]> rowStreamer, int border) {
+        return new BorderedGrid(rowStreamer.toArray(int[][]::new),border);
+    }
+
+
+    public void print() {
+        for (int y=0;y<height;y++) {
+            for (int x=0; x<width; x++) {
+                System.out.printf("%5d",get(new Point(x,y)));
+            }
+            System.out.println();
+        }
     }
 
 }
