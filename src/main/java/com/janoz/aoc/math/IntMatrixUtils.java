@@ -1,4 +1,4 @@
-package com.janoz.aoc;
+package com.janoz.aoc.math;
 
 import java.io.BufferedReader;
 import java.io.IOException;

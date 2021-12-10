@@ -1,4 +1,4 @@
-package com.janoz.aoc;
+package com.janoz.aoc.math;
 
 import java.math.BigInteger;
 import java.util.function.BiFunction;
@@ -54,5 +54,13 @@ public class Operations<T extends Number> {
                 (a,b) -> a/b,
                 l -> (int) l
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Number> Operations<T> of(Class<T> clazz) {
+        if (clazz.equals(Long.class)) return (Operations<T>) longOperations();
+        if (clazz.equals(Integer.class)) return (Operations<T>) integerOperations();
+        if (clazz.equals(BigInteger.class)) return  (Operations<T>) bigIntegerOperations();
+        throw new UnsupportedOperationException("Not supported");
     }
 }

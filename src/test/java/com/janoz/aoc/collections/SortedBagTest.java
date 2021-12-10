@@ -1,5 +1,6 @@
-package com.janoz.aoc.y2021.day7;
+package com.janoz.aoc.collections;
 
+import com.janoz.aoc.collections.SortedBag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

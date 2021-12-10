@@ -1,12 +1,17 @@
-package com.janoz.aoc.y2021.day7;
+package com.janoz.aoc.collections;
 
-import com.janoz.aoc.Operations;
+import com.janoz.aoc.math.Operations;
 
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ *
+ * @param <V> Type of the values
+ * @param <I> Type of the index
+ */
 public class SortedBag<V extends Number & Comparable<V>, I extends Number & Comparable<I>> {
 
     final private SortedMap<V, I> backing = new TreeMap<>();

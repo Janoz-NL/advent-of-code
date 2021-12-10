@@ -1,4 +1,4 @@
-package com.janoz.aoc;
+package com.janoz.aoc.math;
 
 import org.junit.jupiter.api.Test;
 

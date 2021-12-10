@@ -1,5 +1,7 @@
 package com.janoz.aoc.y2021.day7;
 
+import com.janoz.aoc.collections.SortedBag;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;

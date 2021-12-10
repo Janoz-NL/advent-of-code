@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static com.janoz.aoc.IntMatrixUtils.*;
+import static com.janoz.aoc.math.IntMatrixUtils.*;
 
 public class Board {
 

@@ -1,6 +1,6 @@
 package com.janoz.aoc.y2021.day6;
 
-import com.janoz.aoc.Matrix;
+import com.janoz.aoc.math.Matrix;
 
 import java.util.Arrays;
 
