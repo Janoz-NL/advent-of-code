@@ -1,6 +1,11 @@
 package com.janoz.aoc.geo;
 
+import com.janoz.aoc.InputProcessor;
+
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BorderedGrid implements Grid<Integer>{
@@ -49,6 +54,23 @@ public class BorderedGrid implements Grid<Integer>{
         return height;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BorderedGrid that = (BorderedGrid) o;
+        if (width == that.width && height == that.height) {
+            return this.streamPoints().allMatch(p -> this.get(p).equals(that.get(p)));
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(width, height);
+        result = 31 * result + Arrays.deepHashCode(grid);
+        return result;
+    }
 
     private boolean contains(Point p) {
         return !(p.x < 0 || p.x >= width || p.y < 0 || p.y >= height);
@@ -72,10 +94,21 @@ public class BorderedGrid implements Grid<Integer>{
         return new BorderedGrid(create2D(width,height),border);
     }
 
+    public static BorderedGrid filled(int width, int height, int fill, int border) {
+        return  BorderedGrid.from(IntStream.range(0,height).mapToObj(i -> {
+            int[] r = new int[width];
+            Arrays.fill(r,fill);
+            return r;
+        }),border);
+    }
+
     public static BorderedGrid from(Stream<int[]> rowStreamer, int border) {
         return new BorderedGrid(rowStreamer.toArray(int[][]::new),border);
     }
 
+    public static BorderedGrid fromSingleDigitFile(String input, int border) {
+        return BorderedGrid.from(new InputProcessor<>(input, line -> line.chars().map(c -> c - '0').toArray()).stream(), border);
+    }
 
     public void print() {
         for (int y=0;y<height;y++) {
@@ -85,5 +118,4 @@ public class BorderedGrid implements Grid<Integer>{
             System.out.println();
         }
     }
-
 }

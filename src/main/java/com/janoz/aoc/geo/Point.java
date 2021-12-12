@@ -21,20 +21,35 @@ public class Point {
     }
 
     public Point north() {
-        return new Point(x,y-1);
+        return translate(0,-1);
     }
 
     public Point south() {
-        return new Point(x,y+1);
+        return translate(0,+1);
     }
 
     public Point east() {
-        return new Point(x+1,y);
+        return translate(+1,0);
     }
 
-    public Point west() {
-        return new Point(x-1,y);
+    public Point[] adjacent() {
+        return new Point[]{
+                translate(-1,-1),
+                translate(-1,0),
+                translate(-1,1),
+                translate(0,-1),
+                translate(0,1),
+                translate(1,-1),
+                translate(1,0),
+                translate(1,1)
+        };
+
     }
+    public Point west() {
+        return translate(-1,0);
+    }
+
+    public Point translate(int dx, int dy) { return new Point(x+dx,y+dy);}
 
     @Override
     public String toString() {
