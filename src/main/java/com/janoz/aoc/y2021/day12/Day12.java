@@ -20,6 +20,7 @@ public class Day12 {
         d.read("inputs/day12.txt");
         System.out.println(d.travel());
         System.out.println(d.travelLonger());
+        System.out.println(d.travelLonger(d.start, Collections.emptySet(),null, false));
     }
 
     long travel() {
@@ -27,7 +28,7 @@ public class Day12 {
     }
 
     long travelLonger() {
-        return travelLonger(start, Collections.emptySet(), null, false, "start").size();
+        return travelLonger(start, Collections.emptySet(), null, false);
     }
 
 
@@ -44,31 +45,31 @@ public class Day12 {
         return options;
     }
 
-    Set<String> travelLonger(Node current, Set<Node> visited, Node visitedSmall, boolean beentwice, String path) {
+    long travelLonger(Node current, Set<Node> visited, Node visitedSmall, boolean beentwice) {
         if (current == end) {
-            return Collections.singleton(path);
+            return !beentwice && visitedSmall!=null?0:1;
         }
-
         Set<Node> candidates = new HashSet<>(current.neighbours);
         if (!beentwice) {
             visited.remove(visitedSmall);
         }
         candidates.removeAll(visited);
-        Set<String> result = new HashSet<>();
+        long result = 0;
         for (Node neighbour:candidates ) {
             Set<Node> nextVisited = new HashSet<>(visited);
             if (current.small) {
                 nextVisited.add(current);
                 if (visitedSmall == null && current != start) {
-                    result.addAll(travelLonger(neighbour, nextVisited, null, false, path + "," + neighbour.name));
-                    result.addAll(travelLonger(neighbour, new HashSet<>(nextVisited), current, false, path + "," + neighbour.name));
+                    result +=
+                            travelLonger(neighbour, nextVisited, null, false) +
+                            travelLonger(neighbour, new HashSet<>(nextVisited), current, false);
                 } else if(current == visitedSmall) {
-                    result.addAll(travelLonger(neighbour, nextVisited, current, true, path + "," + neighbour.name));
+                    result += travelLonger(neighbour, nextVisited, current, true);
                 } else {
-                    result.addAll(travelLonger(neighbour, nextVisited,visitedSmall,beentwice, path + "," + neighbour.name));
+                    result += travelLonger(neighbour, nextVisited,visitedSmall,beentwice);
                 }
             }  else {
-                result.addAll(travelLonger(neighbour, nextVisited, visitedSmall, beentwice, path + "," + neighbour.name));
+                result += travelLonger(neighbour, nextVisited, visitedSmall, beentwice);
             }
         }
         return result;
