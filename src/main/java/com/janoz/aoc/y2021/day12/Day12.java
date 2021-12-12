@@ -59,7 +59,7 @@ public class Day12 {
             Set<Node> nextVisited = new HashSet<>(visited);
             if (current.small) {
                 nextVisited.add(current);
-                if (visitedSmall == null & current != start) {
+                if (visitedSmall == null && current != start) {
                     result.addAll(travelLonger(neighbour, nextVisited, null, false, path + "," + neighbour.name));
                     result.addAll(travelLonger(neighbour, new HashSet<>(nextVisited), current, false, path + "," + neighbour.name));
                 } else if(current == visitedSmall) {
