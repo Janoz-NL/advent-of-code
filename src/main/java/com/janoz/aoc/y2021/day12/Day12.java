@@ -50,9 +50,6 @@ public class Day12 {
             return !beentwice && visitedSmall!=null?0:1;
         }
         Set<Node> candidates = new HashSet<>(current.neighbours);
-        if (!beentwice) {
-            visited.remove(visitedSmall);
-        }
         candidates.removeAll(visited);
         long result = 0;
         for (Node neighbour:candidates ) {
@@ -62,11 +59,9 @@ public class Day12 {
                 if (visitedSmall == null && current != start) {
                     result +=
                             travelLonger(neighbour, nextVisited, null, false) +
-                            travelLonger(neighbour, new HashSet<>(nextVisited), current, false);
-                } else if(current == visitedSmall) {
-                    result += travelLonger(neighbour, nextVisited, current, true);
+                            travelLonger(neighbour, visited, current, false);
                 } else {
-                    result += travelLonger(neighbour, nextVisited,visitedSmall,beentwice);
+                    result += travelLonger(neighbour, nextVisited, visitedSmall, beentwice || current == visitedSmall );
                 }
             }  else {
                 result += travelLonger(neighbour, nextVisited, visitedSmall, beentwice);
