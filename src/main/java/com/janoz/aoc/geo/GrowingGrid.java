@@ -2,9 +2,11 @@ package com.janoz.aoc.geo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -14,7 +16,8 @@ import java.util.stream.Stream;
 public class GrowingGrid<T> implements Grid<T>{
 
     int width=0;
-    List<List<T>> rows = new ArrayList<>();
+    int height=0;
+    Map<Point,T> data = new HashMap<>();
 
     private T emptyValue;
 
@@ -23,41 +26,46 @@ public class GrowingGrid<T> implements Grid<T>{
     }
 
     public void put(Point p, T value) {
-        resizeTo(p);
-        rows.get(p.y).set(p.x, value);
+        grow(p);
+        data.put(p,value);
     }
 
     public T put(Point p, Function<T,T> func) {
-        resizeTo(p);
-        T value = func.apply (rows.get(p.y).get(p.x));
-        rows.get(p.y).set(p.x, value);
+        grow(p);
+        T value = func.apply (get(p));
+        data.put(p, value);
         return value;
     }
 
-
-    public T get(Point p) {
-        resizeTo(p);
-        return rows.get(p.y).get(p.x);
+    public void setHeight(int height) {
+        if (this.height > height)
+            data.entrySet().removeIf(p -> p.getKey().y >= height);
+        this.height = height;
     }
 
-    private void resizeTo(Point p) {
-        if (p.y >= rows.size()) {
-            for (int i = rows.size(); i<= p.y; i++) {
-                rows.add(new ArrayList<>());
-            }
-        }
-        List<T> col = rows.get(p.y);
-        if (p.x >= col.size()) {
-            for (int i = col.size(); i<= p.x; i++) {
-                col.add(emptyValue);
-            }
-            width = Math.max(width, p.x+1);
-        }
+    public void setWidth(int width) {
+        if (this.width > width)
+            data.entrySet().removeIf(p -> p.getKey().x >= width);
+        this.width = width;
+    }
+
+    public T get(Point p) {
+        grow(p);
+        return data.getOrDefault(p,emptyValue);
+    }
+
+    private void grow(Point p) {
+        width=Math.max(width,p.x+1);
+        height=Math.max(height,p.y+1);
     }
 
     @Override
     public Stream<T> streamValues() {
-        return rows.stream().flatMap(Collection::stream);
+        return data.values().stream();
+    }
+
+    public long amountOfPutPoints() {
+        return data.size();
     }
 
     public int getWidth() {
@@ -65,17 +73,7 @@ public class GrowingGrid<T> implements Grid<T>{
     }
 
     public int getHeight() {
-        return rows.size();
-    }
-
-    public void print(String format) {
-        System.out.println();
-        rows.forEach(cols -> {
-                    cols.forEach(i -> System.out.printf(format,i));
-                    for (int i=cols.size(); i<width; i++) System.out.printf(format, emptyValue);
-                    System.out.println();
-                }
-        );
+        return height;
     }
 
 }

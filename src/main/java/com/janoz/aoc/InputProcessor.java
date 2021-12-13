@@ -14,10 +14,22 @@ import java.util.stream.StreamSupport;
 
 public class InputProcessor<T> implements Iterable<T> {
 
-    private InternalIterator iterator;
+    private final InternalIterator iterator;
+
+    public static BufferedReader getReaderFromResource(String file) {
+        return new BufferedReader(new InputStreamReader(Objects.requireNonNull(InputProcessor.class.getClassLoader().getResourceAsStream(file))));
+    }
+
 
     public InputProcessor(String file, Function<String,T> mapper) {
-        this.iterator = new InternalIterator(file, mapper);
+        this(
+                getReaderFromResource(file),
+                mapper
+        );
+    }
+
+    public InputProcessor(BufferedReader reader, Function<String,T> mapper) {
+        this.iterator = new InternalIterator(reader, mapper);
     }
 
     @Override
@@ -33,33 +45,34 @@ public class InputProcessor<T> implements Iterable<T> {
         return stream().collect(Collectors.toList());
     }
 
+
     private class InternalIterator implements Iterator<T> {
         private String next;
-        private BufferedReader input;
-        private Function<String,T> mapper;
+        private final BufferedReader input;
+        private final Function<String,T> mapper;
 
-        public InternalIterator(String file, Function<String,T> mapper) {
-            InputStream resource = Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(file));
-            input = new BufferedReader(new InputStreamReader(resource));
-            try {
-                next = input.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e.getMessage(),e);
-            }
+        public InternalIterator(BufferedReader input, Function<String,T> mapper) {
+            this.input = input;
             this.mapper = mapper;
+            getNext();
         }
 
         @Override
         public boolean hasNext() {
-            return next != null;
+            return next != null && next.length()>0;
         }
 
         @Override
         public T next() {
-            try {
                 T answer = mapper.apply(next);
-                next = input.readLine();
+                getNext();
                 return answer;
+        }
+
+        private void getNext() {
+            try {
+                next = input.readLine();
+                if (next != null) next = next.trim();
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage(),e);
             }

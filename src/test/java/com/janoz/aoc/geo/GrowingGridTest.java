@@ -23,6 +23,9 @@ public class GrowingGridTest {
         assertThat(cut.get(new Point(2,4)), equalTo(0));
         assertThat(cut.getWidth(), is(3));
         assertThat(cut.getHeight(), is(5));
+        assertThat(cut.get(new Point(1,1)), equalTo(0));
+        assertThat(cut.getWidth(), is(3));
+        assertThat(cut.getHeight(), is(5));
     }
 
     @Test
@@ -38,5 +41,28 @@ public class GrowingGridTest {
         cut.put(new Point(2,4),4);
         assertThat(cut.get(new Point(2,4)), equalTo(4));
     }
+
+    @Test
+    public void resize() {
+        cut.put(new Point(2,2),4);
+        cut.put(new Point(2,4),4);
+        cut.put(new Point(4,4),4);
+        cut.put(new Point(4,2),4);
+        assertThat(cut.get(new Point(2,2)), equalTo(4));
+        assertThat(cut.get(new Point(2,4)), equalTo(4));
+        assertThat(cut.get(new Point(4,4)), equalTo(4));
+        assertThat(cut.get(new Point(4,2)), equalTo(4));
+        cut.setWidth(3);
+        assertThat(cut.get(new Point(2,2)), equalTo(4));
+        assertThat(cut.get(new Point(2,4)), equalTo(4));
+        assertThat(cut.get(new Point(4,4)), equalTo(0));
+        assertThat(cut.get(new Point(4,2)), equalTo(0));
+        cut.setHeight(3);
+        assertThat(cut.get(new Point(2,2)), equalTo(4));
+        assertThat(cut.get(new Point(2,4)), equalTo(0));
+        assertThat(cut.get(new Point(4,4)), equalTo(0));
+        assertThat(cut.get(new Point(4,2)), equalTo(0));
+    }
+
 
 }
