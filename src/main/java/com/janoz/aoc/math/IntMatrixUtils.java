@@ -1,5 +1,7 @@
 package com.janoz.aoc.math;
 
+import com.janoz.aoc.geo.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -97,4 +99,42 @@ public class IntMatrixUtils {
             System.out.println();
         }
     }
+
+    public static int[][] fromPoint(Point p) {
+        return new int[][] {{p.x},{p.y},{1}};
+    }
+
+    public static Point toPoint(int[][] matrix) {
+        return new Point(matrix[0][0],matrix[1][0]);
+    }
+
+    public static int[][] translation(int dx, int dy) {
+        return new int[][]
+                {
+                        { 1, 0, dx},
+                        { 0, 1, dy},
+                        { 0, 0,  1}
+                };
+    }
+
+    public static int[][] mirrorX() {
+        return new int[][]
+                {
+                        {-1, 0, 0},
+                        { 0, 1, 0},
+                        { 0, 0, 1}
+                };
+
+    }
+
+    public static int[][] mirrorY() {
+        return new int[][]
+                {
+                        { 1, 0, 0},
+                        { 0,-1, 0},
+                        { 0, 0, 1}
+                };
+
+    }
+
 }

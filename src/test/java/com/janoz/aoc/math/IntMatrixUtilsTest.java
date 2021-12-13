@@ -1,11 +1,13 @@
 package com.janoz.aoc.math;
 
+import com.janoz.aoc.geo.Point;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.function.BiFunction;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -72,6 +74,26 @@ class IntMatrixUtilsTest {
                         { 1, 12, 20, 15, 19},
         } ));
 
+    }
+
+
+    private BiFunction<Point,int[][],Point> pointOperation= (p, matrix) -> IntMatrixUtils.toPoint(IntMatrixUtils.mul(matrix, IntMatrixUtils.fromPoint(p)));
+
+    @Test
+    void testPointTranslation() {
+        assertThat(pointOperation.apply(new Point(1,2),IntMatrixUtils.translation(3,4)), equalTo(new Point(4,6)));
+    }
+
+    @Test
+    void testPointMirroring() {
+        assertThat(pointOperation.apply(new Point(1,2),IntMatrixUtils.mirrorX()), equalTo(new Point(-1,2)));
+        assertThat(pointOperation.apply(new Point(1,2),IntMatrixUtils.mirrorY()), equalTo(new Point(1,-2)));
+    }
+
+    @Test
+    void testMultipleOperations() {
+        // move +3 and mirror around x=0
+        assertThat(pointOperation.apply(new Point(1,2),IntMatrixUtils.mul(IntMatrixUtils.mirrorX(),IntMatrixUtils.translation(3,0))), equalTo(new Point(-4,2)));
     }
 
 }
