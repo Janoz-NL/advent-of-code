@@ -25,6 +25,10 @@ public class GrowingGrid<T> implements Grid<T>{
         this.emptyValue = emptyValue;
     }
 
+    public void clear() {
+        data.clear();
+    }
+
     public void put(Point p, T value) {
         grow(p);
         data.put(p,value);

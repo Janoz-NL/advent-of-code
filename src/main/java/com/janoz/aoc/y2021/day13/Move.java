@@ -4,16 +4,16 @@ import java.util.function.Consumer;
 
 public class Move {
     boolean horizontal;
-    int position;
+    long position;
 
     public static Move parse(String s) {
         Move m = new Move();
         m.horizontal = s.charAt(11) == 'y';
-        m.position = Integer.parseInt(s.substring(13));
+        m.position = Long.parseLong(s.substring(13));
         return m;
     }
 
-    void doMove(Consumer<Integer> horizontalMove, Consumer<Integer> verticalMove) {
+    void doMove(Consumer<Long> horizontalMove, Consumer<Long> verticalMove) {
         if (horizontal) {
             horizontalMove.accept(position);
         } else {

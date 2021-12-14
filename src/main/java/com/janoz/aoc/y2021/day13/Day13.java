@@ -22,27 +22,27 @@ public class Day13 {
 
     GrowingGrid<Boolean> paper = new GrowingGrid<>(Boolean.FALSE);
 
-    void foldY(int y) {
+    void foldY(long y) {
         fold(paper.getWidth(), y);
     }
 
-    void foldX(int x) {
+    void foldX(long x) {
         fold(x, paper.getHeight());
     }
 
-    void fold(int x, int y) {
+    void fold(long x, long y) {
         Set<Point> mirroredPoints = paper.streamPoints()
                 .filter(p -> p.x>x || p.y>y)
                 .filter(p-> paper.get(p))
                 .map(p -> new Point(mirror(p.x,x),mirror(p.y,y)))
                 .collect(Collectors.toSet());
         mirroredPoints.forEach(p -> paper.put(p,true));
-        paper.setWidth(x);
-        paper.setHeight(y);
+        paper.setWidth((int)x);
+        paper.setHeight((int)y);
     }
 
-    static int mirror(int pos, int mirror) {
-        if (pos > mirror) return mirror - (pos - mirror);
+    static int mirror(int pos, long mirror) {
+        if (pos > mirror) return (int)(mirror - (pos - mirror));
         return pos;
     }
 
