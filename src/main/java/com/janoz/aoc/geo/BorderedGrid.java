@@ -22,7 +22,6 @@ public class BorderedGrid implements Grid<Integer>{
         this.grid = grid;
     }
 
-
     @Override
     public void put(Point p, Integer v) {
         if (contains(p)) {
@@ -40,8 +39,13 @@ public class BorderedGrid implements Grid<Integer>{
 
     @Override
     public Integer get(Point p) {
-        if (!contains(p)) return border;
-        return grid[p.y][p.x];
+        return get(p.x,p.y);
+    }
+
+    @Override
+    public Integer get(int x, int y) {
+        if (!contains(x,y)) return border;
+        return grid[y][x];
     }
 
     @Override
@@ -73,7 +77,11 @@ public class BorderedGrid implements Grid<Integer>{
     }
 
     private boolean contains(Point p) {
-        return !(p.x < 0 || p.x >= width || p.y < 0 || p.y >= height);
+        return contains(p.x, p.y);
+    }
+
+    private boolean contains(int x, int y) {
+        return !(x < 0 || x >= width || y < 0 || y >= height);
     }
 
 

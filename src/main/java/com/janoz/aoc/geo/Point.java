@@ -32,6 +32,10 @@ public class Point {
         return translate(+1,0);
     }
 
+    public Point west() {
+        return translate(-1,0);
+    }
+
     public Point[] adjacent() {
         return new Point[]{
                 translate(-1,-1),
@@ -43,10 +47,22 @@ public class Point {
                 translate(1,0),
                 translate(1,1)
         };
-
     }
-    public Point west() {
-        return translate(-1,0);
+
+    /**
+     * @return Only straight adjacent, not diagonally
+     */
+    public Point[] neighbours() {
+        return new Point[]{
+                translate(-1,0),
+                translate(0,-1),
+                translate(0,1),
+                translate(1,0),
+        };
+    }
+
+    public long manhattanDistance(Point p) {
+        return Math.abs(x -p.x) + Math.abs(y - p.y);
     }
 
     public Point translate(int dx, int dy) { return new Point(x+dx,y+dy);}

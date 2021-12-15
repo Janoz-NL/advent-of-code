@@ -10,6 +10,16 @@ public interface Grid<T> {
     T put(Point p, Function<T,T> f);
     T get(Point p);
 
+    default T get(int x, int y) {
+        return get(new Point(x,y));
+    }
+
+    default boolean inGrid(Point p) {
+        return
+                p.x >=0 && p.x < getWidth() &&
+                p.y >=0 && p.y < getHeight();
+    }
+
     default Stream<T> streamValues() {
         return streamPoints().map(this::get);
     }
