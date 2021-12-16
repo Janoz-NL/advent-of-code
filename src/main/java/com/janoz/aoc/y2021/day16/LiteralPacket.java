@@ -9,7 +9,7 @@ public class LiteralPacket extends Packet{
     int end;
 
     public LiteralPacket(String bits, int version, int start) {
-        super(bits, version, 4);
+        super(version, 4);
         this.end = start;
         literal = parseLiteral(bits);
     }
@@ -25,9 +25,10 @@ public class LiteralPacket extends Packet{
     private BigInteger parseLiteral(String bits) {
         BigInteger result = BigInteger.ZERO;
         do {
-            result = result.multiply(BI_16).add(BigInteger.valueOf(Integer.parseInt(bits.substring(end + 1, end + 5), 2)));
+            result = result.multiply(BI_16)
+                    .add(BigInteger.valueOf(Integer.parseInt(bits.substring(end + 1, end + 5), 2)));
             end = end + 5;
-        } while (bits.charAt(end -5) == '1');
+        } while (bits.charAt(end-5) == '1');
         return result;
     }
 }

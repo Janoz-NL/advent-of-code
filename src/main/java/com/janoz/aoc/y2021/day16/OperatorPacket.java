@@ -10,7 +10,7 @@ public class OperatorPacket extends Packet{
     List<Packet> subPackets = new ArrayList<>();
 
     public OperatorPacket(String bits, int version, int type, int start) {
-        super(bits, version, type);
+        super(version, type);
         end = start;
         if (bits.charAt(end) == '1') {
             int amountOfSubpackages = Integer.parseInt(bits.substring(end + 1, end + 12),2);
@@ -23,12 +23,12 @@ public class OperatorPacket extends Packet{
         } else {
             int amountOfBits = Integer.parseInt(bits.substring(end + 1, end + 16),2);
             end += 16;
-            int end = this.end + amountOfBits;
+            int expectedEnd = end + amountOfBits;
             do {
-                Packet p = Packet.parsePacket(bits, this.end);
-                this.end = p.posAfter();
+                Packet p = Packet.parsePacket(bits, end);
+                end = p.posAfter();
                 subPackets.add(p);
-            } while (this.end < end);
+            } while (end < expectedEnd);
         }
     }
 

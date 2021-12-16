@@ -12,7 +12,6 @@ class PacketTest {
     @Test
     void testParseLiteral() {
         Packet p = Packet.fromHex("D2FE28");
-        assertThat(p.bits, equalTo("110100101111111000101000"));
         assertThat(p.version, equalTo(6));
         assertThat(p.type, equalTo(4));
         assertThat(((LiteralPacket)p).literal, equalTo(BigInteger.valueOf(2021)));
@@ -21,7 +20,6 @@ class PacketTest {
     @Test
     void testParseOperatorLabel0() {
         Packet p = Packet.fromHex("38006F45291200");
-        assertThat(p.bits, equalTo("00111000000000000110111101000101001010010001001000000000"));
         assertThat(p.version, equalTo(1));
         assertThat(p.type, equalTo(6));
         OperatorPacket op = (OperatorPacket) p;
@@ -32,7 +30,6 @@ class PacketTest {
     @Test
     void testParseOperatorLabel1() {
         Packet p = Packet.fromHex("EE00D40C823060");
-        assertThat(p.bits, equalTo("11101110000000001101010000001100100000100011000001100000"));
         assertThat(p.version, equalTo(7));
         assertThat(p.type, equalTo(3));
         OperatorPacket op = (OperatorPacket) p;

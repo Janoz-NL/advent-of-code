@@ -4,16 +4,10 @@ import java.math.BigInteger;
 
 public abstract class Packet {
 
-
-    String bits;
-
     int version;
     int type;
 
-
-
-    protected Packet(String bits, int version, int type) {
-        this.bits = bits;
+    protected Packet(int version, int type) {
         this.version = version;
         this.type = type;
     }
