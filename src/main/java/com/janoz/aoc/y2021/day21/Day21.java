@@ -1,6 +1,7 @@
 package com.janoz.aoc.y2021.day21;
 
-import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.collections.AlwaysHashMap;
+import com.janoz.aoc.collections.LongTuple;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class Day21 {
         }
     }
 
-    static AlwaysMap<Player, Map<Player, LongTuple>> cache = new AlwaysMap<>(HashMap::new);
+    static AlwaysHashMap<Player, Map<Player, LongTuple>> cache = new AlwaysHashMap<>(HashMap::new);
 
     public static void main(String[] args) {
         System.out.println(part1());
@@ -42,7 +43,7 @@ public class Day21 {
 
     static long part2() {
         LongTuple result = splitUniverses(p1,p2);
-        return Math.max(result.l1, result.l2);
+        return Math.max(result.getLeft(), result.getRight());
     }
 
     static LongTuple splitUniverses(Player p1, Player p2) {
