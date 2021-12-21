@@ -17,13 +17,15 @@ public class Day19 {
 
     public static void main(String[] args) throws IOException{
         StopWatch.start();
-        System.out.println(placeScanners("inputs/day19.txt"));
+        List<TranslatedScanner> scanners = placeScanners("inputs/day19.txt");
+        System.out.println(scanners.stream().map(TranslatedScanner::getBeacons).reduce(new HashSet<>(), (s1,s2) -> {s1.addAll(s2);return s1;}).size());
+        System.out.println(findLongestDistance(scanners.stream().map(TranslatedScanner::getMovement).collect(Collectors.toList())));
         StopWatch.stopPrint();
     }
 
 
 
-    static int placeScanners(String input) throws IOException {
+    static List<TranslatedScanner> placeScanners(String input) throws IOException {
         BufferedReader reader = InputProcessor.getReaderFromResource(input);
         Scanner start = readScanner(reader);
         Scanner s;
@@ -32,8 +34,8 @@ public class Day19 {
             scannerQueue.offer(s);
         }
 
-        List<Point3D> scannerLocations = new ArrayList<>();
-
+        List<TranslatedScanner> results = new ArrayList<>();
+        results.add(new TranslatedScanner(Point3D.ORIGIN,0,start));
         Set<Point3D> beacons = new HashSet<>(start.getBeacons());
         while (!scannerQueue.isEmpty()) {
             Scanner candidate = scannerQueue.poll();
@@ -42,13 +44,10 @@ public class Day19 {
                 scannerQueue.offer(candidate);
             } else {
                 beacons.addAll(possibility.getBeacons());
-                scannerLocations.add(possibility.getMovement());
+                results.add(possibility);
             }
         }
-
-        System.out.println(findLongestDistance(scannerLocations));
-
-        return beacons.size();
+        return results;
     }
 
 
