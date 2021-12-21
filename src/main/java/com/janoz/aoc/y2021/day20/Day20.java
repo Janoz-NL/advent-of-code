@@ -16,29 +16,11 @@ public class Day20 {
         BufferedReader bufferedReader = InputProcessor.getReaderFromResource("inputs/day20.txt");
         lookupMap = bufferedReader.readLine();
         bufferedReader.readLine();
-        char[][] map = readMap(new InputProcessor<>(bufferedReader, s -> s).stream().collect(Collectors.toList()));
+        char[][] map = readMap(bufferedReader.lines().collect(Collectors.toList()));
         for (int i=0; i<50;i++) {
             map = enhance(map);
         }
         System.out.println(countPixels(map));
-    }
-
-    static long countPixels(char[][] map) {
-        long result = 0;
-        for (char[] row : map) {
-            for (char c: row) {
-                if (c == '#') result++;
-            }
-        }
-        return result;
-    }
-
-    static char[][] readMap(List<String> lines) {
-        char[][] result = new char[lines.size()][];
-        for (int y=0; y< lines.size(); y++) {
-            result[y] = lines.get(y).toCharArray();
-        }
-        return result;
     }
 
     static char[][] enhance(char[][] input) {
@@ -74,6 +56,24 @@ public class Day20 {
     static char getAt(char[][] map, int x, int y) {
         if (x<0 || y<0 || x>=map[0].length || y>=map.length) return infinite;
         return map[y][x];
+    }
+
+    static long countPixels(char[][] map) {
+        long result = 0;
+        for (char[] row : map) {
+            for (char c: row) {
+                if (c == '#') result++;
+            }
+        }
+        return result;
+    }
+
+    static char[][] readMap(List<String> lines) {
+        char[][] result = new char[lines.size()][];
+        for (int y=0; y< lines.size(); y++) {
+            result[y] = lines.get(y).toCharArray();
+        }
+        return result;
     }
 
     static void printMap(char[][] map) {
