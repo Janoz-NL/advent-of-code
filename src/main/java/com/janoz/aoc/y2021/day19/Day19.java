@@ -2,6 +2,7 @@ package com.janoz.aoc.y2021.day19;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.geo.Point3D;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class Day19 {
             List<Point3D> candidateBeacons = rotateBeacons(candidate, r);
             for (Point3D actualBeacon:actualBeacons) {
                 for (Point3D candidateBeacon:candidateBeacons) {
-                    Point3D translation = findTranslation(actualBeacon,candidateBeacon);
+                    Point3D translation = candidateBeacon.findTranslationTo(actualBeacon);
                     TranslatedScanner result = new TranslatedScanner(translation,r,candidate);
                     Set<Point3D> translatedBeacons = new HashSet<>(result.getBeacons());
                     translatedBeacons.retainAll(actualBeacons);
@@ -98,18 +99,6 @@ public class Day19 {
     private static List<Point3D> rotateBeacons(Scanner candidate, int r) {
         return candidate.getBeacons().stream().map(p -> p.rotate(r)).collect(Collectors.toList());
     }
-
-
-    static Point3D findTranslation(Point3D source, Point3D target) {
-        return new Point3D(
-                source.x-target.x,
-                source.y-target.y,
-                source.z-target.z
-        );
-    }
-
-
-
 
 
 }

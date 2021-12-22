@@ -1,5 +1,7 @@
 package com.janoz.aoc.y2021.day19;
 
+import com.janoz.aoc.geo.Point3D;
+
 import java.util.Collections;
 import java.util.Set;
 

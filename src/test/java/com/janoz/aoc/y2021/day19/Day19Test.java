@@ -2,6 +2,7 @@ package com.janoz.aoc.y2021.day19;
 
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.geo.Point3D;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ class Day19Test {
 
     @Test
     void testPart1() throws IOException {
-        assertThat(Day19.placeScanners("inputs/day19example.txt"), equalTo(79));
+        assertThat(Day19.placeScanners("inputs/day19example.txt").stream().map(TranslatedScanner::getBeacons).reduce(new HashSet<>(), (s1,s2) -> {s1.addAll(s2);return s1;}).size(), equalTo(79));
     }
 
     @Test
@@ -33,9 +34,7 @@ class Day19Test {
     void testMappingTranslated() {
         Scanner s1 = new Scanner("Scan 1", Collections.singleton(new Point3D(10,20,30)));
         Scanner s2 = new Scanner("Scan 2", Collections.singleton(new Point3D(-10,-20,-30)));
-        Point3D translation = Day19.findTranslation(
-                s1.getBeacons().iterator().next(),
-                s2.getBeacons().iterator().next());
+        Point3D translation = s2.getBeacons().iterator().next().findTranslationTo(s1.getBeacons().iterator().next());
         TranslatedScanner translated = new TranslatedScanner(translation, 0, s2);
         Set<Point3D> overlap = new HashSet<>(translated.getBeacons());
         overlap.retainAll(s1.getBeacons());
@@ -48,9 +47,7 @@ class Day19Test {
         Scanner s2 = new Scanner("Scan 2", Collections.singleton(new Point3D(-10,-20,-30)));
 
         TranslatedScanner s2rot = new TranslatedScanner(Point3D.ORIGIN,1,s2);
-        Point3D translation = Day19.findTranslation(
-                s1.getBeacons().iterator().next(),
-                s2rot.getBeacons().iterator().next());
+        Point3D translation = s2rot.getBeacons().iterator().next().findTranslationTo(s1.getBeacons().iterator().next());
         TranslatedScanner translated = new TranslatedScanner(translation, 1, s2);
         Set<Point3D> overlap = new HashSet<>(translated.getBeacons());
         overlap.retainAll(s1.getBeacons());

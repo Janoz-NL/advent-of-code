@@ -1,30 +1,65 @@
-package com.janoz.aoc.y2021.day19;
+package com.janoz.aoc.geo;
 
 import java.util.Objects;
 
+/**
+ *
+ *    z
+ *     |
+ *     |
+ *     |_____ y
+ *    /
+ *   /
+ *  x
+ *
+ */
 public class Point3D {
 
     public static final Point3D ORIGIN = new Point3D(0,0,0);
 
-    final long x;
-    final long y;
-    final long z;
+    public final long x;
+    public final long y;
+    public final long z;
 
-    Point3D(long x, long y, long z) {
+    public Point3D(long x, long y, long z) {
         this.x=x;
         this.y=y;
         this.z=z;
     }
 
-    Point3D reverse() {
+    public boolean above(Point3D other) {
+        return z > other.z;
+    }
+
+    public boolean below(Point3D other) {
+        return z < other.z;
+    }
+
+    public boolean before(Point3D other) {
+        return x > other.x;
+    }
+
+    public boolean after(Point3D other) {
+        return x < other.x;
+    }
+
+    public boolean right(Point3D other) {
+        return y > other.y;
+    }
+
+    public boolean left(Point3D other) {
+        return y < other.y;
+    }
+
+    public Point3D reverse() {
         return new Point3D(-x,-y,-z);
     }
 
-    Point3D translate(Point3D delta) {
+    public Point3D translate(Point3D delta) {
         return new Point3D(x+delta.x, y+delta.y,z+delta.z);
     }
 
-    Point3D rotate(int rotation) {
+    public Point3D rotate(int rotation) {
         switch (rotation) {
             case  0: return new Point3D( x,  y,  z);
             case  1: return new Point3D( x, -y, -z);
@@ -54,6 +89,14 @@ public class Point3D {
             case 23: return new Point3D(-z, -x,  y);
         }
         throw new RuntimeException("Rotation " + rotation + " not supported.");
+    }
+
+    public Point3D findTranslationTo(Point3D target) {
+        return new Point3D(
+                target.x-x,
+                target.y-y,
+                target.z-z
+        );
     }
 
     @Override
