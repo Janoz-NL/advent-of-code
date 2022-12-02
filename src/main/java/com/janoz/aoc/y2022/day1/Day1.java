@@ -9,23 +9,23 @@ public class Day1 {
         int max = 0;
         int[] top3 = new int[3];
 
-        for (int cals:new InputProcessor<>("inputs/2022/day01.txt", Day1::parseIntSave)) {
-            if (cals < 0) {
-                //P1
+        for (String cals:new InputProcessor<>("inputs/2022/day01.txt", s->s)) {
+            if ("".equals(cals)) {
+                //part 1
                 max = Math.max(candidate, max);
 
-               //P2
+               //part 2
                 store(top3, candidate);
 
                 candidate = 0;
             } else {
-                candidate += cals;
+                candidate += Integer.parseInt(cals);
             }
         }
-        //P1
+        //part 1
         System.out.println(Math.max(candidate, max));
 
-        //P2
+        //part 2
         store(top3, candidate);
         System.out.println(top3[0] + top3[1] + top3[2]);
     }
@@ -38,10 +38,5 @@ public class Day1 {
             i--;
         }
         top[i] = candidate;
-    }
-
-    static int parseIntSave(String s) {
-        if ("".equals(s)) return -1;
-        return Integer.parseInt(s);
     }
 }

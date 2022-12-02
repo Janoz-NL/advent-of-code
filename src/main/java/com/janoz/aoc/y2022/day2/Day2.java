@@ -8,11 +8,14 @@ import com.janoz.aoc.InputProcessor;
 public class Day2 {
 
     public static void main(String[] args) {
+        //part 1
         System.out.println(
             new InputProcessor<>("inputs/2022/day02.txt", Day2::mapToRPS).stream().mapToInt(Day2::score).sum()
         );
+
+        //part 2
         System.out.println(
-                new InputProcessor<>("inputs/2022/day02.txt", Day2::mapToOutcome).stream().mapToInt(Day2::score).sum()
+            new InputProcessor<>("inputs/2022/day02.txt", Day2::mapToOutcome).stream().mapToInt(Day2::score).sum()
         );
     }
 
