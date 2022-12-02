@@ -2,6 +2,8 @@ package com.janoz.aoc;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,4 +34,26 @@ public class InputProcessorTest {
         assertThat(actual.toArray(), equalTo(new Integer[]{1,2,3}));
     }
 
+
+    static String INPUT_WITH_NEWLINES =
+            "1000\n" +
+            "2000\n" +
+            "3000\n" +
+            "\n" +
+            "4000\n" +
+            "\n" +
+            "5000\n" +
+            "6000\n" +
+            "\n" +
+            "7000\n" +
+            "8000\n" +
+            "9000\n" +
+            "\n" +
+            "10000";
+
+    @Test
+    void testStopCriteria() {
+        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, false).stream().count(), is(14L));
+        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, true).stream().count(), is(3L));
+    }
 }

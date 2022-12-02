@@ -17,6 +17,7 @@ public class InputProcessor<T> implements Iterable<T> {
     private final InternalIterator iterator;
 
     public static BufferedReader getReaderFromResource(String file) {
+
         return new BufferedReader(new InputStreamReader(Objects.requireNonNull(InputProcessor.class.getClassLoader().getResourceAsStream(file))));
     }
 
@@ -24,12 +25,17 @@ public class InputProcessor<T> implements Iterable<T> {
     public InputProcessor(String file, Function<String,T> mapper) {
         this(
                 getReaderFromResource(file),
-                mapper
+                mapper,
+                false
         );
     }
 
     public InputProcessor(BufferedReader reader, Function<String,T> mapper) {
-        this.iterator = new InternalIterator(reader, mapper);
+        this.iterator = new InternalIterator(reader, mapper, true);
+    }
+
+    public InputProcessor(BufferedReader reader, Function<String,T> mapper, boolean stopIteratorWhenLineEmpty) {
+        this.iterator = new InternalIterator(reader, mapper, stopIteratorWhenLineEmpty);
     }
 
     @Override
@@ -50,16 +56,19 @@ public class InputProcessor<T> implements Iterable<T> {
         private String next;
         private final BufferedReader input;
         private final Function<String,T> mapper;
+        private final boolean stopIteratorWhenLineEmpty;
 
-        public InternalIterator(BufferedReader input, Function<String,T> mapper) {
+        public InternalIterator(BufferedReader input, Function<String,T> mapper, boolean stopIteratorWhenLineEmpty) {
             this.input = input;
             this.mapper = mapper;
+            this.stopIteratorWhenLineEmpty = stopIteratorWhenLineEmpty;
             getNext();
         }
 
         @Override
         public boolean hasNext() {
-            return next != null && next.length()>0;
+            return next != null &&
+                    (!stopIteratorWhenLineEmpty || next.length()>0);
         }
 
         @Override
