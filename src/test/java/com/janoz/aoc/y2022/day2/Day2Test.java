@@ -34,4 +34,22 @@ public class Day2Test {
         assertThat(Day2.score(PAPER, PAPER), is(2+3));
         assertThat(Day2.score(PAPER, SCISSOR), is(3+6));
     }
+
+
+    /* * * * * * * * * * * * * * * * * * * * */
+    @Test
+    void constructTables() {
+        int[] part1 = new int[9];
+        int[] part2 = new int[9];
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                part1[i+(j*3)] = Day2.score(RPS.values()[i], RPS.values()[j]);
+                part2[i+(j*3)] = Day2.score(RPS.values()[i], RPS.values()[i].withOutcome((char)('X' + j)));
+            }
+        }
+
+        return;
+    }
+
+
 }
