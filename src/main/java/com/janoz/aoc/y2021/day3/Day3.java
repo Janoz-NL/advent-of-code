@@ -10,8 +10,8 @@ public class Day3 {
     private final int bitmapSize;
 
     public static void main(String[] args) {
-        System.out.println(new Day3(12).part1("inputs/day3.txt"));
-        System.out.println(new Day3(12).part2("inputs/day3.txt"));
+        System.out.println(new Day3(12).part1("inputs/2021/day3.txt"));
+        System.out.println(new Day3(12).part2("inputs/2021/day3.txt"));
     }
 
     public int part1(String input) {

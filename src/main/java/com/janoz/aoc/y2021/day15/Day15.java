@@ -1,7 +1,6 @@
 package com.janoz.aoc.y2021.day15;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.geo.BorderedGrid;
 import com.janoz.aoc.geo.Grid;
 import com.janoz.aoc.geo.GrowingGrid;
@@ -17,7 +16,7 @@ public class Day15 {
 
     public static void main(String[] args) {
         //Day15.read("inputs/day15.txt");
-        Day15.readExpanded("inputs/day15.txt");
+        Day15.readExpanded("inputs/2021/day15.txt");
         System.out.println(Day15.dijkstra());
     }
 

@@ -13,7 +13,7 @@ public class Day20 {
     static char infinite = '.';
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = InputProcessor.getReaderFromResource("inputs/day20.txt");
+        BufferedReader bufferedReader = InputProcessor.getReaderFromResource("inputs/2021/day20.txt");
         lookupMap = bufferedReader.readLine();
         bufferedReader.readLine();
         char[][] map = readMap(bufferedReader.lines().collect(Collectors.toList()));

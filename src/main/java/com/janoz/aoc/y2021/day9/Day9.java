@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class Day9 {
 
     public static void main(String[] args) {
-        Day9 d = fromFile("inputs/day9.txt");
+        Day9 d = fromFile("inputs/2021/day9.txt");
         System.out.println(d.scorePart1(d.findValeys()));
 
         d.createBasinIds();

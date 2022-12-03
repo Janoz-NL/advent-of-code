@@ -12,11 +12,11 @@ public class Day13 {
 
     public static void main(String[] args) {
         Day13 d = new Day13();
-        d.part1("inputs/day13.txt");
+        d.part1("inputs/2021/day13.txt");
         System.out.println(d.count());
 
         d = new Day13();
-        d.part2("inputs/day13.txt");
+        d.part2("inputs/2021/day13.txt");
         d.print();
     }
 

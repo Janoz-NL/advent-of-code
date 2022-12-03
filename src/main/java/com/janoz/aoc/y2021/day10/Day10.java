@@ -9,7 +9,7 @@ public class Day10 {
 
     public static void main(String[] args) {
         Day10 d = new Day10();
-        System.out.println(d.process("inputs/day10.txt"));
+        System.out.println(d.process("inputs/2021/day10.txt"));
         System.out.println(d.getPart2Score());
     }
 

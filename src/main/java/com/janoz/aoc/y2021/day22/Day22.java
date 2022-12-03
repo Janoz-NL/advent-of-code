@@ -13,7 +13,7 @@ public class Day22 {
     static Set<Cube> reactor = new HashSet<>();
 
     public static void main(String[] args) {
-        part2("inputs/day22.txt");
+        part2("inputs/2021/day22.txt");
         System.out.println(reactor.stream().mapToLong(Cube::volumne).mapToObj(BigInteger::valueOf).reduce(BigInteger.ZERO,BigInteger::add));
     }
 

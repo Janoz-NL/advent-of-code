@@ -12,7 +12,7 @@ public class Day24 {
     static char[] result = new char[14];
 
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = InputProcessor.getReaderFromResource("inputs/day24.txt");
+        BufferedReader reader = InputProcessor.getReaderFromResource("inputs/2021/day24.txt");
         for (int i=0; i<14; i++) {
             algo[i] = readBlock(reader);
         }

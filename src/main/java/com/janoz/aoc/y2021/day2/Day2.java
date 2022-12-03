@@ -7,7 +7,7 @@ public class Day2 {
     public static void main(String[] args) {
         System.out.println(
                 new Day2().determinePosition2(
-                                new InputProcessor<>("inputs/day2.txt", Movement::new)));
+                                new InputProcessor<>("inputs/2021/day2.txt", Movement::new)));
     }
 
     public int determinePosition1(Iterable<Movement> input) {

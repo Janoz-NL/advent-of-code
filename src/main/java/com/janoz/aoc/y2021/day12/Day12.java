@@ -17,7 +17,7 @@ public class Day12 {
 
     public static void main(String[] args) {
         Day12 d = new Day12();
-        d.read("inputs/day12.txt");
+        d.read("inputs/2021/day12.txt");
         System.out.println(d.travel());
         System.out.println(d.travelLonger());
         System.out.println(d.travelLonger(d.start, Collections.emptySet(),null, false));

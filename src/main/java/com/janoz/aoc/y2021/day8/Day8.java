@@ -12,8 +12,8 @@ public class Day8 {
 
 
     public static void main(String[] args) {
-        System.out.println(new InputProcessor<>("inputs/day8.txt",s -> calc(s,Day8::part1)).stream().mapToInt(Integer::intValue).sum());
-        System.out.println(new InputProcessor<>("inputs/day8.txt",s -> calc(s,Day8::map)).stream().mapToInt(Integer::intValue).sum());
+        System.out.println(new InputProcessor<>("inputs/2021/day8.txt", s -> calc(s,Day8::part1)).stream().mapToInt(Integer::intValue).sum());
+        System.out.println(new InputProcessor<>("inputs/2021/day8.txt", s -> calc(s,Day8::map)).stream().mapToInt(Integer::intValue).sum());
     }
     static int part1(String[] digits, String[] output) {
         return countInOutput(output,digits[1]) + countInOutput(output,digits[4]) + countInOutput(output,digits[7]) + countInOutput(output,digits[8]);

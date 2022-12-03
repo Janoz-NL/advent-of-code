@@ -13,7 +13,7 @@ public class Day11 {
 
     public static void main(String[] args) {
         Day11 d = new Day11();
-        d.load("inputs/day11.txt");
+        d.load("inputs/2021/day11.txt");
 //        System.out.println(d.part1());
         System.out.println(d.part2());
     }

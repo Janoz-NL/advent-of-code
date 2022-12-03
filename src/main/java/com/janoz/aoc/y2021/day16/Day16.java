@@ -8,8 +8,8 @@ public class Day16 {
 
 
     public static void main(String[] args) {
-        System.out.println(part1("inputs/day16.txt"));
-        System.out.println(part2("inputs/day16.txt"));
+        System.out.println(part1("inputs/2021/day16.txt"));
+        System.out.println(part2("inputs/2021/day16.txt"));
     }
 
     static long part1(String input) {

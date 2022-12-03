@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 public class Day5 {
 
     public static void main(String[] args) {
-        System.out.println(new Day5().calculateScore1("inputs/day5.txt"));
-        System.out.println(new Day5().calculateScore2("inputs/day5.txt"));
+        System.out.println(new Day5().calculateScore1("inputs/2021/day5.txt"));
+        System.out.println(new Day5().calculateScore2("inputs/2021/day5.txt"));
     }
 
     public long calculateScore1(String input) {

@@ -68,7 +68,7 @@ public class ALU {
 
     public static void main(String[] args) {
         ALU alu = new ALU();
-        alu.compile("inputs/day24.txt");
+        alu.compile("inputs/2021/day24.txt");
         alu.findLargestModelNr();
     }
 

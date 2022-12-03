@@ -9,8 +9,8 @@ public class Day18 {
 
 
     public static void main(String[] args) {
-        System.out.println(part1("inputs/day18.txt").magnitude());
-        System.out.println(part2("inputs/day18.txt"));
+        System.out.println(part1("inputs/2021/day18.txt").magnitude());
+        System.out.println(part2("inputs/2021/day18.txt"));
     }
 
     static Pair part1(String input) {

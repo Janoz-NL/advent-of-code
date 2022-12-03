@@ -11,7 +11,7 @@ public class Day1 {
         System.out.println(
                 new Day1().countIncreases(
                         new SlidingWindowIterator(
-                                new InputProcessor<>("inputs/day1.txt", Integer::valueOf).iterator())));
+                                new InputProcessor<>("inputs/2021/day1.txt", Integer::valueOf).iterator())));
     }
 
 

@@ -12,7 +12,7 @@ public class Day4 {
 //        Day4 day4 = new Day4(100);
 //        day4.process("inputs/aoc-2021-day4-part2.txt");
         Day4 day4 = new Day4(5);
-        day4.process("inputs/day4.txt");
+        day4.process("inputs/2021/day4.txt");
         System.out.println(day4.getScore(day4.winner));
         System.out.println(day4.getScore(day4.loser));
     }

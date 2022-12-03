@@ -13,8 +13,8 @@ import java.util.Map;
 public class Day14 {
 
     public static void main(String[] args) throws IOException {
-        System.out.println(replace("inputs/day14.txt", 10));
-        System.out.println(replace("inputs/day14.txt", 40));
+        System.out.println(replace("inputs/2021/day14.txt", 10));
+        System.out.println(replace("inputs/2021/day14.txt", 40));
 
     }
 

@@ -18,7 +18,7 @@ public class Day19 {
 
     public static void main(String[] args) throws IOException{
         StopWatch.start();
-        List<TranslatedScanner> scanners = placeScanners("inputs/day19.txt");
+        List<TranslatedScanner> scanners = placeScanners("inputs/2021/day19.txt");
         System.out.println(scanners.stream().map(TranslatedScanner::getBeacons).reduce(new HashSet<>(), (s1,s2) -> {s1.addAll(s2);return s1;}).size());
         System.out.println(findLongestDistance(scanners.stream().map(TranslatedScanner::getMovement).collect(Collectors.toList())));
         StopWatch.stopPrint();

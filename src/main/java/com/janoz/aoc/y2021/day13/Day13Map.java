@@ -15,7 +15,7 @@ public class Day13Map {
 
     public static void main(String[] args) {
         StopWatch.start();
-        part2("inputs/day13.txt");
+        part2("inputs/2021/day13.txt");
         StopWatch.stopPrint();
     }
 
