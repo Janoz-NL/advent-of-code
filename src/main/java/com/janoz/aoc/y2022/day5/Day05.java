@@ -4,18 +4,19 @@ import com.janoz.aoc.InputProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Day05 {
 
     public static void main(String[] args) throws IOException {
         String file = "inputs/2022/day05.txt";
-        System.out.println(part1(file));
+        System.out.println(solve(file));
     }
 
     static String[] stacks1;
     static String[] stacks2;
 
-    static String part1(String file) throws IOException {
+    static String solve(String file) throws IOException {
         BufferedReader reader = InputProcessor.getReaderFromResource(file);
         stacks1 = readStacks(reader);
         stacks2 = new String[9];
@@ -50,18 +51,16 @@ public class Day05 {
 
     static String[] readStacks(BufferedReader reader) throws IOException {
         String[] stacks = new String[9];
-        for (int i=0; i<9; i++) stacks[i] = "";
-        String line = reader.readLine();
-        do {
-            int j=0;
-            for (int i = 1; i<line.length(); i+=4) {
+        Arrays.fill(stacks,"");
+        for (String line=reader.readLine(); !line.startsWith(" 1"); line = reader.readLine()) {
+            int j = 0;
+            for (int i = 1; i < line.length(); i += 4) {
                 if (!(line.charAt(i) == ' ')) {
                     stacks[j] = stacks[j] + line.charAt(i);
                 }
                 j++;
             }
-            line = reader.readLine();
-        } while (!line.startsWith(" 1"));
+        }
         reader.readLine();
         return stacks;
     }
