@@ -15,7 +15,7 @@ public class InputProcessorTest {
 
     @Test
     void testIterator() {
-        Iterator<Integer> cut = new InputProcessor<>("list.txt", Integer::valueOf).iterator();
+        Iterator<Integer> cut = InputProcessor.asIterator("list.txt", Integer::valueOf);
 
         assertThat(cut.hasNext(), is(true));
         assertThat(cut.next(), equalTo(1));
@@ -28,7 +28,7 @@ public class InputProcessorTest {
 
     @Test
     void testList() {
-        List<Integer> actual = new InputProcessor<>("list.txt", Integer::valueOf).asList();
+        List<Integer> actual = InputProcessor.asIterable("list.txt", Integer::valueOf).asList();
 
         assertThat(actual.size(), is(3));
         assertThat(actual.toArray(), equalTo(new Integer[]{1,2,3}));

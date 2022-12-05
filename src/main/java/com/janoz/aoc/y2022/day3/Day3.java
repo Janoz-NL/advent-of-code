@@ -15,13 +15,13 @@ public class Day3 {
     }
 
     static long part1(String file) {
-        return new InputProcessor<>(file, s -> s ).stream()
+        return InputProcessor.asStream(file)
                 .mapToInt(s -> toPriority(findItem(s)))
                 .sum();
     }
 
     static long part2(String file) {
-        Iterator<String> iterator = new InputProcessor<>(file, s -> s ).iterator();
+        Iterator<String> iterator = InputProcessor.asIterator(file);
         long sum = 0;
         while (iterator.hasNext()) {
             sum += toPriority(findBadge(iterator));

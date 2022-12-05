@@ -87,4 +87,29 @@ public class InputProcessor<T> implements Iterable<T> {
             }
         }
     }
+
+    public static Stream<String> asStream(String file) {
+        return asStream(file, s->s);
+    }
+
+    public  static <T> Stream<T> asStream(String file, Function<String, T> mapper) {
+        return asIterable(file, mapper).stream();
+    }
+
+    public static Iterator<String> asIterator(String file) {
+        return asIterator(file, s->s);
+    }
+
+    public static <T> Iterator<T> asIterator(String file, Function<String, T> mapper) {
+        return asIterable(file, mapper).iterator();
+    }
+
+    public static InputProcessor<String> asIterable(String file) {
+        return asIterable(file, s->s);
+    }
+
+    public  static <T> InputProcessor<T> asIterable(String file, Function<String, T> mapper) {
+        return new InputProcessor<>(file, mapper);
+    }
+
 }
