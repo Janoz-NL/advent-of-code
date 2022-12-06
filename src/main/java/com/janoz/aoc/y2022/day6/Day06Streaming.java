@@ -1,9 +1,10 @@
 package com.janoz.aoc.y2022.day6;
 
+import com.janoz.aoc.collections.CircularBuffer;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 public class Day06Streaming {
 
@@ -14,19 +15,17 @@ public class Day06Streaming {
         System.out.println(signalpos);
     }
 
+    CircularBuffer buffer;
 
-    private int[] chars = new int[26];
+    private final int[] chars = new int[26];
     private int dupes;
-    private int[] buffer;
-    private int bufpos = 0;
     private int signalpos = 0;
-    private int headersize;
-    private InputStream in;
+    private final int headersize;
+    private final InputStream in;
 
     private void find() throws IOException {
-        Arrays.fill(chars,0);
+        buffer = new CircularBuffer(in, headersize+1);
         dupes = 0;
-        buffer = new int[headersize];
         for (int i =0; i<headersize; i++) {
             add();
         }
@@ -36,21 +35,15 @@ public class Day06Streaming {
         }
     }
 
-    private int getNext() throws IOException {
-        return in.read() - 'a';
-    }
-
     private void add() throws IOException {
-        int i = getNext();
-        buffer[bufpos] = i;
+        int i = buffer.readNext() - 'a';
         chars[i]++;
         if (chars[i] == 2) dupes++;
-        bufpos = (bufpos + 1) % headersize;
         signalpos++;
     }
 
     private void remove() {
-        int i = buffer[bufpos];
+        int i = buffer.get(headersize-1) - 'a';
         chars[i]--;
         if (chars[i]==1) dupes--;
     }
