@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class Day09 {
 
-
     public static void main(String[] args) {
         String file = "inputs/2022/day09.txt";
         Day09 solver = new Day09(10);
