@@ -5,6 +5,9 @@ import java.util.function.BiFunction;
 import java.util.function.LongFunction;
 import java.util.function.Supplier;
 
+/**
+ * Set of operations to be used to make classes independent of the type Number used.
+ */
 public class Operations<T extends Number> {
 
     public final Supplier<T> zero;

@@ -8,6 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
+ * A sorted list of type V internaly backed by a histogram to save memory.
  *
  * @param <V> Type of the values
  * @param <I> Type of the index

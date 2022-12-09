@@ -5,6 +5,7 @@ import com.janoz.aoc.collections.LongTuple;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class Day21 {
 
@@ -23,7 +24,7 @@ public class Day21 {
         }
     }
 
-    static AlwaysHashMap<Player, Map<Player, LongTuple>> cache = new AlwaysHashMap<>(HashMap::new);
+    static AlwaysHashMap<Player, Map<Player, LongTuple>> cache = new AlwaysHashMap<>((Supplier<Map<Player, LongTuple>>) HashMap::new);
 
     public static void main(String[] args) {
         System.out.println(part1());

@@ -62,5 +62,4 @@ public class Histogram<K, N extends Number & Comparable<N>> {
     public static <K> Histogram<K, BigInteger> hugeHistogram() {
         return new Histogram<>(Operations.bigIntegerOperations());
     }
-
 }

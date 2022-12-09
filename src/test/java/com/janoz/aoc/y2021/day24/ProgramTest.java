@@ -9,7 +9,7 @@ public class ProgramTest {
 
     @Test
     void testProgram() {
-        List<String> operations = new InputProcessor<>("inputs/day24.txt", s -> s).asList();
+        List<String> operations = new InputProcessor<>("inputs/2021/day24.txt", s -> s).asList();
         boolean print;
         for (int i = 0; i< 18; i++) {
             print = false;

@@ -15,7 +15,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
+            <groupId>com.github.luben</groupId>
+            <artifactId>zstd-jni</artifactId>
+            <version>1.5.2-5</version>
+        </dependency>
+
+        <dependency>
+        <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.9.0</version>
             <scope>test</scope>
@@ -26,6 +32,7 @@
             <artifactId>assertj-core</artifactId>
             <version>3.23.1</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.hamcrest</groupId>
