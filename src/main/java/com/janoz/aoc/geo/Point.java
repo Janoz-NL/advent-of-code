@@ -12,8 +12,9 @@ public class Point {
         this.y = y;
     }
 
-    public <T> void putOn(Grid<T> g,T v) {
+    public <T> T putOn(Grid<T> g,T v) {
          g.put(this,v);
+         return v;
     }
 
     public <T> T putOn(Grid<T> g, Function<T,T> f) {
