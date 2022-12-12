@@ -1,35 +1,33 @@
 package com.janoz.aoc.y2022.day12;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.geo.DijsktraGrid;
+import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.algorithms.AStar;
+import com.janoz.aoc.algorithms.Dijsktra;
 import com.janoz.aoc.geo.Point;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class Day12 {
-
 
     public static void main(String[] args) {
         String file = "inputs/2022/day12.txt";
         readField(file);
-        //part 1
-        DijsktraGrid dijkstraGrid = new DijsktraGrid(field.get(0).length(),field.size(),Day12::isReachable);
-        dijkstraGrid.calculateFromEnd(end);
-        System.out.println(dijkstraGrid.getDistanceToEnd(start));
 
-        //part 2
-        long result = Long.MAX_VALUE;
-        for (int y=0; y<field.size(); y++) {
-            for (int x=0; x<field.get(0).length(); x++) {
-                if (getChar(x,y) == 'a') {
-                    result = Math.min(result,dijkstraGrid.getDistanceToEnd(new Point(x,y)));
-                }
-            }
-        }
-        System.out.println(result);
+        StopWatch.start();
+        AStar<Point> aStar = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        System.out.println(aStar.calculate(start));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        Dijsktra<Point> dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        System.out.println(dijsktra.calculate(end));
+        StopWatch.stopPrint();
+    }
+
+    static boolean isReverseReachable(Point to, Point from) {
+        return isReachable(from, to);
     }
 
     static boolean isReachable(Point from, Point to) {
