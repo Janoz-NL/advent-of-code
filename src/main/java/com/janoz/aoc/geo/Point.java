@@ -2,6 +2,7 @@ package com.janoz.aoc.geo;
 
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Point {
 
@@ -96,4 +97,7 @@ public class Point {
         return new Point(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()));
     }
 
+    public static Predicate<Point> boundsPredicate(int width, int height) {
+        return (p) -> p.x>=0 && p.y>=0 && p.x<width && p.y<height;
+    }
 }
