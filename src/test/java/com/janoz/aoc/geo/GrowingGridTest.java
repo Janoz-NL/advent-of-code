@@ -64,5 +64,14 @@ public class GrowingGridTest {
         assertThat(cut.get(new Point(4,2)), equalTo(0));
     }
 
+    @Test
+    public void everPut() {
+        assertThat(cut.get(2,2), equalTo(0));
+        assertThat(cut.everPut(new Point(2,2)), equalTo(false));
+        cut.put(new Point(2,2),0);
+        assertThat(cut.get(2,2), equalTo(0));
+        assertThat(cut.everPut(new Point(2,2)), equalTo(true));
+    }
+
 
 }

@@ -54,6 +54,10 @@ public class GrowingGrid<T> implements Grid<T>{
         return data.getOrDefault(p,emptyValue);
     }
 
+    public boolean everPut(Point p) {
+        return data.containsKey(p);
+    }
+
     private void grow(Point p) {
         width=Math.max(width,p.x+1);
         height=Math.max(height,p.y+1);
