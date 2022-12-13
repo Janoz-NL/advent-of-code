@@ -14,7 +14,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class Dijsktra<NODE> {
+public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
 
     private final Map<NODE,Long> distanceMap= new AlwaysHashMap<>(() -> Long.MAX_VALUE);
     private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
@@ -29,11 +29,8 @@ public class Dijsktra<NODE> {
         this.earlyOut = earlyOut;
     }
 
-    public long calculate(NODE start) {
-        return calculate(Collections.singletonList(start));
-    }
-
-    public long calculate(List<NODE> starts) {
+    @Override
+    public long calculate(Collection<NODE> starts) {
         PriorityQueue<Route<NODE>> heap = new PriorityQueue<>();
         starts.forEach(node -> {
             Route<NODE> route = new Route<>(node, 0L);
@@ -52,13 +49,14 @@ public class Dijsktra<NODE> {
         return -1;
     }
 
+    @Override
+    public long getDistance(NODE node) {
+        return distanceMap.get(node);
+    }
+
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {
         distanceMap.put(route.node, route.distance);
         heap.add(route);
-    }
-
-    public long getDistance(NODE node) {
-        return distanceMap.get(node);
     }
 
     private class Step {

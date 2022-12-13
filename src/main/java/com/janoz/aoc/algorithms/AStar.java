@@ -7,12 +7,13 @@ import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class AStar<NODE> {
+public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
 
     private final HashMap<NODE,Long> distanceMap = new AlwaysHashMap<>(() -> Long.MAX_VALUE);
     private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
@@ -29,7 +30,10 @@ public class AStar<NODE> {
         this.heuristic = heuristic;
     }
 
-    public long calculate(NODE start) {
+    @Override
+    public long calculate(Collection<NODE> starts) {
+        if (starts.size() != 1) throw new RuntimeException("A* only implemented for single start");
+        NODE start = starts.iterator().next();
         Route<NODE> route = new Route<>(start, 0L, heuristic.apply(start));
         PriorityQueue<Route<NODE>> heap = new PriorityQueue<>();
         addRoute(heap, route);
@@ -44,6 +48,11 @@ public class AStar<NODE> {
                     .forEach(r -> addRoute(heap,r.to));
         }
         return -1;
+    }
+
+    @Override
+    public long getDistance(NODE node) {
+        return distanceMap.get(node);
     }
 
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {
@@ -72,7 +81,9 @@ public class AStar<NODE> {
 
         @Override
         public int compareTo(Route o) {
-            return (int)Math.signum(expectedDistance - o.expectedDistance);
+            //in case of same expected, ignore heuristic.
+            int result = (int)Math.signum(expectedDistance - o.expectedDistance);
+            return result == 0?(int)(distance - o.distance):result;
         }
 
         public Route(NODE p, long distanceUntilNow, long minimumDistanceToTarget) {

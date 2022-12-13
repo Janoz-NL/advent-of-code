@@ -3,34 +3,68 @@ package com.janoz.aoc.y2022.day12;
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.algorithms.AStar;
+import com.janoz.aoc.algorithms.BFS;
 import com.janoz.aoc.algorithms.Dijsktra;
+import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.Point;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Day12 {
 
     public static void main(String[] args) {
-        AStar<Point> aStar;
-        Dijsktra<Point> dijsktra;
+        PathFindingAlgorithm<Point> algo;
 
         String file = "inputs/2022/day12.txt";
         readField(file);
 
+        Collection<Point> allAs = collectAs();
+
+        System.out.println("-- Part 1 --");
+
         StopWatch.start();
-        aStar = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
-        System.out.println(aStar.calculate(start));
+        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        System.out.println("aStar        : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
-        System.out.println(dijsktra.calculate(start));
+        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReachable, (p) -> p.equals(end));
+        System.out.println("BFS          : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> getChar(p) == 'a');
-        System.out.println(dijsktra.calculate(end));
+        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
+        System.out.println("Dijkstra     : " + algo.calculate(start));
+        StopWatch.stopPrint();
+
+        System.out.println("-- Part 2 --");
+
+        StopWatch.start();
+        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        System.out.println("aStar rev    : " + algo.calculate(allAs));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReachable, (p) -> p.equals(end));
+        System.out.println("BFS          : " + algo.calculate(allAs));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        System.out.println("BFS rev      : " + algo.calculate(end));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(), Day12::isReachable, (p) -> p.equals(end));
+        System.out.println("Dijkstra     : " + algo.calculate(allAs));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
     }
 
@@ -46,6 +80,16 @@ public class Day12 {
 
     static List<String> field;
     static Point end,start;
+
+    static Collection<Point> collectAs() {
+        Collection<Point> result = new ArrayList<>();
+        IntStream.range(0,field.size())
+                .forEach(y -> IntStream.range(0,field.get(0).length())
+                        .filter(x -> getChar(x,y) == 'a')
+                        .mapToObj(x -> new Point(x,y))
+                        .forEach(result::add));
+        return result;
+    }
 
     static void readField(String file) {
         field = new ArrayList<>();
