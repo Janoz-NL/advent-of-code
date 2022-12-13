@@ -4,11 +4,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 
 public class Package implements Comparable<Package> {
 
-    private List<Object> contents;
+    private final List<ListOrInt> contents;
 
     public Package(String data) {
         contents = parseList(new CharIterator(data));
@@ -18,31 +19,31 @@ public class Package implements Comparable<Package> {
         return asString(contents);
     }
 
-    private String asString(List<Object> l) {
+    private String asString(List<ListOrInt> l) {
         StringBuilder sb = new StringBuilder();
         sb.append('[');
         for (int i=0; i<l.size(); i++) {
             if (i!=0) {
                 sb.append(',');
             }
-            if (l.get(i) instanceof Integer) {
-                sb.append((int)l.get(i));
+            if (!l.get(i).isList()) {
+                sb.append(l.get(i).getInt());
             } else {
-                sb.append(asString((List<Object>)l.get(i)));
+                sb.append(asString(l.get(i).getList()));
             }
         }
         sb.append(']');
         return sb.toString();
     }
 
-    private List<Object> parseList(CharIterator it) {
-        List<Object> currentList = new ArrayList<>();
+    private List<ListOrInt> parseList(CharIterator it) {
+        List<ListOrInt> currentList = new ArrayList<>();
         it.pop(); // pop [
         while (it.peek()!=']') {
             if (it.peek() == '[') {
-                currentList.add(parseList(it));
+                currentList.add(new ListOrInt(parseList(it)));
             } else {
-                currentList.add(it.popInt());
+                currentList.add(new ListOrInt(it.popInt()));
             }
             if (it.peek() == ',') it.pop();
         }
@@ -52,35 +53,25 @@ public class Package implements Comparable<Package> {
 
     @Override
     public int compareTo(Package o) {
-        return inOrder(new ArrayDeque<>((List<Object>) contents), new ArrayDeque<>((List<Object>) o.contents));
+        return compare(new ArrayDeque<>(contents), new ArrayDeque<>(o.contents));
     }
 
-    private static int inOrder(Queue<Object> firstQ, Queue<Object> secondQ ) {
+    private static int compare(Queue<ListOrInt> firstQ, Queue<ListOrInt> secondQ ) {
         while (!firstQ.isEmpty()) {
             if (secondQ.isEmpty()) {
                 return 1;
             }
-            if (firstQ.peek() instanceof Integer) {
-                int fi = (Integer) firstQ.poll();
-                if (secondQ.peek() instanceof Integer) {
-                    int si = (Integer) secondQ.poll();
-                    if (fi != si) {
-                        return fi - si;
-                    }
-                } else {
-                    int result = inOrder(new ArrayDeque<>(Collections.singleton(fi)), new ArrayDeque<>((List<Object>) secondQ.poll()));
-                    if (result != 0) return result;
-                }
+            ListOrInt first = firstQ.poll();
+            ListOrInt second = Objects.requireNonNull(secondQ.poll());
+            int result;
+            if (first.isList()) {
+                result = compare(new ArrayDeque<>(first.getList()), new ArrayDeque<>(second.isList() ? second.getList() : Collections.singleton(second)));
+            } else if (second.isList()) {
+                result = compare(new ArrayDeque<>(Collections.singleton(first)), new ArrayDeque<>(second.getList()));
             } else {
-                Queue<Object> firstChildQ = new ArrayDeque<>((List<Object>) firstQ.poll());
-                if (secondQ.peek() instanceof Integer) {
-                    int result = inOrder(firstChildQ, new ArrayDeque<>(Collections.singleton((Integer) secondQ.poll())));
-                    if (result != 0) return result;
-                } else {
-                    int result = inOrder(firstChildQ, new ArrayDeque<>((List<Object>) secondQ.poll()));
-                    if (result != 0) return result;
-                }
+                result = first.getInt() - second.getInt();
             }
+            if (result != 0) return result;
         }
         if (secondQ.isEmpty()) {
             return 0;
@@ -88,8 +79,6 @@ public class Package implements Comparable<Package> {
             return -1;
         }
     }
-
-
 
     private static class CharIterator {
         int curpos;
@@ -114,6 +103,31 @@ public class Package implements Comparable<Package> {
                 i = i + (pop() - '0');
             }
             return i;
+        }
+    }
+
+    private static class ListOrInt {
+        private int i;
+        private List<ListOrInt> l;
+
+        ListOrInt(List<ListOrInt> l) {
+            this.l = l;
+        }
+
+        ListOrInt(int i) {
+            this.i = i;
+        }
+
+        boolean isList() {
+            return l!=null;
+        }
+
+        public int getInt() {
+            return i;
+        }
+
+        public List<ListOrInt> getList() {
+            return l;
         }
     }
 }
