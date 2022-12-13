@@ -3,8 +3,9 @@ package com.janoz.aoc.algorithms;
 import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.geo.Point;
 import com.janoz.aoc.geo.Utils;
+import com.janoz.aoc.graphs.Node;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
@@ -15,12 +16,12 @@ public class AStar<NODE> {
 
     private final HashMap<NODE,Long> distanceMap = new AlwaysHashMap<>(() -> Long.MAX_VALUE);
     private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
-    private final Function<NODE, NODE[]> neighbourProducer;
+    private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<NODE> earlyOut;
     private final Function<NODE, Long> heuristic;
 
-    private AStar(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, NODE[]> neighbourProducer, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
+    private AStar(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
         this.validMovePredicate = validMovePredicate;
         this.distanceCalculator = (f,t) -> 1L;
         this.neighbourProducer = neighbourProducer;
@@ -36,7 +37,7 @@ public class AStar<NODE> {
             Route<NODE> source = heap.poll();
             if (earlyOut.test(source.node)) return source.distance;
             if (source.distance != distanceMap.get(source.node)) continue; //already found a quicker way
-            Arrays.stream(neighbourProducer.apply(source.node))
+            neighbourProducer.apply(source.node).stream()
                     .filter(n -> validMovePredicate.apply(source.node,n))
                     .map(n -> new Step(source,n))
                     .filter(Step::isPreferable)
@@ -82,6 +83,12 @@ public class AStar<NODE> {
     }
 
     public static AStar<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
-        return new AStar<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbours, p -> p.equals(target), p -> p.manhattanDistance(target));
+        return new AStar<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
     }
+
+    public static Dijsktra<Node> forNodes(Node target) {
+        return new Dijsktra<>((f,t) -> true, Node::reachable, (f,t) -> f.getTo(t).getLength(), n -> n == target);
+    }
+
+
 }

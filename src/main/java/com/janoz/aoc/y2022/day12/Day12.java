@@ -12,16 +12,24 @@ import java.util.List;
 public class Day12 {
 
     public static void main(String[] args) {
+        AStar<Point> aStar;
+        Dijsktra<Point> dijsktra;
+
         String file = "inputs/2022/day12.txt";
         readField(file);
 
         StopWatch.start();
-        AStar<Point> aStar = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        aStar = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
         System.out.println(aStar.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        Dijsktra<Point> dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
+        System.out.println(dijsktra.calculate(start));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        dijsktra = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> getChar(p) == 'a');
         System.out.println(dijsktra.calculate(end));
         StopWatch.stopPrint();
     }

@@ -1,5 +1,7 @@
 package com.janoz.aoc.geo;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -61,6 +63,10 @@ public class Point {
                 translate(0,1),
                 translate(1,0),
         };
+    }
+
+    public Collection<Point> neighbourCollection() {
+        return Arrays.asList(neighbours());
     }
 
     public long manhattanDistance(Point p) {
