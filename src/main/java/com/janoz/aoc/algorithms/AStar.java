@@ -32,15 +32,12 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
 
     @Override
     public long calculate(Collection<NODE> starts) {
-        if (starts.size() != 1) throw new RuntimeException("A* only implemented for single start");
-        NODE start = starts.iterator().next();
-        Route<NODE> route = new Route<>(start, 0L, heuristic.apply(start));
         PriorityQueue<Route<NODE>> heap = new PriorityQueue<>();
-        addRoute(heap, route);
+        starts.forEach(start-> addRoute(heap, new Route<>(start, 0L, heuristic.apply(start))));
         while (!heap.isEmpty()) {
             Route<NODE> source = heap.poll();
             if (earlyOut.test(source.node)) return source.distance;
-            if (source.distance != distanceMap.get(source.node)) continue; //already found a quicker way
+            if (source.distance > distanceMap.get(source.node)) continue; //already found a quicker way
             neighbourProducer.apply(source.node).stream()
                     .filter(n -> validMovePredicate.apply(source.node,n))
                     .map(n -> new Step(source,n))

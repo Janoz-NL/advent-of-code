@@ -31,13 +31,28 @@ public class Day12 {
         StopWatch.stopPrint();
 
         StopWatch.start();
+        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable,start);
+        System.out.println("aStar rev    : " + algo.calculate(end));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
         algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReachable, (p) -> p.equals(end));
         System.out.println("BFS          : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
+        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReverseReachable, (p) -> p.equals(start));
+        System.out.println("BFS rev      : " + algo.calculate(end));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
         algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
         System.out.println("Dijkstra     : " + algo.calculate(start));
+        StopWatch.stopPrint();
+
+        StopWatch.start();
+        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> p.equals(start));
+        System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
 
         System.out.println("-- Part 2 --");
