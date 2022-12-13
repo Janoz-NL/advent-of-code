@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day3Test {
 
@@ -22,40 +20,40 @@ public class Day3Test {
     @Test
     public void testPart2() {
         int actual = cut.part2("inputs/day3example.txt");
-        assertThat(actual, equalTo(230));
+        assertThat(actual).isEqualTo(230);
 
     }
 
     @Test
     public void testOxygen() {
         int actual = cut.calculateOxygen(getTestInputAsList());
-        assertThat(actual, equalTo(23));
+        assertThat(actual).isEqualTo(23);
     }
 
     @Test
     public void testCo2() {
         int actual = cut.calculateCo2(getTestInputAsList());
-        assertThat(actual, equalTo(10));
+        assertThat(actual).isEqualTo(10);
     }
 
     @Test
     public void testFilter() {
-        assertThat(cut.filter(getTestInputAsList(), 0, true).size(), equalTo(7));
-        assertThat(cut.filter(getTestInputAsList(), 0, false).size(), equalTo(5));
-        assertThat(cut.filter(getTestInputAsList(), 4, true).size(), equalTo(5));
-        assertThat(cut.filter(getTestInputAsList(), 4, false).size(), equalTo(7));
+        assertThat(cut.filter(getTestInputAsList(), 0, true).size()).isEqualTo(7);
+        assertThat(cut.filter(getTestInputAsList(), 0, false).size()).isEqualTo(5);
+        assertThat(cut.filter(getTestInputAsList(), 4, true).size()).isEqualTo(5);
+        assertThat(cut.filter(getTestInputAsList(), 4, false).size()).isEqualTo(7);
     }
 
     @Test
     public void testModusBits() {
         boolean[] actual =  cut.modusBits(getTestInput());
-        assertThat(actual, equalTo(new boolean[]{true,false,true,true,false}));
+        assertThat(actual).isEqualTo(new boolean[]{true,false,true,true,false});
     }
 
     @Test
     public void testPart1() {
         int actual = cut.part1("inputs/day3example.txt");
-        assertThat(actual, equalTo(198));
+        assertThat(actual).isEqualTo(198);
 
     }
 

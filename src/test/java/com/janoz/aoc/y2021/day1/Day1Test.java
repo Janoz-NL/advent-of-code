@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day1Test {
 
@@ -22,13 +21,13 @@ public class Day1Test {
     @Test
     void testGivenIncrementExample() {
         Iterator<Integer> input = IntStream.of(199,200,208,210,200,207,240,269,260,263).boxed().iterator();
-        assertThat(cut.countIncreases(input), equalTo(7));
+        assertThat(cut.countIncreases(input)).isEqualTo(7);
     }
 
     @Test
     void testGivenFilteredExample() {
         Iterator<Integer> input = IntStream.of(199,200,208,210,200,207,240,269,260,263).boxed().iterator();
-        assertThat(cut.countIncreases(new SlidingWindowIterator(input)), equalTo(5));
+        assertThat(cut.countIncreases(new SlidingWindowIterator(input))).isEqualTo(5);
 
     }
 }

@@ -2,13 +2,9 @@ package com.janoz.aoc.y2021.day24;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.in;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ALUTest {
-
-
 
     @Test
     void testToBit() {
@@ -16,22 +12,22 @@ class ALUTest {
         alu.compile("inputs/day24toBit.txt");
 
         alu.run("0");
-        assertThat(alu.register[0], equalTo(0L));
-        assertThat(alu.register[1], equalTo(0L));
-        assertThat(alu.register[2], equalTo(0L));
-        assertThat(alu.register[3], equalTo(0L));
+        assertThat(alu.register[0]).isEqualTo(0L);
+        assertThat(alu.register[1]).isEqualTo(0L);
+        assertThat(alu.register[2]).isEqualTo(0L);
+        assertThat(alu.register[3]).isEqualTo(0L);
 
         alu.run("9");
-        assertThat(alu.register[0], equalTo(1L));
-        assertThat(alu.register[1], equalTo(0L));
-        assertThat(alu.register[2], equalTo(0L));
-        assertThat(alu.register[3], equalTo(1L));
+        assertThat(alu.register[0]).isEqualTo(1L);
+        assertThat(alu.register[1]).isEqualTo(0L);
+        assertThat(alu.register[2]).isEqualTo(0L);
+        assertThat(alu.register[3]).isEqualTo(1L);
 
         alu.run("6");
-        assertThat(alu.register[0], equalTo(0L));
-        assertThat(alu.register[1], equalTo(1L));
-        assertThat(alu.register[2], equalTo(1L));
-        assertThat(alu.register[3], equalTo(0L));
+        assertThat(alu.register[0]).isEqualTo(0L);
+        assertThat(alu.register[1]).isEqualTo(1L);
+        assertThat(alu.register[2]).isEqualTo(1L);
+        assertThat(alu.register[3]).isEqualTo(0L);
     }
 
     @Test
@@ -40,13 +36,13 @@ class ALUTest {
         alu.compile("inputs/day24eql.txt");
 
         alu.run("39");
-        assertThat(alu.register[3], equalTo(1L));
+        assertThat(alu.register[3]).isEqualTo(1L);
 
         alu.run("13");
-        assertThat(alu.register[3], equalTo(1L));
+        assertThat(alu.register[3]).isEqualTo(1L);
 
         alu.run("21");
-        assertThat(alu.register[3], equalTo(0L));
+        assertThat(alu.register[3]).isEqualTo(0L);
     }
 
     @Test
@@ -90,7 +86,7 @@ class ALUTest {
         for (int z=0; z<25; z++) {
             for (char c = '1'; c <= '9'; c++) {
                 alu.run("" + c, 0, 0, 0, z);
-                assertThat(answer(z,26,-12,6,c-'0'), equalTo(alu.register[3]));
+                assertThat(answer(z,26,-12,6,c-'0')).isEqualTo(alu.register[3]);
             }
         }
 
@@ -98,7 +94,7 @@ class ALUTest {
         for (int z=0; z<25; z++) {
             for (char c = '1'; c <= '9'; c++) {
                 alu.run("" + c, 0, 0, 0, z);
-                assertThat(answer(z,1,14,16,c-'0'), equalTo(alu.register[3]));
+                assertThat(answer(z,1,14,16,c-'0')).isEqualTo(alu.register[3]);
             }
         }
 
@@ -106,7 +102,7 @@ class ALUTest {
         for (int z=0; z<25; z++) {
             for (char c = '1'; c <= '9'; c++) {
                 alu.run("" + c, 0, 0, 0, z);
-                assertThat(answer(z,1,11,3,c-'0'), equalTo(alu.register[3]));
+                assertThat(answer(z,1,11,3,c-'0')).isEqualTo(alu.register[3]);
             }
         }
     }

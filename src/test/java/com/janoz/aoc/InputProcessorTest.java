@@ -7,8 +7,7 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class InputProcessorTest {
@@ -17,21 +16,21 @@ public class InputProcessorTest {
     void testIterator() {
         Iterator<Integer> cut = InputProcessor.asIterator("list.txt", Integer::valueOf);
 
-        assertThat(cut.hasNext(), is(true));
-        assertThat(cut.next(), equalTo(1));
-        assertThat(cut.hasNext(), is(true));
-        assertThat(cut.next(), equalTo(2));
-        assertThat(cut.hasNext(), is(true));
-        assertThat(cut.next(), equalTo(3));
-        assertThat(cut.hasNext(), is(false));
+        assertThat(cut.hasNext()).isTrue();
+        assertThat(cut.next()).isEqualTo(1);
+        assertThat(cut.hasNext()).isTrue();
+        assertThat(cut.next()).isEqualTo(2);
+        assertThat(cut.hasNext()).isTrue();
+        assertThat(cut.next()).isEqualTo(3);
+        assertThat(cut.hasNext()).isFalse();
     }
 
     @Test
     void testList() {
         List<Integer> actual = InputProcessor.asIterable("list.txt", Integer::valueOf).asList();
 
-        assertThat(actual.size(), is(3));
-        assertThat(actual.toArray(), equalTo(new Integer[]{1,2,3}));
+        assertThat(actual.size()).isEqualTo(3);
+        assertThat(actual.toArray()).isEqualTo(new Integer[]{1,2,3});
     }
 
 
@@ -53,7 +52,7 @@ public class InputProcessorTest {
 
     @Test
     void testStopCriteria() {
-        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, false).stream().count(), is(14L));
-        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, true).stream().count(), is(3L));
+        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, false).stream().count()).isEqualTo(14L);
+        assertThat(new InputProcessor<>(new BufferedReader(new StringReader(INPUT_WITH_NEWLINES)),s->s, true).stream().count()).isEqualTo(3L);
     }
 }

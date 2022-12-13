@@ -40,7 +40,7 @@ class Day06StreamingTest {
 
 
     @Test
-    void whyNotWorking() throws IOException {
+    void justAString() throws IOException {
         InputStream inputStream = new ByteArrayInputStream("atiaticunproblematicunproblematicundiscoverablyundiscoverably".getBytes());
         new Day06Streaming(inputStream,14);
     }

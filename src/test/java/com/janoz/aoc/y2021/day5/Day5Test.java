@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Day5Test {
 
@@ -22,17 +21,17 @@ class Day5Test {
     @Test
     void testStream() {
         List<Line> actual = cut.streamLines("inputs/day5example.txt").collect(Collectors.toList());
-        assertThat(actual.size(),is(10));
+        assertThat(actual.size()).isEqualTo(10);
     }
 
     @Test
     void testPart1() {
-        assertThat(cut.calculateScore1("inputs/day5example.txt"), is(5L));
+        assertThat(cut.calculateScore1("inputs/day5example.txt")).isEqualTo(5L);
     }
 
     @Test
     void testPart2() {
-        assertThat(cut.calculateScore2("inputs/day5example.txt"), is(12L));
+        assertThat(cut.calculateScore2("inputs/day5example.txt")).isEqualTo(12L);
     }
 
 }

@@ -3,8 +3,7 @@ package com.janoz.aoc.y2021.day18;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenizerTest {
 
@@ -17,14 +16,14 @@ class TokenizerTest {
 
     @Test
     void testTokenizer() {
-        assertThat(cut.peek(), equalTo('c'));
-        assertThat(cut.peek(), equalTo('c'));
-        assertThat(cut.get(), equalTo('c'));
-        assertThat(cut.peek(), equalTo('o'));
-        assertThat(cut.get(), equalTo('o'));
+        assertThat(cut.peek()).isEqualTo('c');
+        assertThat(cut.peek()).isEqualTo('c');
+        assertThat(cut.get()).isEqualTo('c');
+        assertThat(cut.peek()).isEqualTo('o');
+        assertThat(cut.get()).isEqualTo('o');
 
-        assertThat(cut.hasNext(), equalTo(true));
-        assertThat(cut.get(), equalTo('n'));
-        assertThat(cut.hasNext(), equalTo(false));
+        assertThat(cut.hasNext()).isEqualTo(true);
+        assertThat(cut.get()).isEqualTo('n');
+        assertThat(cut.hasNext()).isEqualTo(false);
     }
 }

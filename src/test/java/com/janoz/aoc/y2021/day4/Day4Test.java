@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Day4Test {
 
@@ -21,25 +20,25 @@ class Day4Test {
     @Test
     public void testInitializing() throws IOException {
         cut.process("inputs/day4example.txt");
-        assertThat(cut.winner.winsInTurn, equalTo(11));
+        assertThat(cut.winner.winsInTurn).isEqualTo(11);
     }
 
     @Test
     public void testBoardScore() throws IOException {
         cut.process("inputs/day4example.txt");
-        assertThat(cut.winner.getScore(), equalTo(188L));
+        assertThat(cut.winner.getScore()).isEqualTo(188L);
     }
 
     @Test
     public void testScoreWinner() throws IOException {
         cut.process("inputs/day4example.txt");
-        assertThat(cut.getScore(cut.winner), equalTo(4512L));
+        assertThat(cut.getScore(cut.winner)).isEqualTo(4512L);
     }
 
     @Test
     public void testScoreLoser() throws IOException {
         cut.process("inputs/day4example.txt");
-        assertThat(cut.getScore(cut.loser), equalTo(1924L));
+        assertThat(cut.getScore(cut.loser)).isEqualTo(1924L);
     }
 
 

@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SlidingWindowIteratorTest {
 
@@ -15,15 +13,15 @@ class SlidingWindowIteratorTest {
     @Test
     void testSLidingWindow() {
         cut = new SlidingWindowIterator(IntStream.of(199,200,208,210,200,207,240,269,260,263).boxed().iterator());
-        assertThat(cut.next(), is(607));
-        assertThat(cut.next(), is(618));
-        assertThat(cut.next(), is(618));
-        assertThat(cut.next(), is(617));
-        assertThat(cut.next(), is(647));
-        assertThat(cut.next(), is(716));
-        assertThat(cut.next(), is(769));
-        assertThat(cut.next(), is(792));
-        assertThat(cut.hasNext(), is(false));
+        assertThat(cut.next()).isEqualTo(607);
+        assertThat(cut.next()).isEqualTo(618);
+        assertThat(cut.next()).isEqualTo(618);
+        assertThat(cut.next()).isEqualTo(617);
+        assertThat(cut.next()).isEqualTo(647);
+        assertThat(cut.next()).isEqualTo(716);
+        assertThat(cut.next()).isEqualTo(769);
+        assertThat(cut.next()).isEqualTo(792);
+        assertThat(cut.hasNext()).isFalse();
     }
 
 }

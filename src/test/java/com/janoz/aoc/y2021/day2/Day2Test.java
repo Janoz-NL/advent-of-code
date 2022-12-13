@@ -4,8 +4,7 @@ import com.janoz.aoc.InputProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day2Test {
 
@@ -19,13 +18,13 @@ public class Day2Test {
     @Test
     public void testPart1() {
         int result = cut.determinePosition1(new InputProcessor<>("inputs/day2example.txt", Movement::new));
-        assertThat(result, equalTo(150));
+        assertThat(result).isEqualTo(150);
     }
 
     @Test
     public void testPart2() {
         int result = cut.determinePosition2(new InputProcessor<>("inputs/day2example.txt", Movement::new));
-        assertThat(result, equalTo(900));
+        assertThat(result).isEqualTo(900);
     }
 
 }

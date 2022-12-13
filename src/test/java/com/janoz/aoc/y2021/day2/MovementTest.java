@@ -2,9 +2,7 @@ package com.janoz.aoc.y2021.day2;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MovementTest {
 
@@ -12,7 +10,7 @@ public class MovementTest {
     @Test
     public void testConstructor() {
         Movement m = new Movement("forward 2");
-        assertThat(m.direction, is(Movement.Direction.FORWARD));
-        assertThat(m.length, equalTo(2));
+        assertThat(m.direction).isEqualTo(Movement.Direction.FORWARD);
+        assertThat(m.length).isEqualTo(2);
     }
 }

@@ -4,10 +4,7 @@ package com.janoz.aoc.y2021.day12;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Day12Test {
 
@@ -23,13 +20,13 @@ class Day12Test {
     @Test
     public void testPart1Example1() {
         cut.read("inputs/day12example1.txt");
-        assertThat(cut.travel(), equalTo(10L));
+        assertThat(cut.travel()).isEqualTo(10L);
     }
 
     @Test
     public void testPart2Example1() {
         cut.read("inputs/day12example1.txt");
-        assertThat(cut.travelLonger(), equalTo(36L));
+        assertThat(cut.travelLonger()).isEqualTo(36L);
     }
 
 }

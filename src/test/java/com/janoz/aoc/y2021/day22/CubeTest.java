@@ -4,25 +4,24 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CubeTest {
 
 
     @Test
     void testIntersects() {
-        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(0,0,0,4,4,4)), equalTo(true));
-        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(2,2,2,4,4,4)), equalTo(false));
-        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(3,3,3,4,4,4)), equalTo(false));
+        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(0,0,0,4,4,4))).isTrue();
+        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(2,2,2,4,4,4))).isFalse();
+        assertThat(new Cube(-2,-2,-2,2,2,2).intersects(new Cube(3,3,3,4,4,4))).isFalse();
     }
 
     @Test
     void testcontains() {
-        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-2,-2,-2,2,2,2)), equalTo(true));
-        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-1,-1,-1,1,1,1)), equalTo(true));
-        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-3,-3,-3,3,3,3)), equalTo(false));
-        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-1,-1,-1,3,3,3)), equalTo(false));
+        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-2,-2,-2,2,2,2))).isTrue();
+        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-1,-1,-1,1,1,1))).isTrue();
+        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-3,-3,-3,3,3,3))).isFalse();
+        assertThat(new Cube(-2,-2,-2,2,2,2).contains(new Cube(-1,-1,-1,3,3,3))).isFalse();
     }
 
     @Test
@@ -30,8 +29,8 @@ class CubeTest {
         Cube start = new Cube(-2, -2, -2, 2, 2, 2);
         Cube added = new Cube(0, 0, 0, 4, 4, 4);
         Set<Cube>[] cubes = start.cut(added);
-        assertThat(cubes[0].stream().mapToLong(Cube::volumne).sum(), equalTo(start.volumne()));
-        assertThat(cubes[0].stream().mapToLong(Cube::volumne).sum(), equalTo(added.volumne()));
+        assertThat(cubes[0].stream().mapToLong(Cube::volumne).sum()).isEqualTo(start.volumne());
+        assertThat(cubes[0].stream().mapToLong(Cube::volumne).sum()).isEqualTo(added.volumne());
     }
 
 

@@ -2,9 +2,7 @@ package com.janoz.aoc.y2021.day25;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 class FieldTest {
 
@@ -14,7 +12,7 @@ class FieldTest {
         Field field = new Field();
         field.readField("inputs/day25example.txt");
         field.print();
-        assertThat(field.moveUntilStopped(),equalTo(58));
+        assertThat(field.moveUntilStopped()).isEqualTo(58);
         System.out.println();
         field.print();
     }

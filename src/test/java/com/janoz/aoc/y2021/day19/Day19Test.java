@@ -11,14 +11,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Day19Test {
 
     @Test
     void testPart1() throws IOException {
-        assertThat(Day19.placeScanners("inputs/day19example.txt").stream().map(TranslatedScanner::getBeacons).reduce(new HashSet<>(), (s1,s2) -> {s1.addAll(s2);return s1;}).size(), equalTo(79));
+        assertThat(Day19.placeScanners("inputs/day19example.txt").stream().map(TranslatedScanner::getBeacons).reduce(new HashSet<>(), (s1,s2) -> {s1.addAll(s2);return s1;})).hasSize(79);
     }
 
     @Test
@@ -27,7 +26,7 @@ class Day19Test {
         Scanner s0 = Day19.readScanner(input);
         Scanner s1 = Day19.readScanner(input);
         TranslatedScanner result = Day19.findMatch(s0.getBeacons(), s1);
-        assertThat(result.getRotation(), equalTo(6));
+        assertThat(result.getRotation()).isEqualTo(6);
     }
 
     @Test
@@ -38,7 +37,7 @@ class Day19Test {
         TranslatedScanner translated = new TranslatedScanner(translation, 0, s2);
         Set<Point3D> overlap = new HashSet<>(translated.getBeacons());
         overlap.retainAll(s1.getBeacons());
-        assertThat(overlap.size(), equalTo(1));
+        assertThat(overlap.size()).isEqualTo(1);
     }
 
     @Test
@@ -51,6 +50,6 @@ class Day19Test {
         TranslatedScanner translated = new TranslatedScanner(translation, 1, s2);
         Set<Point3D> overlap = new HashSet<>(translated.getBeacons());
         overlap.retainAll(s1.getBeacons());
-        assertThat(overlap.size(), equalTo(1));
+        assertThat(overlap.size()).isEqualTo(1);
     }
 }
