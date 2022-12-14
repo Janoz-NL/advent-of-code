@@ -3,13 +3,20 @@ package com.janoz.aoc.geo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * Automatically growing 2D field
  * @param <T> type of gridpoints
+ *
+ *           TODO : Implement negative points
+ *           TODO : refactor width, height, minX, minY to top, left, bottom, right
  */
 public class GrowingGrid<T> implements Grid<T>{
+
+    int minX = Integer.MAX_VALUE;
+    int minY = Integer.MAX_VALUE;
 
     int width=0;
     int height=0;
@@ -61,6 +68,8 @@ public class GrowingGrid<T> implements Grid<T>{
     private void grow(Point p) {
         width=Math.max(width,p.x+1);
         height=Math.max(height,p.y+1);
+        minX=Math.min(minX,p.x);
+        minY=Math.min(minY,p.y);
     }
 
     @Override
@@ -80,4 +89,10 @@ public class GrowingGrid<T> implements Grid<T>{
         return height;
     }
 
+    public void printGrid(Function<T,Character> mapToChar) {
+        IntStream.range(minY,height).forEach(y -> {
+            IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::get).map(mapToChar).forEach(System.out::print);
+            System.out.println();
+        });
+    }
 }
