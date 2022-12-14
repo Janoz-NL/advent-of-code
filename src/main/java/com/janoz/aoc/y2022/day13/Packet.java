@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 
-public class Package implements Comparable<Package> {
+public class Packet implements Comparable<Packet> {
 
     private final List<ListOrInt> contents;
 
-    public Package(String data) {
+    public Packet(String data) {
         contents = parseList(new CharIterator(data));
     }
 
@@ -52,7 +52,7 @@ public class Package implements Comparable<Package> {
     }
 
     @Override
-    public int compareTo(Package o) {
+    public int compareTo(Packet o) {
         return compare(new ArrayDeque<>(contents), new ArrayDeque<>(o.contents));
     }
 
