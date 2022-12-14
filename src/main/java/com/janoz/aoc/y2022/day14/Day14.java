@@ -1,6 +1,7 @@
 package com.janoz.aoc.y2022.day14;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Line;
 import com.janoz.aoc.geo.Point;
@@ -17,6 +18,8 @@ public class Day14 {
 
     public static void main(String[] args) {
         String file = "inputs/2022/day14.txt";
+        StopWatch.start();
+
         loadField(file);
 
         int sand = 0;
@@ -30,6 +33,10 @@ public class Day14 {
             sand++;
         }
         System.out.println("Part 2:" + sand);
+        StopWatch.stopPrint();
+
+        fall.printGrid(c -> c);
+
     }
 
     static boolean dropSand() {
