@@ -12,7 +12,7 @@ public class StopWatch {
     }
 
     public static void stopPrint() {
-        System.out.println(stop());
+        System.out.println("In " + stop() + "ms");
     }
 
 }
