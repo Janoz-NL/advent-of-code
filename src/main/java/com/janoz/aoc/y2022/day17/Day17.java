@@ -57,35 +57,32 @@ public class Day17 {
         int sizeWithNextPattern = field.getHeight() + patternSize;
         int stepsInPattern = 0;
         while (sizeWithNextPattern != field.getHeight()) {
-            totalDroppedRocks++;
             stepsInPattern++;
-            Rock.dropNext(field);
+            dropRock();
         }
         return stepsInPattern;
     }
 
-    static int findPattern() {
+    private static int findPattern() {
         int[] lines = new int[INITIAL_STEPS];
         for (int y=PATTERN_SEARCH_START; y<INITIAL_STEPS; y++) {
             lines[y]= asBitmap(y);
         }
-
         int current = PATTERN_SEARCH_START;
-        int toCompare = PATTERN_SEARCH_START + PATTERN_MIN_LENGTH;
-        while (!patternFound(lines,current,toCompare)) {
-            toCompare++;
+        int nextPattern = PATTERN_SEARCH_START + PATTERN_MIN_LENGTH;
+        while (!patternFound(lines,current,nextPattern)) {
+            nextPattern++;
         }
-
-        return toCompare - current;
+        return nextPattern - current;
     }
 
-    private static boolean patternFound(int[] lines, int current, int toCompare) {
-        int size = toCompare - current;
+    private static boolean patternFound(int[] lines, int current, int nextPattern) {
+        int size = nextPattern - current;
         for (int i=0; i<size;i++) {
-            if (lines[current + i] != lines[toCompare + i]) {
+            if (lines[current + i] != lines[nextPattern + i]) {
                 return false;
             }
-//            if (!lines[current + i].equals(lines[toCompare + i + size])) {
+//            if (!lines[current + i].equals(lines[nextPattern + i + size])) {
 //                return false;
 //            }
         }

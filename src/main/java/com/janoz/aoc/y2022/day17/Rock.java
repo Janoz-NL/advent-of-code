@@ -18,9 +18,7 @@ enum Rock {
 
     private final String[] shape;
 
-
     private static int currentRock = -1;
-
 
     Rock(String... shape) {
         this.shape = shape;
