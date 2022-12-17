@@ -9,11 +9,11 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-class SetUtilsTest {
+class CollectionUtilsTest {
 
     @Test
     void testSuperSet() {
-        Collection<Set<Element>> actual = SetUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),1,2);
+        Collection<Set<Element>> actual = CollectionUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),1,2);
         assertThat(actual).hasSize(10)
                 .contains(Set.of(Element.A))
                 .contains(Set.of(Element.B))
@@ -29,7 +29,7 @@ class SetUtilsTest {
 
     @Test
     void testSuperSetAgain() {
-        Collection<Set<Element>> actual = SetUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),2,4);
+        Collection<Set<Element>> actual = CollectionUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),2,4);
         assertThat(actual).hasSize(11)
                 .contains(Set.of(Element.A, Element.B))
                 .contains(Set.of(Element.A, Element.C))
@@ -46,7 +46,7 @@ class SetUtilsTest {
 
     @Test
     void testSuperSetWithEmptySet() {
-        Collection<Set<Element>> actual = SetUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),0,2);
+        Collection<Set<Element>> actual = CollectionUtils.superSets(Set.of(Element.A,Element.B,Element.C, Element.D),0,2);
         assertThat(actual).hasSize(11)
                 .contains(Collections.emptySet());
     }

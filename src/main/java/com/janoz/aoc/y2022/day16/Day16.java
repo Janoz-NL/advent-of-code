@@ -5,7 +5,7 @@ import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.algorithms.BFS;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.collections.AlwaysHashMap;
-import com.janoz.aoc.collections.SetUtils;
+import com.janoz.aoc.collections.CollectionUtils;
 import com.janoz.aoc.graphs.Edge;
 import com.janoz.aoc.graphs.Node;
 
@@ -42,10 +42,10 @@ public class Day16 {
 
         time_available = 26;
         System.out.println("Answer 2 is " +
-                SetUtils.superSets(pressures.keySet(),7,7).stream()
+                CollectionUtils.superSets(pressures.keySet(),7,7).stream()
                         .mapToInt(permutation ->
                                         calculate(permutation) +
-                                        calculate(SetUtils.complement(pressures.keySet(), permutation)))
+                                        calculate(CollectionUtils.complement(pressures.keySet(), permutation)))
                         .max()
                         .orElse(-1));
         StopWatch.stopPrint();

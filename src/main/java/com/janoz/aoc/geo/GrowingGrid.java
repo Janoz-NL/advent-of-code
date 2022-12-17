@@ -28,6 +28,16 @@ public class GrowingGrid<T> implements Grid<T>{
         this.emptyValue = emptyValue;
     }
 
+    public GrowingGrid<T> copy() {
+        GrowingGrid<T> result = new GrowingGrid<>(emptyValue);
+        result.data = new HashMap<>(data);
+        result.width = width;
+        result.height = height;
+        result.minY = minY;
+        result.minX = minX;
+        return result;
+    }
+
     public void clear() {
         data.clear();
     }
@@ -54,6 +64,13 @@ public class GrowingGrid<T> implements Grid<T>{
         if (this.width > width)
             data.entrySet().removeIf(p -> p.getKey().x >= width);
         this.width = width;
+    }
+
+    /**
+     * Check without growing grid
+     */
+    public T peek(Point p) {
+        return data.getOrDefault(p,emptyValue);
     }
 
     public T get(Point p) {
@@ -91,8 +108,15 @@ public class GrowingGrid<T> implements Grid<T>{
 
     public void printGrid(Function<T,Character> mapToChar) {
         IntStream.range(minY,height).forEach(y -> {
-            IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::get).map(mapToChar).forEach(System.out::print);
+            System.out.print("" + y + '\t');
+            streamRow(y).map(mapToChar).forEach(System.out::print);
             System.out.println();
         });
     }
+
+    public Stream<T> streamRow(int y) {
+        return IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::get);
+    }
+
+
 }

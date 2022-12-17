@@ -89,6 +89,6 @@ public class Day14 {
                 .map(Point::parse)
                 .collect(Collectors.toList())).forEach(points ->
                         IntStream.range(1,points.size()).forEach(i ->
-                                new Line(points.get(i-1), points.get(i)).draw().forEach(p ->fall.put(p,'#'))));
+                                new Line(points.get(i-1), points.get(i)).drawOn(fall,'#')));
     }
 }

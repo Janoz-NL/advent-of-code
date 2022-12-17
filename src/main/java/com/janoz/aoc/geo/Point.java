@@ -24,6 +24,10 @@ public class Point {
         return g.put(this,f);
     }
 
+    public Point fromOrigin(Point origin) {
+        return translate(origin.x, origin.y);
+    }
+
     public Point north() {
         return translate(0,-1);
     }

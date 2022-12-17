@@ -1,8 +1,13 @@
 package com.janoz.aoc.geo;
 
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+/**
+ * ONLY straight or stricktly diagonal lines
+ *
+ */
 public class Line {
     Point start;
     Point end;
@@ -10,6 +15,14 @@ public class Line {
     public Line(Point start, Point end) {
         this.start = start;
         this.end = end;
+    }
+
+    public <T> void drawOn(GrowingGrid<T> g, T v) {
+        draw().forEach(p->p.putOn(g,v));
+    }
+
+    public <T> void drawOn(GrowingGrid<T> g, Function<T,T> f) {
+        draw().forEach(p->p.putOn(g,f));
     }
 
     public Stream<Point> draw() {
