@@ -39,15 +39,15 @@ public class Cube {
 
     public boolean intersects(Cube other) {
         return
-            min.below(other.max) && max.above(other.min) &&
-            min.left(other.max) && max.right(other.min) &&
-            min.after(other.max) && max.before(other.min);
+            min.isBelow(other.max) && max.isAbove(other.min) &&
+            min.isLeft(other.max) && max.isRight(other.min) &&
+            min.isAfter(other.max) && max.isBefore(other.min);
     }
 
     public boolean contains(Cube other) {
         return
-            !other.min.below(min) && !other.min.left(min)  && !other.min.after(min) &
-                    !other.max.above(max) && !other.max.right(max) && !other.max.before(max);
+            !other.min.isBelow(min) && !other.min.isLeft(min)  && !other.min.isAfter(min) &
+                    !other.max.isAbove(max) && !other.max.isRight(max) && !other.max.isBefore(max);
 
     }
 

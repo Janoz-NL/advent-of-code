@@ -1,6 +1,7 @@
 package com.janoz.aoc.geo;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  *
@@ -27,28 +28,55 @@ public class Point3D {
         this.z=z;
     }
 
-    public boolean above(Point3D other) {
+    public boolean isAbove(Point3D other) {
         return z > other.z;
     }
 
-    public boolean below(Point3D other) {
+    public boolean isBelow(Point3D other) {
         return z < other.z;
     }
 
-    public boolean before(Point3D other) {
+    public boolean isBefore(Point3D other) {
         return x > other.x;
     }
 
-    public boolean after(Point3D other) {
+    public boolean isAfter(Point3D other) {
         return x < other.x;
     }
 
-    public boolean right(Point3D other) {
+    public boolean isRight(Point3D other) {
         return y > other.y;
     }
 
-    public boolean left(Point3D other) {
+    public boolean isLeft(Point3D other) {
         return y < other.y;
+    }
+
+    public Point3D above() {
+        return new Point3D(x,y,z+1);
+    }
+
+    public Point3D below() {
+        return new Point3D(x,y,z-1);
+    }
+
+    public Point3D before() {
+        return new Point3D(x+1,y,z);
+    }
+
+    public Point3D after() {
+        return new Point3D(x-1,y,z);
+    }
+
+    public Point3D right() {
+        return new Point3D(x,y+1,z);
+    }
+    public Point3D left() {
+        return new Point3D(x,y-1,z);
+    }
+
+    public Stream<Point3D> neighbours() {
+        return Stream.of(above(),below(),before(),after(),left(),right());
     }
 
     public Point3D reverse() {
@@ -110,6 +138,11 @@ public class Point3D {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    @Override
+    public String toString() {
+        return "(Point3D{)" + x +", " + y +", " + z +')';
     }
 
     public static Point3D parse(String input) {
