@@ -54,10 +54,7 @@ public class Day22 {
         }
 
         traveler = walk(start,path);
-
         System.out.println(extractPassword(traveler));
-
-
     }
 
     static int extractPassword(NodeTraveler nt) {
@@ -66,9 +63,9 @@ public class Day22 {
 
     static Node getEdge(int x, int y, int side, int idx) {
         if (side == TOP) {
-            return GRID.get(  x    * SIDE_LENGTH +  idx,        y    * SIDE_LENGTH);
+            return GRID.get(  x    * SIDE_LENGTH  +  idx,        y    * SIDE_LENGTH);
         } else if (side == RIGHT) {
-            return GRID.get(((x+1) * SIDE_LENGTH) -  1,          y    * SIDE_LENGTH +  idx);
+            return GRID.get(((x+1) * SIDE_LENGTH) -  1,          y    * SIDE_LENGTH  +  idx);
         } else if (side == BOTTOM) {
             return GRID.get(((x+1) * SIDE_LENGTH) - (1 + idx), ((y+1) * SIDE_LENGTH) -  1);
         } else {
