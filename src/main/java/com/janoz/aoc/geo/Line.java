@@ -1,5 +1,9 @@
 package com.janoz.aoc.geo;
 
+import com.janoz.aoc.collections.IntRange;
+
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -53,6 +57,25 @@ public class Line {
     public static Line parse(String s){
         String[] parts = s.split("\\s*->\\s*");
         return new Line(Point.parse(parts[0]), Point.parse(parts[1]));
+    }
+
+
+    /**
+     * Same line can be unequal if it goes the other way
+     * p1 -> p2 != p2 -> p1
+     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Line line = (Line) o;
+        return Objects.equals(start, line.start) && Objects.equals(end, line.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end);
     }
 
     @Override

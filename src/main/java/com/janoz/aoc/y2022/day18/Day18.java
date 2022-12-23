@@ -51,9 +51,9 @@ public class Day18 {
         while (!queue.isEmpty()) {
             Point3D current = queue.poll();
             current.neighbours()
-                    .filter(n -> xRange.inRange(n.x))
-                    .filter(n -> yRange.inRange(n.y))
-                    .filter(n -> zRange.inRange(n.z))
+                    .filter(n -> xRange.contains(n.x))
+                    .filter(n -> yRange.contains(n.y))
+                    .filter(n -> zRange.contains(n.z))
                     .filter(n -> !encasement.contains(n))
                     .filter(n -> !shape.contains(n))
                     .forEach(n -> {
