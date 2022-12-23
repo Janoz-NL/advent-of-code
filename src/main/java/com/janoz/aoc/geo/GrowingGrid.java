@@ -2,6 +2,7 @@ package com.janoz.aoc.geo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -15,11 +16,13 @@ import java.util.stream.Stream;
  */
 public class GrowingGrid<T> implements Grid<T>{
 
-    int minX = Integer.MAX_VALUE;
-    int minY = Integer.MAX_VALUE;
+    public int minX = Integer.MAX_VALUE;
+    public int minY = Integer.MAX_VALUE;
 
     int width=0;
     int height=0;
+
+
     Map<Point,T> data = new HashMap<>();
 
     final private T emptyValue;
@@ -44,14 +47,19 @@ public class GrowingGrid<T> implements Grid<T>{
 
     public void put(Point p, T value) {
         grow(p);
-        data.put(p,value);
+        cheapPut(p,value);
     }
 
     public T put(Point p, Function<T,T> func) {
         grow(p);
         T value = func.apply (get(p));
-        data.put(p, value);
+        cheapPut(p, value);
         return value;
+    }
+
+    private void cheapPut(Point p, T value) {
+        if (Objects.equals(value,emptyValue)) data.remove(p);
+        else data.put(p,value);
     }
 
     public void setHeight(int height) {
@@ -98,10 +106,16 @@ public class GrowingGrid<T> implements Grid<T>{
         return data.size();
     }
 
+    /**
+     * TODO: Actualy maxX+1.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * TODO: Actualy maxY+1.
+     */
     public int getHeight() {
         return height;
     }
@@ -115,8 +129,25 @@ public class GrowingGrid<T> implements Grid<T>{
     }
 
     public Stream<T> streamRow(int y) {
-        return IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::get);
+        return IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::peek);
     }
 
+    public Stream<T> streamCol(int x) {
+        return IntStream.range(minY,height).mapToObj(y -> new Point(x,y)).map(this::peek);
+    }
 
+    public void shrink() {
+        while (streamRow(minY).allMatch(i -> Objects.equals(i,emptyValue))){
+            minY++;
+        }
+        while (streamCol(width-1).allMatch(i -> Objects.equals(i,emptyValue))){
+            width--;
+        }
+        while (streamRow(height-1).allMatch(i -> Objects.equals(i,emptyValue))){
+            height--;
+        }
+        while (streamCol(minX).allMatch(i -> Objects.equals(i,emptyValue))){
+            minX++;
+        }
+    }
 }
