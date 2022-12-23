@@ -31,14 +31,15 @@ public class Day13 {
     }
 
     void fold(long x, long y) {
+        paper.forceOrigin();
         Set<Point> mirroredPoints = paper.streamPoints()
                 .filter(p -> p.x>x || p.y>y)
                 .filter(p-> paper.get(p))
                 .map(p -> new Point(mirror(p.x,x),mirror(p.y,y)))
                 .collect(Collectors.toSet());
         mirroredPoints.forEach(p -> paper.put(p,true));
-        paper.setWidth((int)x);
-        paper.setHeight((int)y);
+        paper.setMaxX((int)x);
+        paper.setMaxY((int)y);
     }
 
     static int mirror(int pos, long mirror) {

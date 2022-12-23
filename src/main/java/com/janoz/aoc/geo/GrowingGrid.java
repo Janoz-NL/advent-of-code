@@ -11,19 +11,15 @@ import java.util.stream.Stream;
  * Automatically growing 2D field
  * @param <T> type of gridpoints
  *
- *           TODO : Implement negative points
- *           TODO : refactor width, height, minX, minY to top, left, bottom, right
  */
 public class GrowingGrid<T> implements Grid<T>{
 
-    public int minX = Integer.MAX_VALUE;
-    public int minY = Integer.MAX_VALUE;
+    private int minY = Integer.MAX_VALUE;
+    private int maxY = Integer.MIN_VALUE;
+    private int minX = Integer.MAX_VALUE;
+    private int maxX = Integer.MIN_VALUE;
 
-    int width=0;
-    int height=0;
-
-
-    Map<Point,T> data = new HashMap<>();
+    private Map<Point,T> data = new HashMap<>();
 
     final private T emptyValue;
 
@@ -34,15 +30,22 @@ public class GrowingGrid<T> implements Grid<T>{
     public GrowingGrid<T> copy() {
         GrowingGrid<T> result = new GrowingGrid<>(emptyValue);
         result.data = new HashMap<>(data);
-        result.width = width;
-        result.height = height;
         result.minY = minY;
+        result.maxY = maxY;
         result.minX = minX;
+        result.maxX = maxX;
         return result;
     }
 
     public void clear() {
         data.clear();
+    }
+
+    /**
+     * force 0,0 to be on the grid
+     */
+    public void forceOrigin() {
+        grow(new Point(0,0));
     }
 
     public void put(Point p, T value) {
@@ -62,16 +65,16 @@ public class GrowingGrid<T> implements Grid<T>{
         else data.put(p,value);
     }
 
-    public void setHeight(int height) {
-        if (this.height > height)
-            data.entrySet().removeIf(p -> p.getKey().y >= height);
-        this.height = height;
+    public void setMaxY(int maxY) {
+        if (this.maxY > maxY)
+            data.entrySet().removeIf(p -> p.getKey().y > maxY);
+        this.maxY = maxY;
     }
 
-    public void setWidth(int width) {
-        if (this.width > width)
-            data.entrySet().removeIf(p -> p.getKey().x >= width);
-        this.width = width;
+    public void setMaxX(int maxX) {
+        if (this.maxX > maxX)
+            data.entrySet().removeIf(p -> p.getKey().x > maxX);
+        this.maxX = maxX;
     }
 
     /**
@@ -91,10 +94,10 @@ public class GrowingGrid<T> implements Grid<T>{
     }
 
     private void grow(Point p) {
-        width=Math.max(width,p.x+1);
-        height=Math.max(height,p.y+1);
-        minX=Math.min(minX,p.x);
-        minY=Math.min(minY,p.y);
+        maxX =Math.max(maxX,p.x);
+        minY =Math.min(minY,p.y);
+        minX =Math.min(minX,p.x);
+        maxY =Math.max(maxY,p.y);
     }
 
     @Override
@@ -106,22 +109,18 @@ public class GrowingGrid<T> implements Grid<T>{
         return data.size();
     }
 
-    /**
-     * TODO: Actualy maxX+1.
-     */
     public int getWidth() {
-        return width;
+        if (data.isEmpty()) return 0;
+        return maxX - minX +1;
     }
 
-    /**
-     * TODO: Actualy maxY+1.
-     */
     public int getHeight() {
-        return height;
+        if (data.isEmpty()) return 0;
+        return maxY - minY +1;
     }
 
     public void printGrid(Function<T,Character> mapToChar) {
-        IntStream.range(minY,height).forEach(y -> {
+        IntStream.rangeClosed(minY,maxY).forEach(y -> {
             System.out.print("" + y + '\t');
             streamRow(y).map(mapToChar).forEach(System.out::print);
             System.out.println();
@@ -129,25 +128,25 @@ public class GrowingGrid<T> implements Grid<T>{
     }
 
     public Stream<T> streamRow(int y) {
-        return IntStream.range(minX,width).mapToObj(x -> new Point(x,y)).map(this::peek);
+        return IntStream.rangeClosed(minX,maxX).mapToObj(x -> new Point(x,y)).map(this::peek);
     }
 
     public Stream<T> streamCol(int x) {
-        return IntStream.range(minY,height).mapToObj(y -> new Point(x,y)).map(this::peek);
+        return IntStream.rangeClosed(minY,maxY).mapToObj(y -> new Point(x,y)).map(this::peek);
     }
 
     public void shrink() {
         while (streamRow(minY).allMatch(i -> Objects.equals(i,emptyValue))){
             minY++;
         }
-        while (streamCol(width-1).allMatch(i -> Objects.equals(i,emptyValue))){
-            width--;
-        }
-        while (streamRow(height-1).allMatch(i -> Objects.equals(i,emptyValue))){
-            height--;
+        while (streamRow(maxY).allMatch(i -> Objects.equals(i,emptyValue))){
+            maxY--;
         }
         while (streamCol(minX).allMatch(i -> Objects.equals(i,emptyValue))){
             minX++;
+        }
+        while (streamCol(maxX).allMatch(i -> Objects.equals(i,emptyValue))){
+            maxX--;
         }
     }
 }

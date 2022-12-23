@@ -28,8 +28,8 @@ public class Day23 {
 
         for (int i=0; i<10; i++) moveELfs();
         grove.shrink();
-        int height = grove.getHeight() - grove.minY;
-        int width = grove.getWidth() - grove.minX;
+        int height = grove.getHeight();
+        int width = grove.getWidth();
         System.out.println("Part 1: " + (width * height - elfs.size()));
 
         int moves = 11;

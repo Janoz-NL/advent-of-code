@@ -50,12 +50,12 @@ public class GrowingGridTest {
         assertThat(cut.get(new Point(2,4))).isEqualTo(4);
         assertThat(cut.get(new Point(4,4))).isEqualTo(4);
         assertThat(cut.get(new Point(4,2))).isEqualTo(4);
-        cut.setWidth(3);
+        cut.setMaxX(2);
         assertThat(cut.get(new Point(2,2))).isEqualTo(4);
         assertThat(cut.get(new Point(2,4))).isEqualTo(4);
         assertThat(cut.get(new Point(4,4))).isEqualTo(0);
         assertThat(cut.get(new Point(4,2))).isEqualTo(0);
-        cut.setHeight(3);
+        cut.setMaxY(2);
         assertThat(cut.get(new Point(2,2))).isEqualTo(4);
         assertThat(cut.get(new Point(2,4))).isEqualTo(0);
         assertThat(cut.get(new Point(4,4))).isEqualTo(0);
