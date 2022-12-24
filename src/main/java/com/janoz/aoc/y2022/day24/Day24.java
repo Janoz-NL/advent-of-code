@@ -2,10 +2,8 @@ package com.janoz.aoc.y2022.day24;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.algorithms.AStar;
-import com.janoz.aoc.algorithms.Dijsktra;
+import com.janoz.aoc.algorithms.BFS;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
-import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.geo.Point;
 import com.janoz.aoc.graphs.Edge;
 import com.janoz.aoc.graphs.Node;
@@ -31,10 +29,9 @@ public class Day24 {
     static int endX;
     static Point endPoint;
     static Point startPoint;
-    static final Node endNode = new Node();
-    static final Node startNode = new Node();
+    static final Node<Void> endNode = new Node<>();
+    static final Node<Void> startNode = new Node<>();
     static List<Blizzard> blizzards = new ArrayList<>();
-
 
 
     public static void main(String[] args) {
@@ -43,23 +40,24 @@ public class Day24 {
 
         StopWatch.start();
         constructNodesMap();
-        PathFindingAlgorithm<Node> pathFindingToEnd = Dijsktra.forNodes();
+        PathFindingAlgorithm<Node<Void>> pathFindingToEnd = BFS.forNodes();
         pathFindingToEnd.calculate(endNode);
-        PathFindingAlgorithm<Node> pathFindingToStart = Dijsktra.forNodes();
+
+        PathFindingAlgorithm<Node<Void>> pathFindingToStart = BFS.forNodes();
         pathFindingToStart.calculate(startNode);
         StopWatch.stopPrint();
 
         StopWatch.start();
         int time = 0;
-        long result;
+        Long result;
 
         do {
             time++;
             while (!forwardNodes.get(time).containsKey(startPoint.south())) time++;
             result = pathFindingToEnd.getDistance(forwardNodes.get(time).get(startPoint.south()));
-        } while (result == Long.MAX_VALUE);
+        } while (result == null);
 
-        time = time + (int)result;
+        time = time + result.intValue();
         System.out.println();
         System.out.println("Part 1 : " + time);
         System.out.println();
@@ -68,9 +66,9 @@ public class Day24 {
             time++;
             while (!backwardNodes.get(time % (width * height)).containsKey(endPoint.north())) time++;
             result = pathFindingToStart.getDistance(backwardNodes.get(time % (width * height)).get(endPoint.north()));
-        } while (result == Long.MAX_VALUE);
+        } while (result == null);
 
-        time = time + (int)result;
+        time = time + result.intValue();
         System.out.println("back at : " + time);
 
         do {
@@ -79,7 +77,7 @@ public class Day24 {
             result = pathFindingToEnd.getDistance(forwardNodes.get(time % (width * height)).get(startPoint.south()));
         } while (result == Long.MAX_VALUE);
 
-        time = time + (int)result;
+        time = time + result.intValue();
         System.out.println();
         System.out.println("Part 2 : " + time);
         System.out.println();
@@ -89,14 +87,14 @@ public class Day24 {
 
 
 
-    private static final Map<Integer, Map<Point,Node>> forwardNodes = new HashMap<>();
-    private static final Map<Integer, Map<Point,Node>> backwardNodes = new HashMap<>();
+    private static final Map<Integer, Map<Point,Node<Void>>> forwardNodes = new HashMap<>();
+    private static final Map<Integer, Map<Point,Node<Void>>> backwardNodes = new HashMap<>();
 
     private static void constructNodesMap() {
 
         for (int i=0; i<width * height; i++) {
-            Map<Point, Node> forwardLayer = constructLayer(i);
-            Map<Point, Node> backwardLayer = copyMap(forwardLayer, (k,v) -> new Node());
+            Map<Point, Node<Void>> forwardLayer = constructLayer(i);
+            Map<Point, Node<Void>> backwardLayer = copyMap(forwardLayer, (k,v) -> new Node<>());
 
             forwardLayer.put(endPoint,endNode);
             backwardLayer.put(startPoint,startNode);
@@ -104,9 +102,9 @@ public class Day24 {
             forwardNodes.put(i,forwardLayer);
             backwardNodes.put(i,backwardLayer);
             if (i>0) {
-                Map<Point, Node> previousForwardLayer = forwardNodes.get(i-1);
+                Map<Point, Node<Void>> previousForwardLayer = forwardNodes.get(i-1);
                 stitch(previousForwardLayer, forwardLayer, endPoint);
-                Map<Point, Node> previousBackwardLayer = backwardNodes.get(i-1);
+                Map<Point, Node<Void>> previousBackwardLayer = backwardNodes.get(i-1);
                 stitch(previousBackwardLayer, backwardLayer, startPoint);
             }
         }
@@ -114,21 +112,21 @@ public class Day24 {
         stitch(backwardNodes.get((width * height) - 1), backwardNodes.get(0), startPoint);
     }
 
-    private static void stitch(Map<Point, Node> current, Map<Point, Node> next, Point ignore) {
+    private static void stitch(Map<Point, Node<Void>> current, Map<Point, Node<Void>> next, Point ignore) {
         current.keySet().stream().filter(p -> !p.equals(ignore))
                 .forEach(start -> Stream.concat(Arrays.stream(start.neighbours()), Stream.of(start))
                         .filter(next::containsKey)
                         .forEach(end -> new Edge(next.get(end), current.get(start))));  //reverse edge
     }
 
-    private static Map<Point, Node> constructLayer(int time) {
+    private static Map<Point, Node<Void>> constructLayer(int time) {
         Set<Point> map = mapAt(time);
-        Map<Point, Node> layer = new HashMap<>();
+        Map<Point, Node<Void>> layer = new HashMap<>();
         //construct inverse of map
         IntStream.range(0,width).forEach(x -> IntStream.range(0,height)
                 .mapToObj(y -> new Point(x,y))
                 .filter(p -> !map.contains(p))
-                .forEach(p -> layer.put(p, new Node())));
+                .forEach(p -> layer.put(p, new Node<>())));
         return layer;
     }
 

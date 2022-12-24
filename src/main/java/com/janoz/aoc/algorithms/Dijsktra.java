@@ -30,7 +30,7 @@ public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
     }
 
     @Override
-    public long calculate(Collection<NODE> starts) {
+    public Long calculate(Collection<NODE> starts) {
         PriorityQueue<Route<NODE>> heap = new PriorityQueue<>();
         starts.forEach(node -> {
             Route<NODE> route = new Route<>(node, 0L);
@@ -46,12 +46,14 @@ public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
                     .filter(Step::isPreferable)
                     .forEach(r -> r.addTo(heap));
         }
-        return -1;
+        return null;
     }
 
     @Override
-    public long getDistance(NODE node) {
-        return distanceMap.get(node);
+    public Long getDistance(NODE node) {
+        if (distanceMap.containsKey(node))
+            return distanceMap.get(node);
+        else return null;
     }
 
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {
@@ -101,11 +103,11 @@ public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
         return new Dijsktra<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection,(f,t) -> 1L, earlyOut);
     }
 
-    public static Dijsktra<Node> forNodes() {
+    public static <D> Dijsktra<Node<D>> forNodes() {
         return new Dijsktra<>((f,t) -> true, Node::reachable, (f,t) -> f.getTo(t).getLength(), n -> false);
     }
 
-    public static Dijsktra<Node> forNodes(Node target) {
+    public static <D> Dijsktra<Node<D>> forNodes(Node<D> target) {
         return new Dijsktra<>((f,t) -> true, Node::reachable, (f,t) -> f.getTo(t).getLength(), n -> n == target);
     }
 }

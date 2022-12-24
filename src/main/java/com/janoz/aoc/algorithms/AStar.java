@@ -12,6 +12,8 @@ import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntBiFunction;
+import java.util.function.ToLongBiFunction;
 
 public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
 
@@ -31,7 +33,7 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     }
 
     @Override
-    public long calculate(Collection<NODE> starts) {
+    public Long calculate(Collection<NODE> starts) {
         PriorityQueue<Route<NODE>> heap = new PriorityQueue<>();
         starts.forEach(start-> addRoute(heap, new Route<>(start, 0L, heuristic.apply(start))));
         while (!heap.isEmpty()) {
@@ -44,13 +46,14 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
                     .filter(Step::isPreferable)
                     .forEach(r -> addRoute(heap,r.to));
         }
-        return -1;
+        return null;
     }
 
     @Override
-    public long getDistance(NODE node) {
-        return distanceMap.get(node);
-    }
+    public Long getDistance(NODE node) {
+        if (distanceMap.containsKey(node))
+            return distanceMap.get(node);
+        else return null;    }
 
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {
         distanceMap.put(route.node, route.distance);
@@ -94,9 +97,8 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
         return new AStar<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
     }
 
-    //TODO :NOT ASTAR
-    public static Dijsktra<Node> forNodes(Node target) {
-        return new Dijsktra<>((f,t) -> true, Node::reachable, (f,t) -> f.getTo(t).getLength(), n -> n == target);
+    public static <D> AStar<Node<D>> forNodes(Node<D> target, ToLongBiFunction<Node<D>, Node<D>> heuristic) {
+        return new AStar<>((f,t) -> true, Node::reachable, n -> n == target, node -> heuristic.applyAsLong(node,target));
     }
 
 

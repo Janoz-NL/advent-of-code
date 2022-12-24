@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 public class Day16 {
 
-    static AlwaysHashMap<String, Node> nodes = new AlwaysHashMap<>(Node::new);
+    static AlwaysHashMap<String, Node<Void>> nodes = new AlwaysHashMap<>(Node::new);
     static Map<String,Map<String, Integer>> distances = new AlwaysHashMap<>((Supplier<Map<String, Integer>>) HashMap::new);
     static Map<String,Integer> pressures = new HashMap<>();
 
@@ -76,9 +76,9 @@ public class Day16 {
      */
     static void precalculate() {
         Stream.concat(pressures.keySet().stream(),Stream.of("AA")).forEach(n1 -> {
-            PathFindingAlgorithm<Node> pfa = BFS.forNodes();
+            PathFindingAlgorithm<Node<Void>> pfa = BFS.forNodes();
             pfa.calculate(nodes.get(n1));
-            pressures.keySet().stream().filter(n2 -> !n1.equals(n2)).forEach(n2 -> distances.get(n1).put(n2, (int) pfa.getDistance(nodes.get(n2))));
+            pressures.keySet().stream().filter(n2 -> !n1.equals(n2)).forEach(n2 -> distances.get(n1).put(n2, pfa.getDistance(nodes.get(n2)).intValue()));
         });
     }
 
@@ -91,7 +91,7 @@ public class Day16 {
             int rate = Integer.parseInt(m.group(2));
             if (rate > 0) pressures.put(name, rate);
             String[] neighbours = m.group(3).split(",");
-            Node node = nodes.get(name);
+            Node<Void> node = nodes.get(name);
             Arrays.stream(neighbours).map(String::trim).map(nodes::get).forEach(neighbour -> new Edge(node, neighbour));
         });
     }

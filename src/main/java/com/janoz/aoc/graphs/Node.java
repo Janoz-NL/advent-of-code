@@ -4,15 +4,24 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Node {
+public class Node<D> {
 
-    Map<Node, Edge> edges = new HashMap<>();
+    Map<Node<D>, Edge> edges = new HashMap<>();
+    D data;
 
-    public Collection<Node> reachable() {
+    public Collection<Node<D>> reachable() {
         return edges.keySet();
     }
 
-    public Edge getTo(Node to) {
+    public Edge getTo(Node<D> to) {
         return edges.get(to);
+    }
+
+    public void setData(D data) {
+        this.data = data;
+    }
+
+    public D getData() {
+        return data;
     }
 }

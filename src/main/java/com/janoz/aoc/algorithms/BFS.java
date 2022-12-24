@@ -30,7 +30,7 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
     }
 
     @Override
-    public long calculate(Collection<NODE> starts) {
+    public Long calculate(Collection<NODE> starts) {
         Queue<NODE> queue = new LinkedList<>();
         starts.forEach(node -> {
             queue.add(node);
@@ -48,11 +48,11 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
                         queue.add(n);
                     });
         }
-        return -1;
+        return null;
     }
 
     @Override
-    public long getDistance(NODE node) {
+    public Long getDistance(NODE node) {
         return distanceMap.get(node);
     }
 
@@ -64,7 +64,7 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
         return new BFS<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, earlyOut);
     }
 
-    public static BFS<Node> forNodes() {
+    public static <D> BFS<Node<D>> forNodes() {
         return new BFS<>((f, t) -> true, Node::reachable, n -> false);
     }
 }

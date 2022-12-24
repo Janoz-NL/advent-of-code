@@ -5,12 +5,12 @@ import java.util.Collections;
 
 public interface PathFindingAlgorithm<NODE> {
 
-    default long calculate(NODE start) {
+    default Long calculate(NODE start) {
         return calculate(Collections.singletonList(start));
     }
 
-    long calculate(Collection<NODE> starts);
+    Long calculate(Collection<NODE> starts);
 
-    long getDistance(NODE node);
+    Long getDistance(NODE node);
 
 }
