@@ -50,6 +50,7 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     }
 
     @Override
+    @SuppressWarnings("Java8MapApi")
     public Long getDistance(NODE node) {
         if (distanceMap.containsKey(node))
             return distanceMap.get(node);
