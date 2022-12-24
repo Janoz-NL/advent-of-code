@@ -29,8 +29,8 @@ public class Day24 {
     static int endX;
     static Point endPoint;
     static Point startPoint;
-    static final Node<Void> endNode = new Node<>();
-    static final Node<Void> startNode = new Node<>();
+    static final Node<Point> endNode = new Node<>();
+    static final Node<Point> startNode = new Node<>();
     static List<Blizzard> blizzards = new ArrayList<>();
 
 
@@ -40,10 +40,10 @@ public class Day24 {
 
         StopWatch.start();
         constructNodesMap();
-        PathFindingAlgorithm<Node<Void>> pathFindingToEnd = BFS.forNodes();
+        PathFindingAlgorithm<Node<Point>> pathFindingToEnd = BFS.forNodes();
         pathFindingToEnd.calculate(endNode);
 
-        PathFindingAlgorithm<Node<Void>> pathFindingToStart = BFS.forNodes();
+        PathFindingAlgorithm<Node<Point>> pathFindingToStart = BFS.forNodes();
         pathFindingToStart.calculate(startNode);
         StopWatch.stopPrint();
 
@@ -87,14 +87,14 @@ public class Day24 {
 
 
 
-    private static final Map<Integer, Map<Point,Node<Void>>> forwardNodes = new HashMap<>();
-    private static final Map<Integer, Map<Point,Node<Void>>> backwardNodes = new HashMap<>();
+    private static final Map<Integer, Map<Point,Node<Point>>> forwardNodes = new HashMap<>();
+    private static final Map<Integer, Map<Point,Node<Point>>> backwardNodes = new HashMap<>();
 
     private static void constructNodesMap() {
 
         for (int i=0; i<width * height; i++) {
-            Map<Point, Node<Void>> forwardLayer = constructLayer(i);
-            Map<Point, Node<Void>> backwardLayer = copyMap(forwardLayer, (k,v) -> new Node<>());
+            Map<Point, Node<Point>> forwardLayer = constructLayer(i);
+            Map<Point, Node<Point>> backwardLayer = copyMap(forwardLayer, (k,v) -> new Node<>(k));
 
             forwardLayer.put(endPoint,endNode);
             backwardLayer.put(startPoint,startNode);
@@ -102,9 +102,9 @@ public class Day24 {
             forwardNodes.put(i,forwardLayer);
             backwardNodes.put(i,backwardLayer);
             if (i>0) {
-                Map<Point, Node<Void>> previousForwardLayer = forwardNodes.get(i-1);
+                Map<Point, Node<Point>> previousForwardLayer = forwardNodes.get(i-1);
                 stitch(previousForwardLayer, forwardLayer, endPoint);
-                Map<Point, Node<Void>> previousBackwardLayer = backwardNodes.get(i-1);
+                Map<Point, Node<Point>> previousBackwardLayer = backwardNodes.get(i-1);
                 stitch(previousBackwardLayer, backwardLayer, startPoint);
             }
         }
@@ -112,21 +112,21 @@ public class Day24 {
         stitch(backwardNodes.get((width * height) - 1), backwardNodes.get(0), startPoint);
     }
 
-    private static void stitch(Map<Point, Node<Void>> current, Map<Point, Node<Void>> next, Point ignore) {
+    private static void stitch(Map<Point, Node<Point>> current, Map<Point, Node<Point>> next, Point ignore) {
         current.keySet().stream().filter(p -> !p.equals(ignore))
                 .forEach(start -> Stream.concat(Arrays.stream(start.neighbours()), Stream.of(start))
                         .filter(next::containsKey)
                         .forEach(end -> new Edge(next.get(end), current.get(start))));  //reverse edge
     }
 
-    private static Map<Point, Node<Void>> constructLayer(int time) {
+    private static Map<Point, Node<Point>> constructLayer(int time) {
         Set<Point> map = mapAt(time);
-        Map<Point, Node<Void>> layer = new HashMap<>();
+        Map<Point, Node<Point>> layer = new HashMap<>();
         //construct inverse of map
         IntStream.range(0,width).forEach(x -> IntStream.range(0,height)
                 .mapToObj(y -> new Point(x,y))
                 .filter(p -> !map.contains(p))
-                .forEach(p -> layer.put(p, new Node<>())));
+                .forEach(p -> layer.put(p, new Node<>(p))));
         return layer;
     }
 
@@ -142,6 +142,7 @@ public class Day24 {
         width = line.length() - 2;
         startX = line.indexOf('.')-1;
         startPoint = new Point(startX,-1);
+        startNode.setData(startPoint);
         int y=0;
         while (true) {
             line = input.next();
@@ -154,6 +155,7 @@ public class Day24 {
             y++;
         }
         endPoint = new Point(endX,height);
+        endNode.setData(endPoint);
     }
 
     private static void parseBlizzards(String line, int y, List<Blizzard> blizzards) {

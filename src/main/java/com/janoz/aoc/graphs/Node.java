@@ -9,6 +9,12 @@ public class Node<D> {
     Map<Node<D>, Edge> edges = new HashMap<>();
     D data;
 
+    public Node() {}
+
+    public Node(D data) {
+        this.data = data;
+    }
+
     public Collection<Node<D>> reachable() {
         return edges.keySet();
     }

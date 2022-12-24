@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 public class Day16 {
 
-    static AlwaysHashMap<String, Node<Void>> nodes = new AlwaysHashMap<>(Node::new);
+    static AlwaysHashMap<String, Node<Void>> nodes = new AlwaysHashMap<>((Supplier<Node<Void>>) Node::new);
     static Map<String,Map<String, Integer>> distances = new AlwaysHashMap<>((Supplier<Map<String, Integer>>) HashMap::new);
     static Map<String,Integer> pressures = new HashMap<>();
 
