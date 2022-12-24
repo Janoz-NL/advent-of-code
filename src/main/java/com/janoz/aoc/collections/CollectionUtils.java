@@ -1,13 +1,19 @@
 package com.janoz.aoc.collections;
 
+import com.janoz.aoc.graphs.Node;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CollectionUtils {
 
@@ -55,6 +61,11 @@ public class CollectionUtils {
             superSet(result, src, newCandidate, curIdx + 1, min, max);
         }
     }
+
+    public static <K,V> Map<K,V> copyMap(Map<K,V> src, BiFunction<K,V,V> function) {
+        return src.keySet().stream().collect(Collectors.toMap(k->k, k -> function.apply(k,src.get(k))));
+    }
+
 
     public static <I,O> Iterator<O> wrap(Iterator<I> src, Function<I,O> function) {
         return new Iterator<>() {

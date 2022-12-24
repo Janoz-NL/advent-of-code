@@ -1,5 +1,6 @@
 package com.janoz.aoc.collections;
 
+import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.Optional;
 import java.util.stream.LongStream;
@@ -14,9 +15,8 @@ public class IntRange {
         this.max = stats.getMax();
     }
 
-    public IntRange(int i1, int i2) {
-        this.min = Math.min(i1,i2);
-        this.max = Math.max(i1,i2);
+    public IntRange(int... ints) {
+        this(Arrays.stream(ints).summaryStatistics());
     }
 
     public LongStream stream() {

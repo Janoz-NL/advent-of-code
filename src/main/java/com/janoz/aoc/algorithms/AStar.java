@@ -94,6 +94,7 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
         return new AStar<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
     }
 
+    //TODO :NOT ASTAR
     public static Dijsktra<Node> forNodes(Node target) {
         return new Dijsktra<>((f,t) -> true, Node::reachable, (f,t) -> f.getTo(t).getLength(), n -> n == target);
     }
