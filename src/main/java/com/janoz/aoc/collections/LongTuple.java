@@ -1,5 +1,7 @@
 package com.janoz.aoc.collections;
 
+import java.util.Arrays;
+
 public class LongTuple {
     private final long l1;
     private final long l2;
@@ -9,11 +11,14 @@ public class LongTuple {
         this.l2 = 0;
     }
 
-    public LongTuple(long l1, long l2) {
-        this.l1 = l1;
-        this.l2 = l2;
+    public LongTuple(String input) {
+        this(Arrays.stream(input.split("\\s+")).mapToLong(Long::parseLong).toArray());
     }
 
+    public LongTuple(long... l) {
+        this.l1 = l[0];
+        this.l2 = l[1];
+    }
     public long getLeft() {
         return l1;
     }
