@@ -87,7 +87,7 @@ public class IntMatrixUtils {
         return Arrays.stream(input).flatMapToInt(Arrays::stream);
     }
 
-    private static int[] readLine(String line) {
+    public static int[] readLine(String line) {
         return Arrays.stream(line.trim().split("\\s+")).mapToInt(Integer::parseInt).toArray();
     }
 
