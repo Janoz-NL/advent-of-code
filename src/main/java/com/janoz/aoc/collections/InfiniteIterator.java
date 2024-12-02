@@ -1,7 +1,5 @@
 package com.janoz.aoc.collections;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,11 +11,15 @@ import java.util.stream.IntStream;
  */
 public class InfiniteIterator<T> implements Iterator<T> {
 
-    private List<T> src;
+    private final List<T> src;
     private int curpos;
 
     public InfiniteIterator(List<T> src) {
         this.src = src;
+        curpos = -1;
+    }
+
+    public void reset() {
         curpos = -1;
     }
 
@@ -36,6 +38,12 @@ public class InfiniteIterator<T> implements Iterator<T> {
     public static InfiniteIterator<Character> loopingCharIterator(String input) {
         char[] chars = input.toCharArray();
         return new InfiniteIterator<>(IntStream.range(0,chars.length).mapToObj(i -> (chars[i])).collect(Collectors.toList()));
+    }
+
+
+    public T get(long index) {
+        int i = (int)(index % src.size());
+        return src.get(i);
     }
 
 }
