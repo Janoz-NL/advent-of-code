@@ -12,7 +12,11 @@ public class LongTuple {
     }
 
     public LongTuple(String input) {
-        this(Arrays.stream(input.split("\\s+")).mapToLong(Long::parseLong).toArray());
+        this(input,"\\s+");
+    }
+
+    public LongTuple(String input, String regex) {
+        this(Arrays.stream(input.split(regex)).mapToLong(Long::parseLong).toArray());
     }
 
     public LongTuple(long... l) {

@@ -88,7 +88,11 @@ public class IntMatrixUtils {
     }
 
     public static int[] readLine(String line) {
-        return Arrays.stream(line.trim().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+        return readLine(line, "\\s+");
+    }
+
+    public static int[] readLine(String line, String regexp) {
+        return Arrays.stream(line.trim().split(regexp)).mapToInt(Integer::parseInt).toArray();
     }
 
     public static void print(int[][] matrix) {
