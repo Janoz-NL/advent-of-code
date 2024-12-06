@@ -64,7 +64,7 @@ public class Day6 {
     static boolean inLoop(List<Point> path, List<Point> direction) {
         Point pos = path.get(path.size()-1);
         Point dir = direction.get(path.size()-1);
-        for (int i=0; i<path.size()-2; i++) {
+        for (int i=0; i<path.size()-1; i++) {
             if (path.get(i).equals(pos) && direction.get(i).equals(dir)) return true;
         }
         return false;
@@ -83,7 +83,7 @@ public class Day6 {
     static void placeObstacles() {
         Set<Point> innerVisited = new LinkedHashSet<>(visited);
         innerVisited.remove(findStart());
-        System.out.println(innerVisited.stream().filter(o -> walk(o::equals) == null ).count());
+        System.out.println(innerVisited.parallelStream().filter(o -> walk(o::equals) == null ).count());
     }
 
     static Point rotate(Point p) {
