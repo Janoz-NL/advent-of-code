@@ -79,6 +79,8 @@ public class Point {
 
     public Point translate(int dx, int dy) { return new Point(x+dx,y+dy);}
 
+    public Point translate(Point p) { return translate(p.x,p.y); }
+
     public boolean isTouching(Point p) {
         return Math.abs(x -p.x) <= 1 && Math.abs(y - p.y) <= 1;
     }
