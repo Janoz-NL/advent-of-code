@@ -1,6 +1,10 @@
 package com.janoz.aoc.y2024.day6;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,23 +21,26 @@ public class Day6 {
     static int height;
     static Predicate<Point> inbounds;
     static Set<Point> visited;
+    static Point start;
+    static Set<Point> turnpoints = new HashSet<>();
+
     public static void main(String[] args) {
         map = InputProcessor.asStream("inputs/2024/day06.txt").collect(Collectors.toList());
-        width = map.get(0).length();
-        height = map.size();
-        inbounds = Point.boundsPredicate(width,height);
+        init();
         visited = walk();
         System.out.println(visited.size());
         placeObstacles();
     }
 
     static Set<Point> walk() {
-        return walk(p->false);
+        return walk(null);
     }
 
-    static Set<Point> walk(Predicate<Point> blocked) {
+    static Set<Point> walk(Point newObstacle) {
+        Predicate<Point> blocked = newObstacle==null?p->false:newObstacle::equals;
+        Collection<Point> extraTurnPoints = newObstacle==null?Collections.emptyList():newObstacle.neighbourCollection();
         Set<Point> visited = new LinkedHashSet<>();
-        Point curpos = findStart();
+        Point curpos = start;
         Point direction = new Point(0,-1);
         visited.add(curpos);
         List<Point> path = new ArrayList<>();
@@ -41,7 +48,7 @@ public class Day6 {
         path.add(curpos);
         directions.add(direction);
         while(true) {
-            if (inLoop(path, directions)) {
+            if (newObstacle != null && inLoop(path, directions, extraTurnPoints)) {
                 return null;
             }
             Point nextPos = curpos.translate(direction);
@@ -61,8 +68,9 @@ public class Day6 {
     /**
      * @return true when last point added created a loop
      */
-    static boolean inLoop(List<Point> path, List<Point> direction) {
+    static boolean inLoop(List<Point> path, List<Point> direction, Collection<Point> extraTurns) {
         Point pos = path.get(path.size()-1);
+        if (!turnpoints.contains(pos) && !extraTurns.contains(pos)) return false;
         Point dir = direction.get(path.size()-1);
         for (int i=0; i<path.size()-1; i++) {
             if (path.get(i).equals(pos) && direction.get(i).equals(dir)) return true;
@@ -70,20 +78,25 @@ public class Day6 {
         return false;
     }
 
-    static Point findStart() {
+    static void init() {
+        width = map.get(0).length();
+        height = map.size();
+        inbounds = Point.boundsPredicate(width,height);
         for (int y=0; y< height; y++) {
             int x = map.get(y).indexOf('^');
             if (x >= 0) {
-                return new Point(x,y);
+                start = new Point(x,y);
+            }
+            for (x = map.get(y).indexOf('#'); x >= 0; x = map.get(y).indexOf('#',x+1)) {
+                Arrays.stream(new Point (x,y).neighbours()).filter(inbounds).forEach(turnpoints::add);
             }
         }
-        throw new RuntimeException("Guard not found");
     }
 
     static void placeObstacles() {
         Set<Point> innerVisited = new LinkedHashSet<>(visited);
-        innerVisited.remove(findStart());
-        System.out.println(innerVisited.parallelStream().filter(o -> walk(o::equals) == null ).count());
+        innerVisited.remove(start);
+        System.out.println(innerVisited.parallelStream().filter(o -> walk(o) == null).count());
     }
 
     static Point rotate(Point p) {
