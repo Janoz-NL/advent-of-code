@@ -1,7 +1,6 @@
 package com.janoz.aoc.y2024.day6;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,22 +11,22 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
+import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Point;
 
 public class Day6 {
 
-    static List<String> map;
-    static int width;
-    static int height;
+    static GrowingGrid<Character> grid;
+    static BoundingBox boundingBox = new BoundingBox(Point.ORIGIN);
     static Predicate<Point> inbounds;
     static Set<Point> visited;
     static Point start;
     static Set<Point> turnpoints = new HashSet<>();
 
     public static void main(String[] args) {
-        map = InputProcessor.asStream("inputs/2024/day06.txt").collect(Collectors.toList());
-        init();
+        init("inputs/2024/day06.txt");
         visited = walk();
         System.out.println(visited.size());
         placeObstacles();
@@ -37,9 +36,14 @@ public class Day6 {
         return walk(null);
     }
 
-    static Set<Point> walk(Point newObstacle) {
-        Predicate<Point> blocked = newObstacle==null?p->false:newObstacle::equals;
-        Collection<Point> extraTurnPoints = newObstacle==null?Collections.emptyList():newObstacle.neighbourCollection();
+    /**
+     *
+     * @param obstacle
+     * @return a set of visited nodes, ofr null if the guard is in a loop
+     */
+    static Set<Point> walk(Point obstacle) {
+        Predicate<Point> blocked = obstacle==null?p->false:obstacle::equals;
+        Collection<Point> extraTurnPoints = obstacle==null?Collections.emptyList():obstacle.neighbourCollection();
         Set<Point> visited = new LinkedHashSet<>();
         Point curpos = start;
         Direction direction = Direction.NORTH;
@@ -49,12 +53,12 @@ public class Day6 {
         path.add(curpos);
         directions.add(direction);
         while(true) {
-            if (newObstacle != null && inLoop(path, directions, extraTurnPoints)) {
+            if (obstacle != null && inLoop(path, directions, extraTurnPoints)) {
                 return null;
             }
             Point nextPos = curpos.translate(direction);
             if (!inbounds.test(nextPos)) return visited;
-            if (map.get(nextPos.y).charAt(nextPos.x) != '#' && !blocked.test(nextPos)) {
+            if (!grid.peek(nextPos).equals('#') && !blocked.test(nextPos)) {
                 visited.add(nextPos);
                 path.add(nextPos);
                 directions.add(direction);
@@ -79,19 +83,23 @@ public class Day6 {
         return false;
     }
 
-    static void init() {
-        width = map.get(0).length();
-        height = map.size();
-        inbounds = Point.boundsPredicate(width,height);
-        for (int y=0; y< height; y++) {
-            int x = map.get(y).indexOf('^');
-            if (x >= 0) {
-                start = new Point(x,y);
+    static void init(String file) {
+        grid = new GrowingGrid<>('.');
+        grid.forceOrigin();
+        InputProcessor.asStream(file).forEach(line -> {
+            int y= grid.getHeight();
+            boundingBox.addPoint(new Point(line.length()-1,y));
+            int x = line.indexOf('^');
+            if (x >= 0) start = new Point(x,y);
+            for (x = line.indexOf('#'); x>=0; x=line.indexOf('#',x+1)) {
+                Point p = new Point(x, y);
+                grid.put(p,'#');
             }
-            for (x = map.get(y).indexOf('#'); x >= 0; x = map.get(y).indexOf('#',x+1)) {
-                Arrays.stream(new Point (x,y).neighbours()).filter(inbounds).forEach(turnpoints::add);
-            }
-        }
+        });
+        inbounds = boundingBox.inBoundsPredicate();
+        turnpoints = grid.streamPoints()
+                .flatMap(p -> p.neighbourCollection().stream())
+                .filter(inbounds).collect(Collectors.toSet());
     }
 
     static void placeObstacles() {

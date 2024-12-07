@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 
 public class Point {
 
+    public static final Point ORIGIN = new Point(0,0);
+
     public int x,y;
 
     public Point(int x, int y) {
@@ -111,5 +113,9 @@ public class Point {
 
     public static Predicate<Point> boundsPredicate(int width, int height) {
         return (p) -> p.x>=0 && p.y>=0 && p.x<width && p.y<height;
+    }
+
+    public static Predicate<Point> boundsPredicate(int minX, int maxX, int minY, int maxY) {
+        return (p) -> p.x>=minX && p.y>=minY && p.x<=maxX && p.y<=maxY;
     }
 }

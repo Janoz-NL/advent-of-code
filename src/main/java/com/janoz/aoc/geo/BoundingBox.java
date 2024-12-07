@@ -1,6 +1,7 @@
 package com.janoz.aoc.geo;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class BoundingBox {
@@ -18,6 +19,10 @@ public class BoundingBox {
         bottom = Math.max(bottom,toAdd.y);
         left = Math.min(left,toAdd.x);
         right = Math.max(right,toAdd.x);
+    }
+
+    public Predicate<Point> inBoundsPredicate() {
+        return Point.boundsPredicate(left,right,top, bottom);
     }
 
     public void printGrid(Function<Point,Character> mapToChar) {
