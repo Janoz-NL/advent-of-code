@@ -23,12 +23,12 @@ public class Day7 {
     }
 
     static boolean trySolve(long result, List<Long> values) {
-        if (result < 0) return false;
         long tail = values.get(values.size()-1);
         List<Long> headList = values.subList(0, values.size()-1);
         if (values.size() == 1) return tail == result;
+        if (tail == 0 && result == 0)  return true;
         if ((tail != 0)  && (result % tail == 0) && trySolve(result/tail,headList)) return true;
-        if ((result >= tail)      && trySolve(result-tail,headList)) return true;
+        if ((result >= tail) && trySolve(result-tail,headList)) return true;
 
         String resultString = String.valueOf(result);
         String tailString = String.valueOf(tail);
