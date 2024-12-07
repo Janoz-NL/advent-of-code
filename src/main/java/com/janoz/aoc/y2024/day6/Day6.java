@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.Point;
 
 public class Day6 {
@@ -41,10 +42,10 @@ public class Day6 {
         Collection<Point> extraTurnPoints = newObstacle==null?Collections.emptyList():newObstacle.neighbourCollection();
         Set<Point> visited = new LinkedHashSet<>();
         Point curpos = start;
-        Point direction = new Point(0,-1);
+        Direction direction = Direction.NORTH;
         visited.add(curpos);
         List<Point> path = new ArrayList<>();
-        List<Point> directions = new ArrayList<>();
+        List<Direction> directions = new ArrayList<>();
         path.add(curpos);
         directions.add(direction);
         while(true) {
@@ -59,7 +60,7 @@ public class Day6 {
                 directions.add(direction);
                 curpos = nextPos;
             } else {
-                direction = rotate(direction);
+                direction = direction.rotateCW();
                 directions.set(directions.size()-1, direction);
             }
         }
@@ -68,10 +69,10 @@ public class Day6 {
     /**
      * @return true when last point added created a loop
      */
-    static boolean inLoop(List<Point> path, List<Point> direction, Collection<Point> extraTurns) {
+    static boolean inLoop(List<Point> path, List<Direction> direction, Collection<Point> extraTurns) {
         Point pos = path.get(path.size()-1);
         if (!turnpoints.contains(pos) && !extraTurns.contains(pos)) return false;
-        Point dir = direction.get(path.size()-1);
+        Direction dir = direction.get(path.size()-1);
         for (int i=0; i<path.size()-1; i++) {
             if (path.get(i).equals(pos) && direction.get(i).equals(dir)) return true;
         }
@@ -97,9 +98,5 @@ public class Day6 {
         Set<Point> innerVisited = new LinkedHashSet<>(visited);
         innerVisited.remove(start);
         System.out.println(innerVisited.parallelStream().filter(o -> walk(o) == null).count());
-    }
-
-    static Point rotate(Point p) {
-        return new Point(p.y * -1, p.x);
     }
 }

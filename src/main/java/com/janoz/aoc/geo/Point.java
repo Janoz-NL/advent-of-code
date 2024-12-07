@@ -29,19 +29,19 @@ public class Point {
     }
 
     public Point north() {
-        return translate(0,-1);
+        return translate(Direction.NORTH);
     }
 
     public Point south() {
-        return translate(0,+1);
+        return translate(Direction.SOUTH);
     }
 
     public Point east() {
-        return translate(+1,0);
+        return translate(Direction.EAST);
     }
 
     public Point west() {
-        return translate(-1,0);
+        return translate(Direction.WEST);
     }
 
     public Point[] adjacent() {
