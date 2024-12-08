@@ -13,13 +13,11 @@ import java.util.stream.Collectors;
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
-import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Point;
 
 public class Day6 {
 
-    static GrowingGrid<Character> grid;
-    static BoundingBox boundingBox = new BoundingBox(Point.ORIGIN);
+    static Set<Point> obstacles;
     static Predicate<Point> inbounds;
     static Set<Point> visited;
     static Point start;
@@ -29,7 +27,7 @@ public class Day6 {
         init("inputs/2024/day06.txt");
         visited = walk();
         System.out.println(visited.size());
-        placeObstacles();
+        System.out.println(possibleLoops());
     }
 
     static Set<Point> walk() {
@@ -37,9 +35,8 @@ public class Day6 {
     }
 
     /**
-     *
-     * @param obstacle
-     * @return a set of visited nodes, ofr null if the guard is in a loop
+     * @param obstacle extra obstacle or null for part 1
+     * @return a set of visited nodes, or null if the guard is in a loop
      */
     static Set<Point> walk(Point obstacle) {
         Predicate<Point> blocked = obstacle==null?p->false:obstacle::equals;
@@ -58,7 +55,7 @@ public class Day6 {
             }
             Point nextPos = curpos.translate(direction);
             if (!inbounds.test(nextPos)) return visited;
-            if (!grid.peek(nextPos).equals('#') && !blocked.test(nextPos)) {
+            if (!obstacles.contains(nextPos) && !blocked.test(nextPos)) {
                 visited.add(nextPos);
                 path.add(nextPos);
                 directions.add(direction);
@@ -84,27 +81,19 @@ public class Day6 {
     }
 
     static void init(String file) {
-        grid = new GrowingGrid<>('.');
-        grid.forceOrigin();
-        InputProcessor.asStream(file).forEach(line -> {
-            int y= grid.getHeight();
-            boundingBox.addPoint(new Point(line.length()-1,y));
-            int x = line.indexOf('^');
-            if (x >= 0) start = new Point(x,y);
-            for (x = line.indexOf('#'); x>=0; x=line.indexOf('#',x+1)) {
-                Point p = new Point(x, y);
-                grid.put(p,'#');
-            }
-        });
-        inbounds = boundingBox.inBoundsPredicate();
-        turnpoints = grid.streamPoints()
+        obstacles = new HashSet<>();
+        inbounds = BoundingBox.readGrid(InputProcessor.asIterator(file), (p,c) -> {
+            if (c == '^') start = p;
+            if (c == '#') obstacles.add(p);
+        }).inBoundsPredicate();
+        turnpoints = obstacles.stream()
                 .flatMap(p -> p.neighbourCollection().stream())
                 .filter(inbounds).collect(Collectors.toSet());
     }
 
-    static void placeObstacles() {
-        Set<Point> innerVisited = new LinkedHashSet<>(visited);
-        innerVisited.remove(start);
-        System.out.println(innerVisited.parallelStream().filter(o -> walk(o) == null).count());
+    static long possibleLoops() {
+        return visited.parallelStream()
+                .filter(p -> !p.equals(start))
+                .filter(o -> walk(o) == null).count();
     }
 }

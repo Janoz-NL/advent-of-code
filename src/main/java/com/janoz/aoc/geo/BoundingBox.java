@@ -1,5 +1,7 @@
 package com.janoz.aoc.geo;
 
+import java.util.Iterator;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -32,11 +34,19 @@ public class BoundingBox {
         });
     }
 
-    public int getBottom() {
-        return bottom;
-    }
-
-    public void setTop(int top) {
-        this.top=top;
+    public static BoundingBox readGrid(Iterator<String> input, BiConsumer<Point, Character> itemProcessor) {
+        int y=0;
+        String line = input.next();
+        BoundingBox result = new BoundingBox(new Point(line.length()-1,0));
+        do {
+            for (int x=0;x<line.length(); x++) {
+                if (line.charAt(x) != '.') itemProcessor.accept(new Point(x,y), line.charAt(x));
+            }
+            if (!input.hasNext()) break;
+            y++;
+            line = input.next();
+        } while (true);
+        result.addPoint(new Point(0,y));
+        return result;
     }
 }

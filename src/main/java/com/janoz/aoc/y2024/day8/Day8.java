@@ -22,17 +22,9 @@ public class Day8 {
     static AlwaysHashMap<Character, List<Point>> antennas = new AlwaysHashMap<>(p-> new ArrayList<>());
     public static void main(String[] args) {
         StopWatch.start();
-        BoundingBox b = new BoundingBox(new Point(0,-1));
-        InputProcessor.asStream("inputs/2024/day08.txt").forEach( line -> {
-            int y = b.getBottom()+1;
-            b.addPoint(new Point(line.length()-1,y));
-            for (int x=0; x< line.length(); x++) {
-                if (line.charAt(x) != '.')
-                    antennas.get(line.charAt(x)).add(new Point(x, y));
-            }
-        });
-        b.setTop(0);
-        boundingPredicate = b.inBoundsPredicate();
+        boundingPredicate = BoundingBox.readGrid(
+                InputProcessor.asIterator("inputs/2024/day08.txt"),
+                (p,c) -> antennas.get(c).add(p)).inBoundsPredicate();
         System.out.println(calcAntiNodes());
         StopWatch.stopPrint();
     }
