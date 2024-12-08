@@ -21,4 +21,14 @@ public class DirectionTest {
         assertThat(Direction.SOUTH.rotateCCW()).isEqualTo(Direction.EAST);
         assertThat(Direction.WEST.rotateCCW()).isEqualTo(Direction.SOUTH);
     }
+
+    @Test
+    void testReverse() {
+        assertThat(Direction.NORTH.reverse()).isEqualTo(Direction.SOUTH);
+        assertThat(Direction.EAST.reverse()).isEqualTo(Direction.WEST);
+        assertThat(Direction.SOUTH.reverse()).isEqualTo(Direction.NORTH);
+        assertThat(Direction.WEST.reverse()).isEqualTo(Direction.EAST);
+    }
+
+
 }

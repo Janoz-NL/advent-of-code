@@ -8,7 +8,7 @@ public class Direction extends Point{
     public static final Direction SOUTH = new Direction(0,1);
     public static final Direction WEST = new Direction(-1,0);
 
-    private Direction(int dx, int dy) {
+    public Direction(int dx, int dy) {
         super(dx,dy);
     }
 
@@ -20,5 +20,7 @@ public class Direction extends Point{
         return new Direction(this.y, this.x * -1);
     }
 
-
+    public Direction reverse() {
+        return new Direction(-x,-y);
+    }
 }

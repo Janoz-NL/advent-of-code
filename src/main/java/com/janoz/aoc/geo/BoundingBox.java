@@ -31,4 +31,12 @@ public class BoundingBox {
             System.out.println();
         });
     }
+
+    public int getBottom() {
+        return bottom;
+    }
+
+    public void setTop(int top) {
+        this.top=top;
+    }
 }

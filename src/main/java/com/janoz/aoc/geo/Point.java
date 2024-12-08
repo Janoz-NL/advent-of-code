@@ -87,6 +87,10 @@ public class Point {
         return Math.abs(x -p.x) <= 1 && Math.abs(y - p.y) <= 1;
     }
 
+    public Direction directionTo(Point p) {
+        return new Direction(p.x-this.x, p.y - this.y);
+    }
+
     @Override
     public String toString() {
         return x + "," + y;
@@ -104,7 +108,6 @@ public class Point {
     public int hashCode() {
         return Objects.hash(x, y);
     }
-
 
     public static Point parse(String input) {
         String[] parts = input.split(",");
