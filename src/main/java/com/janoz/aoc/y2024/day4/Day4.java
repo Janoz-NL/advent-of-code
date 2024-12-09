@@ -8,7 +8,7 @@ import com.janoz.aoc.InputProcessor;
 public class Day4 {
 
     public static void main(String[] args) {
-        List<String> data = InputProcessor.asStream("inputs/2024/day4.txt").collect(Collectors.toList());
+        List<String> data = InputProcessor.asStream("inputs/2024/day04.txt").collect(Collectors.toList());
         int width = data.get(0).length();
         int height = data.size();
 

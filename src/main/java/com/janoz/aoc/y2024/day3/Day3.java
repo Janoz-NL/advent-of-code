@@ -7,7 +7,7 @@ import com.janoz.aoc.InputProcessor;
 public class Day3 {
 
     public static void main(String[] args) {
-        String data = InputProcessor.asStream("inputs/2024/day3.txt").collect(Collectors.joining("#"));
+        String data = InputProcessor.asStream("inputs/2024/day03.txt").collect(Collectors.joining("#"));
 
         Day3 part1 = new Day3(data);
         while (part1.findNextMultiplication()) {}
