@@ -1,5 +1,6 @@
 package com.janoz.aoc.y2024.day10;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -20,7 +21,7 @@ public class Day10 {
     public static void main(String[] args) {
         init(InputProcessor.asIterator("inputs/2024/day10.txt"));
         System.out.println(part1());
-        System.out.println(climbingTrails());
+        System.out.println(part2());
     }
 
     static void init(Iterator<String> input) {
@@ -39,9 +40,7 @@ public class Day10 {
     static Set<Point> reachableTops(Point start) {
         final int nextHeight = map.get(start) + 1;
         if (nextHeight == 10) {
-            HashSet<Point> result = new HashSet<>();
-            result.add(start);
-            return result;
+            return Collections.singleton(start);
         }
         return start.streamNeighbour(inBounds)
                 .filter(p -> map.get(p) == nextHeight)
@@ -52,7 +51,7 @@ public class Day10 {
                         );
     }
 
-    static long climbingTrails() {
+    static long part2() {
         return trailHeads.stream().mapToLong(Day10::climbingTrail).sum();
     }
 

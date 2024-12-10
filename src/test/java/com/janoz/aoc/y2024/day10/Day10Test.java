@@ -36,7 +36,7 @@ public class Day10Test {
                         "...9..2\n" +
                         ".....01";
         Day10.init(makeIterator(s));
-        assertThat(Day10.climbingTrails()).isEqualTo(3);
+        assertThat(Day10.part2()).isEqualTo(3);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class Day10Test {
                         "01329801\n" +
                         "10456732";
         Day10.init(makeIterator(s));
-        assertThat(Day10.climbingTrails()).isEqualTo(81);
+        assertThat(Day10.part2()).isEqualTo(81);
     }
 
     @Test
