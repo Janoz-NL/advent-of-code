@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Point {
 
@@ -73,6 +74,10 @@ public class Point {
 
     public Collection<Point> neighbourCollection() {
         return Arrays.asList(neighbours());
+    }
+
+    public Stream<Point> streamNeighbour(Predicate<Point> filter) {
+        return Arrays.stream(neighbours()).filter(filter);
     }
 
     public long manhattanDistance(Point p) {
