@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.collections.AccumulatingMap;
 
 public class Day11 {
     static Map<Long, Long> stones;
-    static Map<Long, Long> next;
 
     public static void main(String[] args) {
         StopWatch.start();
@@ -22,10 +22,9 @@ public class Day11 {
 
     static void parse(String input) {
         stones = new HashMap<>();
-        next = new HashMap<>();
         Arrays.stream(input.split(" "))
                 .mapToLong(Long::parseLong)
-                .forEach(eng -> stones.put(eng, stones.getOrDefault(eng,0L) + 1));
+                .forEach(l -> stones.merge(l,1L, Long::sum));
     }
 
     static void blink(int times) {
@@ -35,26 +34,21 @@ public class Day11 {
     }
 
     static void blink() {
-        int digits;
-        for (long engraving: stones.keySet()) {
-            if (engraving == 0) {
-                putNext(1L,engraving);
-            } else if ((digits = (int) (Math.log10(engraving) + 1)) % 2 == 0) {
-                long split = (long) Math.pow(10, digits>>1);
-                long engraving1 = engraving / split;
-                long engraving2 = engraving % split;
-                putNext(engraving1,engraving);
-                putNext(engraving2,engraving);
-            } else {
-                putNext(engraving * 2024, engraving);
-            }
-        }
-        stones = Map.copyOf(next);
-        next.clear();
-    }
-
-    static void putNext(long newEngraving, long previousEngraving) {
-        next.put(newEngraving, next.getOrDefault(newEngraving,0L) + stones.get(previousEngraving));
+        final AccumulatingMap<Long,Long,Long> next =
+                new AccumulatingMap<>((newEngraving, engraving)-> stones.get(engraving), Long::sum);
+        stones.keySet().forEach(engraving -> {
+                    int digits;
+                    if (engraving == 0) {
+                        next.accumulate(1L, engraving);
+                    } else if (((digits = (int) (Math.log10(engraving) + 1)) & 1) == 0) {
+                        long split = (long) Math.pow(10, digits>>1);
+                        next.accumulate(engraving / split, engraving);
+                        next.accumulate(engraving % split, engraving);
+                    } else {
+                        next.accumulate(engraving * 2024, engraving);
+                    }
+        });
+        stones = next;
     }
 
     static long count() {
