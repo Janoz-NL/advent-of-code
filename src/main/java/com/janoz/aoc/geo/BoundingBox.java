@@ -35,18 +35,8 @@ public class BoundingBox {
     }
 
     public static BoundingBox readGrid(Iterator<String> input, BiConsumer<Point, Character> itemProcessor) {
-        int y=0;
-        String line = input.next();
-        BoundingBox result = new BoundingBox(new Point(line.length()-1,0));
-        do {
-            for (int x=0;x<line.length(); x++) {
-                if (line.charAt(x) != '.') itemProcessor.accept(new Point(x,y), line.charAt(x));
-            }
-            if (!input.hasNext()) break;
-            y++;
-            line = input.next();
-        } while (true);
-        result.addPoint(new Point(0,y));
+        BoundingBox result = new BoundingBox(new Point(0, 0));
+        Grid.readGrid(input, result::addPoint, itemProcessor);
         return result;
     }
 }

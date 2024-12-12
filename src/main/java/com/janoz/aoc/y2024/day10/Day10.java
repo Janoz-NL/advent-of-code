@@ -3,12 +3,11 @@ package com.janoz.aoc.y2024.day10;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Point;
 
@@ -25,12 +24,9 @@ public class Day10 {
     }
 
     static void init(Iterator<String> input) {
-        map = new GrowingGrid<>(-1);
-        trailHeads = new LinkedHashSet<>();
-        inBounds = BoundingBox.readGrid(input, (p, c) -> {
-            map.put(p,  c - '0');
-            if (c=='0') trailHeads.add(p);
-        }).inBoundsPredicate();
+        map = GrowingGrid.readGrid(input, c -> c - '0', -1);
+        trailHeads = map.streamPoints().filter(p -> map.peek(p) == 0).collect(Collectors.toSet());
+        inBounds = map.inBoundsPredicate();
     }
 
     static long part1() {

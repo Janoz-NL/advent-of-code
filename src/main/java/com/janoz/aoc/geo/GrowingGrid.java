@@ -1,6 +1,7 @@
 package com.janoz.aoc.geo;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -148,5 +149,15 @@ public class GrowingGrid<T> implements Grid<T>{
         while (streamCol(maxX).allMatch(i -> Objects.equals(i,emptyValue))){
             maxX--;
         }
+    }
+
+    public static <T> GrowingGrid<T> readGrid(Iterator<String> input, Function<Character,T> mapper, T emptyValue) {
+        GrowingGrid<T> result = new GrowingGrid<>(emptyValue);
+        Grid.readGrid(input, result::grow, result::put, mapper, emptyValue);
+        return result;
+    }
+
+    public static GrowingGrid<Character> readGrid(Iterator<String> input) {
+        return readGrid(input, c -> c, '.');
     }
 }
