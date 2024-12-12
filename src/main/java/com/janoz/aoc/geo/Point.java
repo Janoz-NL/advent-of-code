@@ -47,16 +47,27 @@ public class Point {
         return translate(Direction.WEST);
     }
 
+    /**
+     * Return all adjacent in counterclockwise order
+     *
+     * <pre>
+     * 0 7 6
+     * 1   5
+     * 2 3 4
+     * </pre>
+     *
+     * @return
+     */
     public Point[] adjacent() {
         return new Point[]{
                 translate(-1,-1),
                 translate(-1,0),
                 translate(-1,1),
-                translate(0,-1),
                 translate(0,1),
-                translate(1,-1),
+                translate(1,1),
                 translate(1,0),
-                translate(1,1)
+                translate(1,-1),
+                translate(0,-1)
         };
     }
 

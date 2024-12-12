@@ -1,6 +1,7 @@
 package com.janoz.aoc.y2024.day12;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.collections.MergingMap;
 import com.janoz.aoc.geo.BoundingBox;
@@ -14,21 +15,20 @@ import java.util.stream.IntStream;
 
 public class Day12 {
 
-
     static GrowingGrid<Character> map;
     static GrowingGrid<Integer> regionGrid;
     static Predicate<Point> inBounds;
     static MergingMap regionMapper;
     static Map<Integer, Set<Point>> regions;
 
-
     public static void main(String[] args) {
+        StopWatch.start();
         init(InputProcessor.asIterator("inputs/2024/day12.txt"));
-        Day12.floodfill();
+        Day12.connectedSets();
         System.out.println(Day12.part1());
         System.out.println(Day12.part2());
+        StopWatch.stopPrint();
     }
-
 
     static void init(Iterator<String> input) {
         map = new GrowingGrid<>('.');
@@ -40,7 +40,7 @@ public class Day12 {
         regions = new AlwaysHashMap<>((Supplier<Set<Point>>)HashSet::new);
     }
 
-    static void floodfill() {
+    static void connectedSets() {
         Iterator<Integer> nextRegionSupplier = IntStream.iterate(1,i->i+1).iterator();
         Stack<Point> stack = new Stack<>();
         stack.push(Point.ORIGIN);
@@ -89,43 +89,16 @@ public class Day12 {
     static long bulkPerimiter(Collection<Point> points) {
         return points.stream().mapToLong(p -> {
             int posts = 0;
-            //top left
-            if (points.contains(p.north()) == points.contains(p.west())) {
-                if (points.contains(p.north())) {
-                    if (!points.contains(p.north().west())) {
-                        posts++;
-                    }
-                } else {
+            Point[] adjacent = p.adjacent();
+            for (int i = 0; i<8; i+=2) {
+                if (   points.contains(adjacent[(i + 7) & 7]) &&
+                       points.contains(adjacent[(i + 1) & 7]) &&
+                       !points.contains(adjacent[i & 7])) {
+                    //inner corner
                     posts++;
-                }
-            }
-            //top right
-            if (points.contains(p.north()) == points.contains(p.east())) {
-                if (points.contains(p.north())) {
-                    if (!points.contains(p.north().east())) {
-                        posts++;
-                    }
-                } else {
-                    posts++;
-                }
-            }
-            //bottom left
-            if (points.contains(p.south()) == points.contains(p.west())) {
-                if (points.contains(p.south())) {
-                    if (!points.contains(p.south().west())) {
-                        posts++;
-                    }
-                } else {
-                    posts++;
-                }
-            }
-            //bottom right
-            if (points.contains(p.south()) == points.contains(p.east())) {
-                if (points.contains(p.south())) {
-                    if (!points.contains(p.south().east())) {
-                        posts++;
-                    }
-                } else {
+                } else if (!points.contains(adjacent[(i + 7) & 7]) &&
+                           !points.contains(adjacent[(i + 1) & 7])) {
+                    //outer corner
                     posts++;
                 }
             }
@@ -133,3 +106,4 @@ public class Day12 {
         }).sum();
     }
 }
+

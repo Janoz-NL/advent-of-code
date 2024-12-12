@@ -15,7 +15,7 @@ class Day12Test {
                 "BBCC\n" +
                 "EEEC"));
         Day12.map.printGrid(c -> c);
-        Day12.floodfill();
+        Day12.connectedSets();
         Day12.regionGrid.printGrid(i -> (char)('a' -1 + Day12.regionMapper.getActual(i)));
     }
 
@@ -32,7 +32,7 @@ class Day12Test {
                 "MIIIIIJJEE\n" +
                 "MIIISIJEEE\n" +
                 "MMMISSJEEE"));
-        Day12.floodfill();
+        Day12.connectedSets();
         System.out.println(Day12.part1());
     }
 
@@ -42,7 +42,7 @@ class Day12Test {
                 "BBCD\n" +
                 "BBCC\n" +
                 "EEEC"));
-        Day12.floodfill();
+        Day12.connectedSets();
         System.out.println(Day12.part2());
     }
 
