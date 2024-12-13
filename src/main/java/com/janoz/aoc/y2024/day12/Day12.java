@@ -1,5 +1,6 @@
 package com.janoz.aoc.y2024.day12;
 
+import com.janoz.aoc.graphics.ConsumingAnimationWriter;
 import com.janoz.aoc.graphics.Graphics;
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
@@ -8,12 +9,11 @@ import com.janoz.aoc.geo.Point;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Day12 {
@@ -33,14 +33,15 @@ public class Day12 {
 
         // And now for the graphics
         Function<Integer, Color> colorMapper = Graphics.constructMapper(16);
-        List<BufferedImage> images = new ArrayList<>();
+        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_12_big.gif", true);
+        Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
         map.connectedSets(frame -> {
-            BufferedImage image = frame.toImage(colorMapper);
+            BufferedImage image = frame.toBigImage(colorMapper,3,0);
             if (image != null) {
-                images.add(image);
+                imageConsumer.accept(image);
             }
         });
-        Graphics.writeAniGif(images, "target/AOC_2024_12.gif");
+        caw.close();
     }
 
     static long part1() {

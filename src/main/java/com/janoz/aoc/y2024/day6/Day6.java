@@ -18,7 +18,7 @@ import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.Grid;
 import com.janoz.aoc.geo.Point;
-import com.janoz.aoc.graphics.Graphics;
+import com.janoz.aoc.graphics.ConsumingAnimationWriter;
 
 public class Day6 {
 
@@ -37,10 +37,11 @@ public class Day6 {
         System.out.println(visited.size());
         System.out.println(possibleLoops());
 
-        List<BufferedImage> images = new ArrayList<>();
-        images.add(Grid.asGrid(width, height, obstacles).toImage(x -> Color.RED));
-        walk(null, p -> images.add(Grid.asGrid(width,height,Collections.singleton(p)).toImage(x -> Color.BLUE)));
-        Graphics.writeAniGif(images, "target/AOC_2024_06.gif");
+        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_06.gif", true);
+        Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
+        imageConsumer.accept(Grid.asGrid(width, height, obstacles).toBigImage(x -> Color.RED,5,1));
+        walk(null, p -> imageConsumer.accept(Grid.asGrid(width,height,Collections.singleton(p)).toBigImage(x -> Color.BLUE, 5,1)));
+        caw.close();
     }
 
     static Set<Point> walk() {

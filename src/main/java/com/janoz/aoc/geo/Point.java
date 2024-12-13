@@ -3,6 +3,7 @@ package com.janoz.aoc.geo;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -123,6 +124,19 @@ public class Point {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+
+    private Integer randHash;
+    /**
+     *
+     * @return more random hash which still adheres to hash rules
+     */
+    public int randHash() {
+        if (randHash == null) {
+            randHash = (int)new Random(y * 1000L + x).nextLong();
+        }
+        return randHash;
     }
 
     public static Point parse(String input) {

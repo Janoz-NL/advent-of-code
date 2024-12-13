@@ -5,12 +5,13 @@ import com.janoz.aoc.collections.SetAsMap;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -76,6 +77,26 @@ public interface Grid<T> {
         return image;
     }
 
+    default BufferedImage toBigImage(Function<T,Color> mapper,int blocksize, int bordersize) {
+        ToIntFunction<Color> toInt = Color::getRGB;
+        BufferedImage image = new BufferedImage(getWidth() * blocksize + bordersize,getHeight() * blocksize + bordersize, BufferedImage.TYPE_INT_ARGB);
+        Iterator<Point> it = streamPoints().iterator();
+        if (!it.hasNext()) {
+            return null;
+        }
+        while (it.hasNext()) {
+            Point p = it.next();
+            for (int x=bordersize;x<blocksize;x++){
+                for (int y=bordersize;y<blocksize;y++){
+                    image.setRGB(p.x * blocksize + x, p.y * blocksize + y, toInt.applyAsInt(mapper.apply(get(p))));
+                }
+            }
+        }
+        return image;
+    }
+
+
+
     default Map<Integer, Set<Point>> connectedSets() {
         return connectedSets((a)->{});
     }
@@ -84,11 +105,12 @@ public interface Grid<T> {
         Iterator<Integer> nextRegionSupplier = IntStream.iterate(1, l->l+1).iterator();
         Map<Point, Integer> regions = new HashMap<>();
         MergingMap regionMapper = new MergingMap();
-        Stack<Point> stack = new Stack<>();
-        stack.push(Point.ORIGIN);
-        regions.put(Point.ORIGIN,nextRegionSupplier.next());
+        PriorityQueue<Point> stack = new PriorityQueue<>(Comparator.comparingInt(Point::randHash));
+        Point middle = new Point(getWidth() >> 1, getHeight() >> 1);
+        stack.add(middle);
+        regions.put(middle,nextRegionSupplier.next());
         while (!stack.isEmpty()) {
-            Point p = stack.pop();
+            Point p = stack.poll();
             T value = get(p);
             int region = regions.get(p);
             p.streamNeighbour(this::inGrid).forEach(n-> {
@@ -100,7 +122,7 @@ public interface Grid<T> {
                         //new point
                         regions.put(n,actualRegion);
                         frameConsumer.accept(asGrid(getWidth(),getHeight(), regions, regionMapper::getActual, x->x == actualRegion));
-                        stack.push(n);
+                        stack.add(n);
                     } else if (neighbourRegion != actualRegion) {
                         //existing point, merge sets
                         int resultRegion = regionMapper.addMapping(actualRegion, neighbourRegion);
@@ -112,7 +134,7 @@ public interface Grid<T> {
                         int nextRegion = nextRegionSupplier.next();
                         regions.put(n, nextRegion);
                         frameConsumer.accept(asGrid(getWidth(),getHeight(), regions, x->x, x->x == nextRegion));
-                        stack.push(n);
+                        stack.add(n);
                     }
                 }
             });
