@@ -5,13 +5,15 @@ import java.util.Map;
 
 public class MergingMap {
 
-    private Map<Integer, Integer> backingMap = new HashMap<>();
+    private final Map<Integer, Integer> backingMap = new HashMap<>();
 
-    public void addMapping(int i1, int i2) {
+    public int addMapping(int i1, int i2) {
         i1 = getActual(i1);
         i2 = getActual(i2);
-        if (i1 == i2) return;
-        backingMap.put(Math.max(i1,i2),Math.min(i1,i2));
+        if (i1 == i2) return i1;
+        int result = Math.min(i1, i2);
+        backingMap.put(Math.max(i1,i2), result);
+        return result;
     }
 
     public int getActual(int i) {

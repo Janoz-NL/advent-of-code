@@ -1,5 +1,7 @@
 package com.janoz.aoc.y2024.day6;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,13 +9,16 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
+import com.janoz.aoc.geo.Grid;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.graphics.Graphics;
 
 public class Day6 {
 
@@ -23,11 +28,19 @@ public class Day6 {
     static Point start;
     static Set<Point> turnpoints = new HashSet<>();
 
+    static int width;
+    static int height;
+
     public static void main(String[] args) {
         init("inputs/2024/day06.txt");
         visited = walk();
         System.out.println(visited.size());
         System.out.println(possibleLoops());
+
+        List<BufferedImage> images = new ArrayList<>();
+        images.add(Grid.asGrid(width, height, obstacles).toImage(x -> Color.RED));
+        walk(null, p -> images.add(Grid.asGrid(width,height,Collections.singleton(p)).toImage(x -> Color.BLUE)));
+        Graphics.writeAniGif(images, "target/AOC_2024_06.gif");
     }
 
     static Set<Point> walk() {
@@ -39,6 +52,10 @@ public class Day6 {
      * @return a set of visited nodes, or null if the guard is in a loop
      */
     static Set<Point> walk(Point obstacle) {
+        return walk(obstacle, x -> {});
+    }
+
+    static Set<Point> walk(Point obstacle, Consumer<Point> pathStepConsumer) {
         Predicate<Point> blocked = obstacle==null?p->false:obstacle::equals;
         Collection<Point> extraTurnPoints = obstacle==null?Collections.emptyList():obstacle.neighbourCollection();
         Set<Point> visited = new LinkedHashSet<>();
@@ -50,6 +67,7 @@ public class Day6 {
         path.add(curpos);
         directions.add(direction);
         while(true) {
+            pathStepConsumer.accept(curpos);
             if (obstacle != null && inLoop(path, directions, extraTurnPoints)) {
                 return null;
             }
@@ -82,10 +100,13 @@ public class Day6 {
 
     static void init(String file) {
         obstacles = new HashSet<>();
-        inbounds = BoundingBox.readGrid(InputProcessor.asIterator(file), (p,c) -> {
+        BoundingBox bb = BoundingBox.readGrid(InputProcessor.asIterator(file), (p, c) -> {
             if (c == '^') start = p;
             if (c == '#') obstacles.add(p);
-        }).inBoundsPredicate();
+        });
+        width = bb.getWidth();
+        height = bb.getHeight();
+        inbounds = bb.inBoundsPredicate();
         turnpoints = obstacles.stream()
                 .flatMap(p -> p.neighbourCollection().stream())
                 .filter(inbounds).collect(Collectors.toSet());

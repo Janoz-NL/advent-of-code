@@ -1,14 +1,20 @@
 package com.janoz.aoc.y2024.day12;
 
+import com.janoz.aoc.graphics.Graphics;
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Point;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class Day12 {
 
@@ -18,11 +24,23 @@ public class Day12 {
     public static void main(String[] args) {
         StopWatch.start();
         Iterator<String> input = InputProcessor.asIterator("inputs/2024/day12.txt");
+
         map = GrowingGrid.readGrid(input);
         regions = map.connectedSets();
         System.out.println(Day12.part1());
         System.out.println(Day12.part2());
         StopWatch.stopPrint();
+
+        // And now for the graphics
+        Function<Integer, Color> colorMapper = Graphics.constructMapper(16);
+        List<BufferedImage> images = new ArrayList<>();
+        map.connectedSets(frame -> {
+            BufferedImage image = frame.toImage(colorMapper);
+            if (image != null) {
+                images.add(image);
+            }
+        });
+        Graphics.writeAniGif(images, "target/AOC_2024_12.gif");
     }
 
     static long part1() {

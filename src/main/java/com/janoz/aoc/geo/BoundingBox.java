@@ -39,4 +39,12 @@ public class BoundingBox {
         Grid.readGrid(input, result::addPoint, itemProcessor);
         return result;
     }
+
+    public int getWidth() {
+        return right - left + 1;
+    }
+
+    public int getHeight() {
+        return bottom - top + 1;
+    }
 }
