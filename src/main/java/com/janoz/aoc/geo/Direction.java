@@ -23,4 +23,8 @@ public class Direction extends Point{
     public Direction reverse() {
         return new Direction(-x,-y);
     }
+
+    public Direction times(int i) {
+        return new Direction(this.x * i, this.y * i);
+    }
 }
