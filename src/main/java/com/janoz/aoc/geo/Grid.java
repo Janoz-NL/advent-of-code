@@ -64,8 +64,12 @@ public interface Grid<T> {
     int getHeight();
 
     default BufferedImage toImage(Function<T,Color> mapper) {
+        return toImage(mapper, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    default BufferedImage toImage(Function<T,Color> mapper, int type) {
         ToIntFunction<Color> toInt = Color::getRGB;
-        BufferedImage image = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(getWidth(),getHeight(), type);
         Iterator<Point> it = streamPoints().iterator();
         if (!it.hasNext()) {
             return null;

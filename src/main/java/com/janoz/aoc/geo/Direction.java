@@ -12,6 +12,10 @@ public class Direction extends Point{
         super(dx,dy);
     }
 
+    public Direction(Point p) {
+        super(p.x,p.y);
+    }
+
     public  Direction rotateCW() {
         return new Direction(this.y * -1, this.x);
     }
