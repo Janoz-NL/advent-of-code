@@ -37,6 +37,10 @@ public interface Grid<T> {
                 p.y >=0 && p.y < getHeight();
     }
 
+    default Point getOrigin() {
+        return Point.ORIGIN;
+    }
+
     default Predicate<Point> inBoundsPredicate() {
         return this::inGrid;
     }
@@ -45,11 +49,19 @@ public interface Grid<T> {
         return streamPoints().map(this::get);
     }
 
+    default Stream<Point> streamPoints() {
+        return streamAllPoints();
+    }
+
     /**
      * @return a Stream of all points in scan order
      */
-    default Stream<Point> streamPoints() {
-        return IntStream.range(0,getHeight()).mapToObj( y-> IntStream.range(0,getWidth()).mapToObj(x -> new Point(x,y))).flatMap(x -> x);
+    default Stream<Point> streamAllPoints() {
+        Point o = getOrigin();
+        return IntStream.range(o.y, o.y + getHeight())
+                .mapToObj(y-> IntStream.range(o.x, o.x + getWidth())
+                        .mapToObj(x -> new Point(x,y)))
+                .flatMap(x -> x);
     }
 
     default String toString(Function<T,String> formatter) {
@@ -108,7 +120,7 @@ public interface Grid<T> {
         Map<Point, Integer> regions = new HashMap<>();
         MergingMap regionMapper = new MergingMap();
         regions.put(Point.ORIGIN,nextRegionSupplier.next());
-        streamPoints().forEach(p -> {
+        streamAllPoints().forEach(p -> {
             T value = get(p);
             int region = regions.get(p);
             Arrays.stream(new Point[]{p.south(),p.east()}).filter(this::inGrid).forEach(n-> {
@@ -221,6 +233,10 @@ public interface Grid<T> {
 
     static Grid<Boolean> asGrid(int width, int height, Set<Point> points) {
         return asGrid(width, height, new SetAsMap<>(points), x->x);
+    }
+
+    static Grid<Boolean> asGrid(int width, int height, Set<Point> points, Function<Boolean,Boolean> transformer) {
+        return asGrid(width, height, new SetAsMap<>(points), transformer);
     }
 
     static <T> Grid<T> asGrid(int width, int height, Map<Point, T> data, Function<T,T> transformer) {

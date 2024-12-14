@@ -21,35 +21,37 @@ public class Day14 {
     static int height = 103;
 
     public static void main(String[] args) {
-        part2();
+        System.out.println("Part 1: " + part1());
+        System.out.println("Part 2: " + part2());
     }
 
-    static void part1() {
+    static int part1() {
         readRobots("inputs/2024/day14.txt");
         moveRobots(100);
         int[] part1 = quadrants();
-        System.out.println("Part 1: " + part1[0] * part1[1] * part1[2] * part1[3]);
+        return part1[0] * part1[1] * part1[2] * part1[3];
     }
 
-    static void part2() {
+    static int part2() {
         readRobots("inputs/2024/day14.txt");
         int i=0;
         while(i < 10000) {
             i++;
             moveRobots(1);
             if (testTree()) {
-                System.out.println("found " + i);
                 Graphics.writePng(
                         Grid.asGrid(width, height, robots.stream().map(r -> r.position).collect(Collectors.toSet())).toImage(x -> Color.RED, BufferedImage.TYPE_INT_RGB),
                         "target/field_"+i+".png"
                 );
+                return i;
             }
         }
+        return -1;
     }
 
     static boolean testTree() {
         Set<Point> positions = robots.stream().map(r -> r.position).collect(Collectors.toSet());
-        Grid<Boolean> g = Grid.asGrid(width, height, positions);
+        Grid<Boolean> g = Grid.asGrid(width, height, positions, x -> x != null && x);
         Map<Integer, Set<Point>> map = g.connectedSets();
         return map.values().stream()
                 .filter(s -> positions.contains(s.iterator().next()))

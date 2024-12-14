@@ -28,6 +28,11 @@ public class GrowingGrid<T> implements Grid<T>{
         this.emptyValue = emptyValue;
     }
 
+    @Override
+    public Point getOrigin() {
+        return new Point(minX, minY);
+    }
+
     public GrowingGrid<T> copy() {
         GrowingGrid<T> result = new GrowingGrid<>(emptyValue);
         result.data = new HashMap<>(data);
