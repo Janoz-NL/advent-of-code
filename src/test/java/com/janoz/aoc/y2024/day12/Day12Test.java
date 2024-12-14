@@ -1,5 +1,6 @@
 package com.janoz.aoc.y2024.day12;
 
+import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.GrowingGrid;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +51,13 @@ class Day12Test {
         assertThat(Day12.part2()).isEqualTo(80L);
     }
 
+    @Test
+    void testSolution() {
+        Day12.map = GrowingGrid.readGrid(InputProcessor.asIterator("inputs/2024/day12.txt"));
+        Day12.regions = Day12.map.connectedSets();
+        assertThat(Day12.part1()).isEqualTo(1421958L);
+        assertThat(Day12.part2()).isEqualTo(885394L);
+    }
 
     private Iterator<String> toLines(String input) {
         return Arrays.stream(input.trim().split("\n")).iterator();

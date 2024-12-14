@@ -7,12 +7,14 @@ public class MergingMap {
 
     private final Map<Integer, Integer> backingMap = new HashMap<>();
 
-    public int addMapping(int i1, int i2) {
-        i1 = getActual(i1);
-        i2 = getActual(i2);
-        if (i1 == i2) return i1;
-        int result = Math.min(i1, i2);
-        backingMap.put(Math.max(i1,i2), result);
+    public int addMapping(final int i1, final int i2) {
+        int ai1 = getActual(i1);
+        int ai2 = getActual(i2);
+        if (ai1 == ai2) return ai1;
+        int result = Math.min(ai1, ai2);
+        backingMap.put(Math.max(ai1,ai2), result);
+        if (result != i1) backingMap.put(i1, result);
+        if (result != i2) backingMap.put(i2, result);
         return result;
     }
 
