@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -141,6 +143,10 @@ public class GrowingGrid<T> implements Grid<T>{
         return IntStream.rangeClosed(minY,maxY).mapToObj(y -> new Point(x,y)).map(this::peek);
     }
 
+    public Stream<Point> streamPoints(Predicate<T> filter) {
+        return data.entrySet().stream().filter(e -> filter.test(e.getValue())).map(Map.Entry::getKey);
+    }
+
     public void shrink() {
         while (streamRow(minY).allMatch(i -> Objects.equals(i,emptyValue))){
             minY++;
@@ -162,7 +168,22 @@ public class GrowingGrid<T> implements Grid<T>{
         return result;
     }
 
+    public static GrowingGrid<Character> readGrid(Iterator<String> input, BiConsumer<Point,Character> dataConsumer) {
+        GrowingGrid<Character> result = new GrowingGrid<>('.');
+        Grid.readGrid(input, result::grow, biConsumers(result::put,dataConsumer), c -> c, '.');
+        return result;
+    }
+
     public static GrowingGrid<Character> readGrid(Iterator<String> input) {
         return readGrid(input, c -> c, '.');
+    }
+
+    @SafeVarargs
+    static BiConsumer<Point,Character> biConsumers(BiConsumer<Point,Character>... biConsumers) {
+        return (p,c) -> {
+            for (BiConsumer<Point,Character> biConsumer : biConsumers) {
+                biConsumer.accept(p,c);
+            }
+        };
     }
 }
