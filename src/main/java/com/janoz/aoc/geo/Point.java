@@ -2,7 +2,6 @@ package com.janoz.aoc.geo;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -123,7 +122,7 @@ public class Point {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return x * 521 + y;
     }
 
 

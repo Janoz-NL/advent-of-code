@@ -85,6 +85,10 @@ public class GrowingGrid<T> implements Grid<T>{
         this.maxX = maxX;
     }
 
+    public boolean isEmpty(Point p) {
+        return !everPut(p);
+    }
+
     /**
      * Check without growing grid
      */
