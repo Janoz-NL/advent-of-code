@@ -1,5 +1,6 @@
 package com.janoz.aoc.geo;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -7,7 +8,10 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class BoundingBox {
-    int top,bottom,left,right;
+    int top = Integer.MAX_VALUE;
+    int bottom = Integer.MIN_VALUE;
+    int left = Integer.MAX_VALUE;
+    int right = Integer.MIN_VALUE;
 
     public BoundingBox(Point origin) {
         top = origin.y;
@@ -17,7 +21,12 @@ public class BoundingBox {
     }
 
     public BoundingBox(Point... points) {
-        this(points[0]);
+        for (Point point : points) {
+            addPoint(point);
+        }
+    }
+
+    public BoundingBox(Collection<Point> points) {
         for (Point point : points) {
             addPoint(point);
         }
@@ -28,6 +37,14 @@ public class BoundingBox {
         bottom = Math.max(bottom,toAdd.y);
         left = Math.min(left,toAdd.x);
         right = Math.max(right,toAdd.x);
+    }
+
+    public Point topLeft() {
+        return new Point(left,top);
+    }
+
+    public Point bottomRight() {
+        return new Point(right, bottom);
     }
 
     public Predicate<Point> inBoundsPredicate() {

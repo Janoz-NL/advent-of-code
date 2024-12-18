@@ -7,12 +7,10 @@ import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.ToIntBiFunction;
 import java.util.function.ToLongBiFunction;
 
 public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
@@ -94,10 +92,30 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
         }
     }
 
-    public static AStar<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
-        return new AStar<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
+    /**
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
+     * @param target target to find the path to
+     */
+    public static AStar<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
+        return new AStar<>(validRoutePredicate, Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
     }
 
+    /**
+     * @param width Width of the field
+     * @param height Height of the field
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
+     * @param target target to find the path to
+     */
+    public static AStar<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
+        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), target);
+    }
+
+    /**
+     *
+     * @param target target to find the path to
+     * @param heuristic AStar heuristic indicating the theoretical minimal cost between the nodes
+     * @param <D> datatype contained in the node
+     */
     public static <D> AStar<Node<D>> forNodes(Node<D> target, ToLongBiFunction<Node<D>, Node<D>> heuristic) {
         return new AStar<>((f,t) -> true, Node::reachable, n -> n == target, node -> heuristic.applyAsLong(node,target));
     }

@@ -109,12 +109,58 @@ public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
         }
     }
 
-    public static Dijsktra<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate) {
-        return new Dijsktra<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection,(f, t) -> 1L, n -> false);
+    /**
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
+     */
+    public static Dijsktra<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate) {
+        return for2DGrid(validRoutePredicate, n -> false);
     }
 
+    /**
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid at a specific step. Predicate should check for bounds
+     * @param earlyOut predicate indicating if pathfinding is finished
+     */
+    public static Dijsktra<Point> for2DGrid(TriFunction<Point,Point, Long, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
+        return new Dijsktra<>(validRoutePredicate, Point::neighbourCollection, (f,t)->1L , earlyOut);
+    }
+
+    /**
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
+     * @param earlyOut predicate indicating if pathfinding is finished
+     */
+    public static Dijsktra<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
+        return new Dijsktra<>(validRoutePredicate, Point::neighbourCollection,(f, t) -> 1L, earlyOut);
+    }
+
+    /**
+     *
+     * @param width Width of the field
+     * @param height Height of the field
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
+     */
+    public static Dijsktra<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate) {
+        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate));
+    }
+
+    /**
+     *
+     * @param width Width of the field
+     * @param height Height of the field
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
+     * @param earlyOut predicate indicating if pathfinding is finished
+     */
     public static Dijsktra<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return new Dijsktra<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection,(f,t) -> 1L, earlyOut);
+        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), earlyOut);
+    }
+
+    /**
+     *
+     * @param inbounds predicate to determine if a point is in bounds
+     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
+     * @param earlyOut predicate indicating if pathfinding is finished
+     */
+    public static Dijsktra<Point> for2DGrid(Predicate<Point> inbounds, BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
+        return for2DGrid(Utils.boundsCheckWrapperForTo(inbounds,validRoutePredicate), earlyOut);
     }
 
     public static <D> Dijsktra<Node<D>> forNodes() {

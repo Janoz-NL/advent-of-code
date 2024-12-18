@@ -6,8 +6,7 @@ import java.util.function.Supplier;
 
 /**
  * A Hashmap that wil always contain the requested key. If the backing hashmap doesn't contain the key
- * a new value will be added using the supplied constructor.
- *
+ * a new value will be created and added to the map using the supplied fucntion.
  *
  * @param <K>
  * @param <V>
@@ -17,14 +16,14 @@ public class AlwaysHashMap<K,V> extends HashMap<K,V> {
     private final Function<K,V> constructor;
 
     /**
-     * @param constructor supplier of a new element when a key is requested for the first time.
+     * @param constructor constructor of a new element when the map doesn't contain the key.
      */
     public AlwaysHashMap(Supplier<V> constructor) {
         this.constructor = (key) -> constructor.get();
     }
 
     /**
-     * @param constructor supplier of a new element when a key is requested for the first time.
+     * @param constructor function to create a new element based on the key when the map doesn't contain the key.
      */
     public AlwaysHashMap(Function<K,V> constructor) {
         this.constructor = constructor;
