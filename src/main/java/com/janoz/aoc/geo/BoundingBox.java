@@ -16,6 +16,13 @@ public class BoundingBox {
         right = origin.x;
     }
 
+    public BoundingBox(Point... points) {
+        this(points[0]);
+        for (Point point : points) {
+            addPoint(point);
+        }
+    }
+
     public void addPoint(Point toAdd) {
         top = Math.min(top,toAdd.y);
         bottom = Math.max(bottom,toAdd.y);

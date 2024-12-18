@@ -6,13 +6,13 @@ import com.janoz.aoc.geo.Utils;
 import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import org.assertj.core.util.TriFunction;
 
 public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
 
@@ -21,6 +21,19 @@ public class Dijsktra<NODE> implements PathFindingAlgorithm<NODE> {
     private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<NODE> earlyOut;
+
+    public Dijsktra(TriFunction<NODE, NODE, Long, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, Predicate<NODE> earlyOut) {
+        this.validMovePredicate = (from,to) ->{
+            long distance = getDistance(from);
+            distance = distance + distanceCalculator.apply(from,to);
+            return validMovePredicate.apply(from,to,distance);
+        };
+        this.neighbourProducer = neighbourProducer;
+        this.distanceCalculator = distanceCalculator;
+        this.earlyOut = earlyOut;
+
+
+    }
 
     public Dijsktra(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, Predicate<NODE> earlyOut) {
         this.validMovePredicate = validMovePredicate;
