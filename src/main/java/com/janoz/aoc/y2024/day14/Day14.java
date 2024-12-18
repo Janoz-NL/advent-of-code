@@ -2,8 +2,8 @@ package com.janoz.aoc.y2024.day14;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.Direction;
-import com.janoz.aoc.geo.Grid;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.geo.ReadOnlyGrid;
 import com.janoz.aoc.graphics.Graphics;
 
 import java.awt.*;
@@ -40,7 +40,7 @@ public class Day14 {
             moveRobots(1);
             if (testTree()) {
                 Graphics.writePng(
-                        Grid.asGrid(width, height, robots.stream().map(r -> r.position).collect(Collectors.toSet())).toImage(x -> Color.RED, BufferedImage.TYPE_INT_RGB),
+                        ReadOnlyGrid.asGrid(width, height, robots.stream().map(r -> r.position).collect(Collectors.toSet())).toImage(x -> Color.RED, BufferedImage.TYPE_INT_RGB),
                         "target/field_"+i+".png"
                 );
                 return i;
@@ -51,7 +51,7 @@ public class Day14 {
 
     static boolean testTree() {
         Set<Point> positions = robots.stream().map(r -> r.position).collect(Collectors.toSet());
-        Grid<Boolean> g = Grid.asGrid(width, height, positions, x -> x != null && x);
+        ReadOnlyGrid<Boolean> g = ReadOnlyGrid.asGrid(width, height, positions, x -> x != null && x);
         Map<Integer, Set<Point>> map = g.connectedSets();
         return map.values().stream()
                 .filter(s -> positions.contains(s.iterator().next()))
