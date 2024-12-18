@@ -10,7 +10,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.algorithms.Dijsktra;
+import com.janoz.aoc.algorithms.Dijkstra;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.GrowingGrid;
@@ -37,7 +37,7 @@ public class Day16 {
         map.put(start,'.');
         map.put(end,'.');
 
-        PathFindingAlgorithm<Position> pfa = new Dijsktra<>((p1,p2)->true, Day16::getPrevious, Day16::score, p->false);
+        PathFindingAlgorithm<Position> pfa = new Dijkstra<>((p1, p2)->true, Day16::getPrevious, Day16::score, p->false);
         pfa.calculate(getEnd());
         System.out.println("Part 1: " + pfa.getDistance(new Position(start, Direction.EAST)) );
 

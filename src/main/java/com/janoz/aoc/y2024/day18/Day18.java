@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.algorithms.AStar;
-import com.janoz.aoc.algorithms.Dijsktra;
+import com.janoz.aoc.algorithms.Dijkstra;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Point;
@@ -50,7 +50,7 @@ public class Day18 {
         Point target = new Point(70,70);
         inBounds = new BoundingBox(Point.ORIGIN, target).inBoundsPredicate();
 
-        PathFindingAlgorithm<Point> pfa = Dijsktra.for2DGrid(
+        PathFindingAlgorithm<Point> pfa = Dijkstra.for2DGrid(
                 (from, to, time) -> inBounds.test(to) && !bytes.subList(0,(int) (long) time).contains(to),
                 target::equals);
 

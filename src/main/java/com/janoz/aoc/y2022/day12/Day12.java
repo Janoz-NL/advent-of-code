@@ -4,7 +4,7 @@ import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.algorithms.AStar;
 import com.janoz.aoc.algorithms.BFS;
-import com.janoz.aoc.algorithms.Dijsktra;
+import com.janoz.aoc.algorithms.Dijkstra;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.Point;
 
@@ -46,12 +46,12 @@ public class Day12 {
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
+        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
         System.out.println("Dijkstra     : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> p.equals(start));
+        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> p.equals(start));
         System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
 
@@ -73,12 +73,12 @@ public class Day12 {
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(), Day12::isReachable, (p) -> p.equals(end));
+        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(), Day12::isReachable, (p) -> p.equals(end));
         System.out.println("Dijkstra     : " + algo.calculate(allAs));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijsktra.for2DGrid(field.get(0).length(),field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
         System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
     }
