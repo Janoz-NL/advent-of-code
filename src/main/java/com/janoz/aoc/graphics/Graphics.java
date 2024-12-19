@@ -20,7 +20,7 @@ public class Graphics {
 
     public static void writeAniGif(List<BufferedImage> images, String filename) {
         try (FileImageOutputStream outputStream = new FileImageOutputStream(new File(filename))) {
-            GifSequenceWriter gsw = new GifSequenceWriter(outputStream, images.get(0).getType(), true);
+            GifSequenceWriter gsw = new GifSequenceWriter(outputStream, images.get(0).getType(), 50);
             for (BufferedImage image : images) {
                 gsw.writeToSequence(image);
             }
@@ -39,7 +39,7 @@ public class Graphics {
     }
 
     public static Function<Integer, Color> constructMapper(Set<Integer> inputs) {
-        Integer[] values = inputs.toArray(new Integer[inputs.size()]);
+        Integer[] values = inputs.toArray(new Integer[0]);
         Arrays.sort(values);
         Map<Integer, Color> colorMap = new HashMap<>();
         for (int i=0; i<values.length; i++) {

@@ -37,7 +37,7 @@ public class Day6 {
         System.out.println(visited.size());
         System.out.println(possibleLoops());
 
-        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_06.gif", true);
+        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_06.gif", 50);
         Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
         imageConsumer.accept(ReadOnlyGrid.asGrid(width, height, obstacles).toBigImage(x -> Color.RED,5,1));
         walk(null, p -> imageConsumer.accept(ReadOnlyGrid.asGrid(width,height,Collections.singleton(p)).toBigImage(x -> Color.BLUE, 5,1)));

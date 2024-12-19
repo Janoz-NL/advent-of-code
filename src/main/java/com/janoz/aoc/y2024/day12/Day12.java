@@ -33,7 +33,7 @@ public class Day12 {
 
         // And now for the graphics
         Function<Integer, Color> colorMapper = Graphics.constructMapper(16);
-        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_12_big.gif", true);
+        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_12_big.gif", 50);
         Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
         map.connectedSets(frame -> {
             BufferedImage image = frame.toBigImage(colorMapper,3,0);

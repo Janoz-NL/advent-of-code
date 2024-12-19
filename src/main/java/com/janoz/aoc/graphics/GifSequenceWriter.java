@@ -17,20 +17,20 @@ public class GifSequenceWriter {
   protected ImageWriteParam params;
   protected IIOMetadata metadata;
 
-  public GifSequenceWriter(FileImageOutputStream outputStream, int imageType, boolean loop) throws IOException {
+  public GifSequenceWriter(FileImageOutputStream outputStream, int imageType, int fps) throws IOException {
     writer = ImageIO.getImageWritersBySuffix("gif").next();
     params = writer.getDefaultWriteParam();
 
     ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
     metadata = writer.getDefaultImageMetadata(imageTypeSpecifier, params);
 
-    configureRootMetadata(loop);
+    configureRootMetadata(fps);
 
     writer.setOutput(outputStream);
     writer.prepareWriteSequence(null);
   }
 
-  private void configureRootMetadata(boolean loop) throws IIOInvalidTreeException {
+  private void configureRootMetadata(int fps) throws IIOInvalidTreeException {
     String metaFormatName = metadata.getNativeMetadataFormatName();
     IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(metaFormatName);
 
@@ -38,7 +38,7 @@ public class GifSequenceWriter {
     graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
     graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
     graphicsControlExtensionNode.setAttribute("transparentColorFlag", "FALSE");
-    graphicsControlExtensionNode.setAttribute("delayTime", "2");
+    graphicsControlExtensionNode.setAttribute("delayTime", String.valueOf(Math.max(2, 100/fps)));
     graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
     IIOMetadataNode appExtensionsNode = getNode(root, "ApplicationExtensions");
@@ -46,8 +46,7 @@ public class GifSequenceWriter {
     child.setAttribute("applicationID", "NETSCAPE");
     child.setAttribute("authenticationCode", "2.0");
 
-    int loopContinuously = loop ? 0 : 1;
-    child.setUserObject(new byte[]{ 0x1, (byte) (loopContinuously & 0xFF), (byte) ((loopContinuously >> 8) & 0xFF)});
+    child.setUserObject(new byte[]{ 0x1, (byte) (0x0), (byte) (0x0)});
     appExtensionsNode.appendChild(child);
     metadata.setFromTree(metaFormatName, root);
   }
