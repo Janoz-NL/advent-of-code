@@ -1,11 +1,7 @@
 package com.janoz.aoc.y2024.day22;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
@@ -13,27 +9,27 @@ import com.janoz.aoc.InputProcessor;
 public class Day22 {
 
     static List<Long> initials;
-
+    public static final int DELTA_RANGE = 19; //-9..9
+    public static final int HASH_SPACE = DELTA_RANGE * DELTA_RANGE * DELTA_RANGE * DELTA_RANGE;
+    static long[] score = new long[HASH_SPACE];
     public static void main(String[] args) {
         initials = InputProcessor.asStream("inputs/2024/day22.txt",Long::parseLong).collect(Collectors.toList());
-        System.out.println("Part 1: " + initials.stream().mapToLong(Day22::procesSecretNumber).sum());
-        System.out.println("Part 2: " + sequenceScore.values().stream().mapToLong(l->l).max().orElseThrow());
+        System.out.println("Part 1: " + initials.stream().mapToLong(Day22::processSecretNumber).sum());
+        System.out.println("Part 2: " + Arrays.stream(score).max().orElseThrow());
     }
 
-    static Map<Sequence, Long> sequenceScore = new HashMap<>();
-
-    static long procesSecretNumber(Long l) {
-        Set<Sequence> seen = new HashSet<>();
-        Sequence s = new Sequence(0,0,0,0);
-        long prevDigit = 0;
-        long digit;
+    static long processSecretNumber(Long l) {
+        boolean[] seen = new boolean[HASH_SPACE];
+        int prevDigit = 0;
+        int hash=0;
+        int digit;
         for (int i=0; i<2000;i++) {
             l = nextSecret(l);
-            digit = (l % 10);
-            s = s.next(digit - prevDigit);
-            if (i>3 && !seen.contains(s)) {
-                seen.add(s);
-                sequenceScore.merge(s, digit, Long::sum);
+            digit = (int)(l % 10);
+            hash = nextHash(hash,digit - prevDigit);
+            if (i>3 && !seen[hash]) {
+                seen[hash] = true;
+                score[hash] += digit;
             }
             prevDigit = digit;
         }
@@ -47,31 +43,7 @@ public class Day22 {
         return l;
     }
 
-    private static class Sequence {
-        int[] deltas;
-
-        Sequence(int... deltas) {
-            this.deltas = deltas;
-        }
-
-        Sequence next(long i) {
-            int[] result = new int[4];
-            System.arraycopy(deltas,1,result,0,3);
-            result[3] = (int) i;
-            return new Sequence(result);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Sequence sequence = (Sequence) o;
-            return Arrays.equals(deltas, sequence.deltas);
-        }
-
-        @Override
-        public int hashCode() {
-            return Arrays.hashCode(deltas);
-        }
+    static int nextHash(int currentHash, int digit) {
+        return ((currentHash * DELTA_RANGE) + (digit+9)) % (HASH_SPACE);
     }
 }
