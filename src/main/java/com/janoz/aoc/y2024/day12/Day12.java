@@ -36,7 +36,7 @@ public class Day12 {
         ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_12_big.gif", 50);
         Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
         map.connectedSets(frame -> {
-            BufferedImage image = frame.toBigImage(colorMapper,3,0);
+            BufferedImage image = Graphics.toBigImage(frame, colorMapper, 3, 0, BufferedImage.TYPE_INT_ARGB);
             if (image != null) {
                 imageConsumer.accept(image);
             }

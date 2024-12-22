@@ -1,7 +1,5 @@
 package com.janoz.aoc.geo;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -74,42 +71,6 @@ public interface ReadOnlyGrid<T> {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    default BufferedImage toImage(Function<T, Color> mapper) {
-        return toImage(mapper, BufferedImage.TYPE_INT_ARGB);
-    }
-
-    default BufferedImage toImage(Function<T, Color> mapper, int type) {
-        ToIntFunction<Color> toInt = Color::getRGB;
-        BufferedImage image = new BufferedImage(getWidth(),getHeight(), type);
-        Iterator<Point> it = streamPoints().iterator();
-        if (!it.hasNext()) {
-            return null;
-        }
-        while (it.hasNext()) {
-            Point p = it.next();
-            image.setRGB(p.x, p.y, toInt.applyAsInt(mapper.apply(get(p))));
-        }
-        return image;
-    }
-
-    default BufferedImage toBigImage(Function<T, Color> mapper, int blocksize, int bordersize) {
-        ToIntFunction<Color> toInt = Color::getRGB;
-        BufferedImage image = new BufferedImage(getWidth() * blocksize + bordersize,getHeight() * blocksize + bordersize, BufferedImage.TYPE_INT_ARGB);
-        Iterator<Point> it = streamPoints().iterator();
-        if (!it.hasNext()) {
-            return null;
-        }
-        while (it.hasNext()) {
-            Point p = it.next();
-            for (int x=bordersize;x<blocksize;x++){
-                for (int y=bordersize;y<blocksize;y++){
-                    image.setRGB(p.x * blocksize + x, p.y * blocksize + y, toInt.applyAsInt(mapper.apply(get(p))));
-                }
-            }
-        }
-        return image;
     }
 
     default Map<Integer, Set<Point>> connectedSets() {

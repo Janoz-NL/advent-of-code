@@ -5,13 +5,13 @@ import com.janoz.aoc.geo.Utils;
 import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,7 +21,7 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
     private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
     private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final Predicate<NODE> earlyOut;
-
+    private Consumer<NODE> algorithmCallback = node -> {};
 
     public BFS(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Predicate<NODE> earlyOut) {
         this.validMovePredicate = validMovePredicate;
@@ -38,6 +38,7 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
         });
         while (!queue.isEmpty()) {
             NODE node = queue.poll();
+            algorithmCallback.accept(node);
             long newDistance = distanceMap.get(node) + 1L;
             if (earlyOut.test(node)) return distanceMap.get(node);
             neighbourProducer.apply(node).stream()
@@ -54,6 +55,21 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
     @Override
     public Long getDistance(NODE node) {
         return distanceMap.get(node);
+    }
+
+    @Override
+    public Set<NODE> getVisited() {
+        return distanceMap.keySet();
+    }
+
+    @Override
+    public Collection<NODE> getNeighbours(NODE node) {
+        return neighbourProducer.apply(node);
+    }
+
+    @Override
+    public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
+        this.algorithmCallback = algorithmCallback;
     }
 
     public static BFS<Point> forPoints(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate) {

@@ -8,7 +8,9 @@ import com.janoz.aoc.graphs.Node;
 import java.util.Collection;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,6 +23,7 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
     private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<NODE> earlyOut;
+    private Consumer<NODE> algorithmCallback = node -> {};
 
     public Dijkstra(TriFunction<NODE, NODE, Long, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, Predicate<NODE> earlyOut) {
         this.validMovePredicate = (from,to) ->{
@@ -51,6 +54,7 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
         });
         while (!heap.isEmpty()) {
             Route<NODE> source = heap.poll();
+            algorithmCallback.accept(source.node);
             if (earlyOut.test(source.node)) return source.distance;
             if (source.distance != distanceMap.get(source.node)) continue; //already found a quicker way
             neighbourProducer.apply(source.node).stream()
@@ -68,6 +72,20 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
         if (distanceMap.containsKey(node))
             return distanceMap.get(node);
         else return null;
+    }
+
+    @Override
+    public Set<NODE> getVisited() {
+        return distanceMap.keySet();
+    }
+
+    @Override
+    public Collection<NODE> getNeighbours(NODE node) {
+        return neighbourProducer.apply(node);
+    }
+
+    public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
+        this.algorithmCallback = algorithmCallback;
     }
 
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {

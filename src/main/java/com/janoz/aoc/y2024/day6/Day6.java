@@ -19,6 +19,7 @@ import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.Point;
 import com.janoz.aoc.geo.ReadOnlyGrid;
 import com.janoz.aoc.graphics.ConsumingAnimationWriter;
+import com.janoz.aoc.graphics.Graphics;
 
 public class Day6 {
 
@@ -39,8 +40,12 @@ public class Day6 {
 
         ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_06.gif", 50);
         Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
-        imageConsumer.accept(ReadOnlyGrid.asGrid(width, height, obstacles).toBigImage(x -> Color.RED,5,1));
-        walk(null, p -> imageConsumer.accept(ReadOnlyGrid.asGrid(width,height,Collections.singleton(p)).toBigImage(x -> Color.BLUE, 5,1)));
+        ReadOnlyGrid<Boolean> booleanReadOnlyGrid1 = ReadOnlyGrid.asGrid(width, height, obstacles);
+        imageConsumer.accept(Graphics.toBigImage(booleanReadOnlyGrid1, x1 -> Color.RED, 5, 1, BufferedImage.TYPE_INT_ARGB));
+        walk(null, p -> {
+            ReadOnlyGrid<Boolean> booleanReadOnlyGrid = ReadOnlyGrid.asGrid(width,height, Collections.singleton(p));
+            imageConsumer.accept(Graphics.toBigImage(booleanReadOnlyGrid, x -> Color.BLUE, 5, 1, BufferedImage.TYPE_INT_ARGB));
+        });
         caw.close();
     }
 

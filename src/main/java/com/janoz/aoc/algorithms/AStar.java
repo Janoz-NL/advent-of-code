@@ -8,7 +8,9 @@ import com.janoz.aoc.graphs.Node;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToLongBiFunction;
@@ -21,6 +23,8 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<NODE> earlyOut;
     private final Function<NODE, Long> heuristic;
+
+    private Consumer<NODE> algorithmCallback = node -> {};
 
     private AStar(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
         this.validMovePredicate = validMovePredicate;
@@ -36,6 +40,7 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
         starts.forEach(start-> addRoute(heap, new Route<>(start, 0L, heuristic.apply(start))));
         while (!heap.isEmpty()) {
             Route<NODE> source = heap.poll();
+            algorithmCallback.accept(source.node);
             if (earlyOut.test(source.node)) return source.distance;
             if (source.distance > distanceMap.get(source.node)) continue; //already found a quicker way
             neighbourProducer.apply(source.node).stream()
@@ -52,7 +57,22 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     public Long getDistance(NODE node) {
         if (distanceMap.containsKey(node))
             return distanceMap.get(node);
-        else return null;    }
+        else return null;
+    }
+
+    @Override
+    public Set<NODE> getVisited() {
+        return distanceMap.keySet();
+    }
+
+    @Override
+    public Collection<NODE> getNeighbours(NODE node) {
+        return neighbourProducer.apply(node);
+    }
+
+    public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
+        this.algorithmCallback = algorithmCallback;
+    }
 
     private void addRoute(PriorityQueue<Route<NODE>> heap, Route<NODE> route) {
         distanceMap.put(route.node, route.distance);
@@ -119,6 +139,4 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     public static <D> AStar<Node<D>> forNodes(Node<D> target, ToLongBiFunction<Node<D>, Node<D>> heuristic) {
         return new AStar<>((f,t) -> true, Node::reachable, n -> n == target, node -> heuristic.applyAsLong(node,target));
     }
-
-
 }

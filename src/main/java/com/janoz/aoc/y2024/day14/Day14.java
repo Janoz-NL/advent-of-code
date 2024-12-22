@@ -39,8 +39,9 @@ public class Day14 {
             i++;
             moveRobots(1);
             if (testTree()) {
+                ReadOnlyGrid<Boolean> booleanReadOnlyGrid = ReadOnlyGrid.asGrid(width, height, robots.stream().map(r -> r.position).collect(Collectors.toSet()));
                 Graphics.writePng(
-                        ReadOnlyGrid.asGrid(width, height, robots.stream().map(r -> r.position).collect(Collectors.toSet())).toImage(x -> Color.RED, BufferedImage.TYPE_INT_RGB),
+                        Graphics.toBigImage(booleanReadOnlyGrid, x -> Color.RED, 1, 0, BufferedImage.TYPE_INT_RGB),
                         "target/field_"+i+".png"
                 );
                 return i;
