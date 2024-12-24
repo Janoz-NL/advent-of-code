@@ -63,28 +63,24 @@ public class Day24 {
         return errors.stream().sorted().collect(Collectors.joining(","));
     }
 
-    /**
+    /*
      * X00 ^ Y00 = Z00
      * X00 & Y00 = C01
-     *
-     *
      */
     static String findFirstCarry() {
-        BoolNode z00 = nodes.get("z00");
-        assert(z00.op == XOR);
+        BoolNode z00a = findByLogic(XOR, "x00", "y00").orElseThrow(() -> new NonRecoverableException("X00 ^ Y00 not found"));
+        BoolNode z00b = nodes.get("z00");
+        if (!z00a.name.equals(z00b.name)) throw new RecoverableException(z00a.name, z00b.name);
         BoolNode carry = findByLogic(AND, "x00", "y00").orElseThrow(() -> new NonRecoverableException("Error at first carry"));
         return carry.name;
     }
 
-    /**
+    /*
      * Xx ^ Yx = Ax
      * Cx ^ Ax = Zx
      * Ax & Cx = Bx
      * Xx & Yx = Dx
      * Bx | Dx = C(x+1)
-     *
-     * @param previousCarry
-     * @return
      */
     static String findNextCarry(int bit, String previousCarry) {
         String nr = String.format("%02d", bit);
@@ -99,21 +95,21 @@ public class Day24 {
                 //DONE
                 return null;
             }
-            a = findByLogic(XOR,"x" + nr, "y" + nr).orElseThrow(() -> new NonRecoverableException("Non Recoverable a")).name;
+            a = findByLogic(XOR,"x" + nr, "y" + nr).orElseThrow(() -> new NonRecoverableException("Xx ^ Yx not found")).name;
+            d = findByLogic(AND, "x" + nr, "y" + nr).orElseThrow(() -> new NonRecoverableException("Xx & Yx not found")).name;
             z = findByLogic(XOR, a, previousCarry).map(n -> n.name).orElse(null);
             if (z == null) {
-                Optional<String> otherA = otherInput(zNode,previousCarry);
-                if (otherA.isPresent()) {
-                    throw new RecoverableException(a, otherA.get());
-                }
-                throw new NonRecoverableException("Error " + a + " - " + otherA.orElse("UNKNOWN"));
+                throw new RecoverableException(
+                        a,
+                        otherInput(zNode,previousCarry)
+                                .orElseThrow(() -> new NonRecoverableException("Cx ^ Ax = Zx not found")));
             }
             if (!z.equals(zNode.name)) throw new RecoverableException(z, zNode.name);
-            b = findByLogic(AND, a, previousCarry).orElseThrow(() -> new NonRecoverableException("Non Recoverable b")).name;
-            d = findByLogic(AND, "x" + nr, "y" + nr).orElseThrow(() -> new NonRecoverableException("Non Recoverable d")).name;
-            c = findByLogic(OR, b, d).orElseThrow(() -> new NonRecoverableException("Non Recoverable c")).name;
+            b = findByLogic(AND, a, previousCarry).orElseThrow(() -> new NonRecoverableException("Ax & Cx not found")).name;
+            c = findByLogic(OR, b, d).orElseThrow(() -> new NonRecoverableException("Bx | Dx not found")).name;
             return c;
         } catch (NonRecoverableException r) {
+
             System.out.println("Invalid construction at bit " + bit + " : " + r.getMessage());
             System.out.println("c" + bit + " was " + previousCarry);
             System.out.println("a" + bit + " is " + a);
@@ -175,7 +171,6 @@ public class Day24 {
         Boolean value;
         BiFunction<Boolean, Boolean, Boolean> op;
         Set<String> inputs;
-
         Boolean getValue() {
             if (value == null) {
                 Iterator<String> it = inputs.iterator();
