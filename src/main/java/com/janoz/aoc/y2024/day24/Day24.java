@@ -1,6 +1,7 @@
 package com.janoz.aoc.y2024.day24;
 
 import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.StopWatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +24,11 @@ public class Day24 {
     static BiFunction<Boolean,Boolean,Boolean> XOR = (a,b) -> a ^ b;
 
     public static void main(String[] args) {
+        StopWatch.start();
         readInput("inputs/2024/day24.txt");
         System.out.println("Part 1 : " + part1());
         System.out.println("Part 2 : " + part2());
+        StopWatch.stopPrint();
     }
 
     static long part1() {
@@ -47,9 +50,17 @@ public class Day24 {
     }
 
     static String part2() {
-        String carry = findFirstCarry();
-        int i=1;
         List<String> errors = new ArrayList<>();
+        String carry;
+        try {
+            carry = findFirstCarry();
+        } catch (RecoverableException r) {
+            errors.add(r.output1);
+            errors.add(r.output2);
+            fixError(r.output1, r.output2);
+            carry = findFirstCarry();
+        }
+        int i=1;
         while (carry != null) {
             try {
                 carry = findNextCarry(i, carry);
