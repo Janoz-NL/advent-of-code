@@ -3,9 +3,11 @@ package com.janoz.aoc.geo;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class BoundingBox {
     int top = Integer.MAX_VALUE;
@@ -52,16 +54,27 @@ public class BoundingBox {
     }
 
     public void printGrid(Function<Point,Character> mapToChar) {
-        IntStream.rangeClosed(top,bottom).forEach(y -> {
-            IntStream.rangeClosed(left,right).mapToObj(x -> new Point(x,y)).map(mapToChar).forEach(System.out::print);
-            System.out.println();
-        });
+        consumeAllPoints(p -> System.out.print(mapToChar.apply(p)), System.out::println);
     }
 
     public static BoundingBox readGrid(Iterator<String> input, BiConsumer<Point, Character> itemProcessor) {
         BoundingBox result = new BoundingBox(new Point(0, 0));
         Grid.readGrid(input, result::addPoint, itemProcessor);
         return result;
+    }
+
+    public Stream<Point> streamAllPoints() {
+        return IntStream.rangeClosed(top, bottom)
+                .mapToObj(y-> IntStream.rangeClosed(left,right)
+                        .mapToObj(x -> new Point(x,y)))
+                .flatMap(p -> p);
+    }
+
+    public void consumeAllPoints(Consumer<Point> pointConsumer, Runnable newLineAction) {
+        IntStream.rangeClosed(top,bottom).forEach(y -> {
+            IntStream.rangeClosed(left,right).mapToObj(x -> new Point(x,y)).forEach(pointConsumer);
+            newLineAction.run();
+        });
     }
 
     public int getWidth() {

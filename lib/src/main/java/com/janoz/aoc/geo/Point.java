@@ -47,6 +47,17 @@ public class Point {
         return translate(Direction.WEST);
     }
 
+    public Point move(char c) {
+        return switch (c) {
+            case '^' -> north();
+            case 'v' -> south();
+            case '<' -> west();
+            case '>' -> east();
+            default -> throw new RuntimeException("Unknow char " + c);
+        };
+    }
+
+
     /**
      * Return all adjacent in counterclockwise order
      *
