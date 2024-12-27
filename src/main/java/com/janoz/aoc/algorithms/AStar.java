@@ -1,35 +1,37 @@
 package com.janoz.aoc.algorithms;
 
 import com.janoz.aoc.collections.AlwaysHashMap;
-import com.janoz.aoc.geo.Point;
-import com.janoz.aoc.geo.Utils;
-import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.ToLongBiFunction;
 
 public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
 
     private final HashMap<NODE,Long> distanceMap = new AlwaysHashMap<>(() -> Long.MAX_VALUE);
-    private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
+    private final BiPredicate<NODE, NODE> validMovePredicate;
     private final Function<NODE, Collection<NODE>> neighbourProducer;
+    private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
+    private final Predicate<Step> validStepPredicate;
+
     private final Predicate<NODE> earlyOut;
     private final Function<NODE, Long> heuristic;
 
     private Consumer<NODE> algorithmCallback = node -> {};
 
-    private AStar(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
+    AStar(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer,Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
         this.validMovePredicate = validMovePredicate;
         this.distanceCalculator = (f,t) -> 1L;
         this.neighbourProducer = neighbourProducer;
+        this.reversedMeighbourProducer = reversedMeighbourProducer;
+        this.validStepPredicate = step -> validToAtDistancePredicate.test(step.to.node,step.to.distance);
         this.earlyOut = earlyOut;
         this.heuristic = heuristic;
     }
@@ -44,9 +46,10 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
             if (earlyOut.test(source.node)) return source.distance;
             if (source.distance > distanceMap.get(source.node)) continue; //already found a quicker way
             neighbourProducer.apply(source.node).stream()
-                    .filter(n -> validMovePredicate.apply(source.node,n))
+                    .filter(n -> validMovePredicate.test(source.node,n))
                     .map(n -> new Step(source,n))
                     .filter(Step::isPreferable)
+                    .filter(validStepPredicate)
                     .forEach(r -> addRoute(heap,r.to));
         }
         return null;
@@ -66,8 +69,13 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     }
 
     @Override
-    public Collection<NODE> getNeighbours(NODE node) {
+    public Collection<NODE> getReachableFrom(NODE node) {
         return neighbourProducer.apply(node);
+    }
+
+    @Override
+    public Collection<NODE> getReachableTo(NODE node) {
+        return reversedMeighbourProducer.apply(node);
     }
 
     public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
@@ -110,33 +118,5 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
             this.distance = distanceUntilNow;
             this.expectedDistance = distanceUntilNow + minimumDistanceToTarget;
         }
-    }
-
-    /**
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
-     * @param target target to find the path to
-     */
-    public static AStar<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
-        return new AStar<>(validRoutePredicate, Point::neighbourCollection, p -> p.equals(target), p -> p.manhattanDistance(target));
-    }
-
-    /**
-     * @param width Width of the field
-     * @param height Height of the field
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
-     * @param target target to find the path to
-     */
-    public static AStar<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Point target) {
-        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), target);
-    }
-
-    /**
-     *
-     * @param target target to find the path to
-     * @param heuristic AStar heuristic indicating the theoretical minimal cost between the nodes
-     * @param <D> datatype contained in the node
-     */
-    public static <D> AStar<Node<D>> forNodes(Node<D> target, ToLongBiFunction<Node<D>, Node<D>> heuristic) {
-        return new AStar<>((f,t) -> true, Node::reachable, n -> n == target, node -> heuristic.applyAsLong(node,target));
     }
 }

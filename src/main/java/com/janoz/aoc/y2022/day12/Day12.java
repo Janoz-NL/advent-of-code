@@ -2,9 +2,7 @@ package com.janoz.aoc.y2022.day12;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.algorithms.AStar;
-import com.janoz.aoc.algorithms.BFS;
-import com.janoz.aoc.algorithms.Dijkstra;
+import com.janoz.aoc.algorithms.PFABuilder;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.Point;
 
@@ -26,59 +24,92 @@ public class Day12 {
         System.out.println("-- Part 1 --");
 
         StopWatch.start();
-        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTarget(end)
+                .asAStar();
         System.out.println("aStar        : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable,start);
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReverseReachable)
+                .withTarget(start)
+                .asAStar();
         System.out.println("aStar rev    : " + algo.calculate(end));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReachable, (p) -> p.equals(end));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTargetPredicate((p5) -> p5.equals(end))
+                .asBFS();
         System.out.println("BFS          : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReverseReachable, (p) -> p.equals(start));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReverseReachable)
+                .withTargetPredicate((p4) -> p4.equals(start))
+                .asBFS();
         System.out.println("BFS rev      : " + algo.calculate(end));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable, (p) -> p.equals(end));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTargetPredicate((p3) -> p3.equals(end))
+                .asDijkstra();
         System.out.println("Dijkstra     : " + algo.calculate(start));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(),Day12::isReverseReachable, (p) -> p.equals(start));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReverseReachable)
+                .withTargetPredicate((p2) -> p2.equals(start))
+                .asDijkstra();
         System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
 
         System.out.println("-- Part 2 --");
 
         StopWatch.start();
-        algo = AStar.for2DGrid(field.get(0).length(),field.size(),Day12::isReachable,end);
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTarget(end)
+                .asAStar();
         System.out.println("aStar rev    : " + algo.calculate(allAs));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReachable, (p) -> p.equals(end));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTargetPredicate((p3) -> p3.equals(end))
+                .asBFS();
         System.out.println("BFS          : " + algo.calculate(allAs));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = BFS.forPoints(field.get(0).length(), field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReverseReachable)
+                .withTargetPredicate((p2) -> getChar(p2) == 'a')
+                .asBFS();
         System.out.println("BFS rev      : " + algo.calculate(end));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(), Day12::isReachable, (p) -> p.equals(end));
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReachable)
+                .withTargetPredicate((p1) -> p1.equals(end))
+                .asDijkstra();
         System.out.println("Dijkstra     : " + algo.calculate(allAs));
         StopWatch.stopPrint();
 
         StopWatch.start();
-        algo = Dijkstra.for2DGrid(field.get(0).length(),field.size(), Day12::isReverseReachable, (p) -> getChar(p) == 'a');
+        algo = PFABuilder.forPoints(field.get(0).length(), field.size())
+                .addValidMovePredicate(Day12::isReverseReachable)
+                .withTargetPredicate((p) -> getChar(p) == 'a')
+                .asDijkstra();
         System.out.println("Dijkstra rev : " + algo.calculate(end));
         StopWatch.stopPrint();
     }

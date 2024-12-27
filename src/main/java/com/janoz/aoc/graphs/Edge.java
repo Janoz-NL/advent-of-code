@@ -1,19 +1,20 @@
 package com.janoz.aoc.graphs;
 
-public class Edge {
+public class Edge<D> {
 
     long length;
-    Node from,to;
+    Node<D> from,to;
 
-    public Edge(Node from, Node to) {
+    public Edge(Node<D> from, Node<D> to) {
         this(from,to,1L);
     }
 
-    public Edge(Node from, Node to, long length) {
+    public Edge(Node<D> from, Node<D> to, long length) {
         this.length = length;
         this.from = from;
         this.to = to;
-        from.edges.put(to,this);
+        from.edgesTo.put(to,this);
+        to.edgesFrom.put(from,this);
     }
 
     public long getLength() {

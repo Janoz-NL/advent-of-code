@@ -1,47 +1,35 @@
 package com.janoz.aoc.algorithms;
 
 import com.janoz.aoc.collections.AlwaysHashMap;
-import com.janoz.aoc.geo.Point;
-import com.janoz.aoc.geo.Utils;
-import com.janoz.aoc.graphs.Node;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.assertj.core.util.TriFunction;
-
 public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
 
     private final Map<NODE,Long> distanceMap= new AlwaysHashMap<>(() -> Long.MAX_VALUE);
-    private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
+    private final BiPredicate<NODE, NODE> validMovePredicate;
     private final Function<NODE, Collection<NODE>> neighbourProducer;
+    private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
+    private final Predicate<Step> validStepPredicate;
     private final Predicate<NODE> earlyOut;
     private Consumer<NODE> algorithmCallback = node -> {};
 
-    public Dijkstra(TriFunction<NODE, NODE, Long, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, Predicate<NODE> earlyOut) {
-        this.validMovePredicate = (from,to) ->{
-            long distance = getDistance(from);
-            distance = distance + distanceCalculator.apply(from,to);
-            return validMovePredicate.apply(from,to,distance);
-        };
-        this.neighbourProducer = neighbourProducer;
-        this.distanceCalculator = distanceCalculator;
-        this.earlyOut = earlyOut;
 
-
-    }
-
-    public Dijkstra(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, Predicate<NODE> earlyOut) {
+    Dijkstra(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut) {
         this.validMovePredicate = validMovePredicate;
         this.neighbourProducer = neighbourProducer;
+        this.reversedMeighbourProducer = reversedMeighbourProducer;
         this.distanceCalculator = distanceCalculator;
+        this.validStepPredicate = step -> validToAtDistancePredicate.test(step.to.node,step.to.distance);
         this.earlyOut = earlyOut;
     }
 
@@ -58,9 +46,10 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
             if (earlyOut.test(source.node)) return source.distance;
             if (source.distance != distanceMap.get(source.node)) continue; //already found a quicker way
             neighbourProducer.apply(source.node).stream()
-                    .filter(n -> validMovePredicate.apply(source.node, n))
+                    .filter(n -> validMovePredicate.test(source.node, n))
                     .map(n -> new Step(source,n))
                     .filter(Step::isPreferable)
+                    .filter(validStepPredicate)
                     .forEach(r -> r.addTo(heap));
         }
         return null;
@@ -80,8 +69,13 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
     }
 
     @Override
-    public Collection<NODE> getNeighbours(NODE node) {
+    public Collection<NODE> getReachableFrom(NODE node) {
         return neighbourProducer.apply(node);
+    }
+
+    @Override
+    public Collection<NODE> getReachableTo(NODE node) {
+        return reversedMeighbourProducer.apply(node);
     }
 
     public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
@@ -125,67 +119,5 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
             node = p;
             this.distance = data;
         }
-    }
-
-    /**
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
-     */
-    public static Dijkstra<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate) {
-        return for2DGrid(validRoutePredicate, n -> false);
-    }
-
-    /**
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid at a specific step. Predicate should check for bounds
-     * @param earlyOut predicate indicating if pathfinding is finished
-     */
-    public static Dijkstra<Point> for2DGrid(TriFunction<Point,Point, Long, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return new Dijkstra<>(validRoutePredicate, Point::neighbourCollection, (f, t)->1L , earlyOut);
-    }
-
-    /**
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid. Predicate should check for bounds
-     * @param earlyOut predicate indicating if pathfinding is finished
-     */
-    public static Dijkstra<Point> for2DGrid(BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return new Dijkstra<>(validRoutePredicate, Point::neighbourCollection,(f, t) -> 1L, earlyOut);
-    }
-
-    /**
-     *
-     * @param width Width of the field
-     * @param height Height of the field
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
-     */
-    public static Dijkstra<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate) {
-        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate));
-    }
-
-    /**
-     *
-     * @param width Width of the field
-     * @param height Height of the field
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
-     * @param earlyOut predicate indicating if pathfinding is finished
-     */
-    public static Dijkstra<Point> for2DGrid(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return for2DGrid(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), earlyOut);
-    }
-
-    /**
-     *
-     * @param inbounds predicate to determine if a point is in bounds
-     * @param validRoutePredicate predicate indicating a move from src to dest is valid (no need to check bounds)
-     * @param earlyOut predicate indicating if pathfinding is finished
-     */
-    public static Dijkstra<Point> for2DGrid(Predicate<Point> inbounds, BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return for2DGrid(Utils.boundsCheckWrapperForTo(inbounds,validRoutePredicate), earlyOut);
-    }
-
-    public static <D> Dijkstra<Node<D>> forNodes() {
-        return new Dijkstra<>((f, t) -> true, Node::reachable, (f, t) -> f.getTo(t).getLength(), n -> false);
-    }
-
-    public static <D> Dijkstra<Node<D>> forNodes(Node<D> target) {
-        return new Dijkstra<>((f, t) -> true, Node::reachable, (f, t) -> f.getTo(t).getLength(), n -> n == target);
     }
 }

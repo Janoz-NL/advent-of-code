@@ -2,7 +2,7 @@ package com.janoz.aoc.y2022.day24;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.algorithms.BFS;
+import com.janoz.aoc.algorithms.PFABuilder;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.Point;
 import com.janoz.aoc.graphs.Edge;
@@ -40,10 +40,12 @@ public class Day24 {
 
         StopWatch.start();
         constructNodesMap();
-        PathFindingAlgorithm<Node<Point>> pathFindingToEnd = BFS.forNodes();
+        PathFindingAlgorithm<Node<Point>> pathFindingToEnd = PFABuilder.forNodes(Point.class)
+                .asBFS();
         pathFindingToEnd.calculate(endNode);
 
-        PathFindingAlgorithm<Node<Point>> pathFindingToStart = BFS.forNodes();
+        PathFindingAlgorithm<Node<Point>> pathFindingToStart = PFABuilder.forNodes(Point.class)
+                .asBFS();
         pathFindingToStart.calculate(startNode);
         StopWatch.stopPrint();
 
@@ -116,7 +118,7 @@ public class Day24 {
         current.keySet().stream().filter(p -> !p.equals(ignore))
                 .forEach(start -> Stream.concat(Arrays.stream(start.neighbours()), Stream.of(start))
                         .filter(next::containsKey)
-                        .forEach(end -> new Edge(next.get(end), current.get(start))));  //reverse edge
+                        .forEach(end -> new Edge<>(next.get(end), current.get(start))));  //reverse edge
     }
 
     private static Map<Point, Node<Point>> constructLayer(int time) {

@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.algorithms.Dijkstra;
+import com.janoz.aoc.algorithms.PFABuilder;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.HistoGrid;
@@ -46,7 +46,9 @@ public class Day20 {
         map.put(start,'.');
         map.put(end,'.');
 
-        pfa = Dijkstra.for2DGrid((src, dst) -> map.isEmpty(dst));
+        pfa = PFABuilder.forPoints()
+                .addValidMovePredicate((src1, dst1) -> map.isEmpty(dst1))
+                .asDijkstra();
         pfa.calculate(start);
 
         System.out.println("Part 1 :" + part1());
@@ -54,7 +56,9 @@ public class Day20 {
         StopWatch.stopPrint();
 
 
-        pfaBackwards = Dijkstra.for2DGrid((src, dst) -> map.isEmpty(dst));
+        pfaBackwards = PFABuilder.forPoints()
+                .addValidMovePredicate((src, dst) -> map.isEmpty(dst))
+                .asDijkstra();
         pfaBackwards.calculate(end);
 
         ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/race___.gif", 5);

@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.janoz.aoc.InputProcessor;
-import com.janoz.aoc.algorithms.AStar;
-import com.janoz.aoc.algorithms.Dijkstra;
+import com.janoz.aoc.algorithms.PFABuilder;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Point;
@@ -36,7 +35,10 @@ public class Day18 {
         bic.accept(Graphics.gridImage(target.x+1, target.y+1,5,1, Color.DARK_GRAY));
 
         Long l = PathFindingAlgorithm.renderingGridPathFinding(target.x+1, target.y+1,
-                Dijkstra.for2DGrid(validMovePredicate(1024), target::equals),
+                PFABuilder.forPoints()
+                        .addValidMovePredicate(validMovePredicate(1024))
+                        .withTargetPredicate(target::equals)
+                        .asDijkstra(),
                 Point.ORIGIN,
                 new HashSet<>(bytes.subList(0,1024)),
                 grid -> bic.accept(Graphics.toBigImage(grid, c -> c, 5, 1, BufferedImage.TYPE_INT_ARGB)));
@@ -52,13 +54,17 @@ public class Day18 {
 
         System.out.println(l);
 
-        System.out.println("Part 1:" + AStar.for2DGrid(validMovePredicate(1024), target).calculate(Point.ORIGIN));
+        System.out.println("Part 1:" + PFABuilder.forPoints()
+                .addValidMovePredicate(validMovePredicate(1024))
+                .asAStar().calculate(Point.ORIGIN));
 
         int min = 1024;
         int max = bytes.size() - 1;
         while (true) {
             int i = min + ((max - min) / 2);
-            if (AStar.for2DGrid(validMovePredicate(i), target).calculate(Point.ORIGIN) == null) {
+            if (PFABuilder.forPoints()
+                    .addValidMovePredicate(validMovePredicate(i))
+                    .asAStar().calculate(Point.ORIGIN) == null) {
                 max = i;
             } else {
                 min = i;
@@ -70,20 +76,7 @@ public class Day18 {
         }
     }
 
-    static BiFunction<Point,Point,Boolean> validMovePredicate(int time) {
+    static BiPredicate<Point,Point> validMovePredicate(int time) {
         return (from,to) -> inBounds.test(to) && !bytes.subList(0,time+1).contains(to);
-    }
-
-    static void walkWithFalingBytes() {
-        bytes = InputProcessor.asStream("inputs/2024/day18.txt", Point::parse).collect(Collectors.toList());
-        Point target = new Point(70,70);
-        inBounds = new BoundingBox(Point.ORIGIN, target).inBoundsPredicate();
-
-        PathFindingAlgorithm<Point> pfa = Dijkstra.for2DGrid(
-                (from, to, time) -> inBounds.test(to) && !bytes.subList(0,(int) (long) time).contains(to),
-                target::equals);
-
-        pfa.calculate(Point.ORIGIN);
-        System.out.println(pfa.getDistance(target));
     }
 }

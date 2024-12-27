@@ -28,7 +28,9 @@ public interface PathFindingAlgorithm<NODE> {
 
     Set<NODE> getVisited();
 
-    Collection<NODE> getNeighbours(NODE node);
+    Collection<NODE> getReachableFrom(NODE node);
+
+    Collection<NODE> getReachableTo(NODE node);
 
     void setAlgorithmCallback(Consumer<NODE> algorithmCallback);
 
@@ -43,7 +45,7 @@ public interface PathFindingAlgorithm<NODE> {
         NODE current = end;
         path.add(end);
         while (distance > 0) {
-            for (NODE candidate : getNeighbours(current)) {
+            for (NODE candidate : getReachableTo(current)) {
                 long nextDistance = Optional.ofNullable(getDistance(candidate)).orElse(Long.MAX_VALUE);
                 if (nextDistance < distance) {
                     current = candidate;

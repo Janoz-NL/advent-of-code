@@ -1,16 +1,12 @@
 package com.janoz.aoc.algorithms;
 
-import com.janoz.aoc.geo.Point;
-import com.janoz.aoc.geo.Utils;
-import com.janoz.aoc.graphs.Node;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -18,14 +14,20 @@ import java.util.function.Predicate;
 public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
 
     private final Map<NODE,Long> distanceMap= new HashMap<>();
-    private final BiFunction<NODE, NODE, Boolean> validMovePredicate;
+    private final BiPredicate<NODE, NODE> validMovePredicate;
     private final Function<NODE, Collection<NODE>> neighbourProducer;
+    private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
+
+    private final BiPredicate<NODE, Long> validToAtDistancePredicate;
+
     private final Predicate<NODE> earlyOut;
     private Consumer<NODE> algorithmCallback = node -> {};
 
-    public BFS(BiFunction<NODE, NODE, Boolean> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Predicate<NODE> earlyOut) {
+    BFS(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut) {
         this.validMovePredicate = validMovePredicate;
         this.neighbourProducer = neighbourProducer;
+        this.reversedMeighbourProducer = reversedMeighbourProducer;
+        this.validToAtDistancePredicate = validToAtDistancePredicate;
         this.earlyOut = earlyOut;
     }
 
@@ -43,7 +45,8 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
             if (earlyOut.test(node)) return distanceMap.get(node);
             neighbourProducer.apply(node).stream()
                     .filter(n -> !distanceMap.containsKey(n)) // not visited
-                    .filter(n -> validMovePredicate.apply(node, n)) // valid move
+                    .filter(n -> validMovePredicate.test(node, n)) // valid move
+                    .filter(n -> validToAtDistancePredicate.test(node,newDistance))
                     .forEach(n -> {
                         distanceMap.put(n, newDistance);
                         queue.add(n);
@@ -63,24 +66,17 @@ public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
     }
 
     @Override
-    public Collection<NODE> getNeighbours(NODE node) {
+    public Collection<NODE> getReachableFrom(NODE node) {
         return neighbourProducer.apply(node);
+    }
+
+    @Override
+    public Collection<NODE> getReachableTo(NODE node) {
+        return reversedMeighbourProducer.apply(node);
     }
 
     @Override
     public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
         this.algorithmCallback = algorithmCallback;
-    }
-
-    public static BFS<Point> forPoints(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate) {
-        return forPoints(width, height, validRoutePredicate, p -> false);
-    }
-
-    public static BFS<Point> forPoints(int width, int height, BiFunction<Point,Point, Boolean> validRoutePredicate, Predicate<Point> earlyOut) {
-        return new BFS<>(Utils.boundsCheckWrapperForTo(width,height,validRoutePredicate), Point::neighbourCollection, earlyOut);
-    }
-
-    public static <D> BFS<Node<D>> forNodes() {
-        return new BFS<>((f, t) -> true, Node::reachable, n -> false);
     }
 }

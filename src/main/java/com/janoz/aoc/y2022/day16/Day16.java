@@ -2,7 +2,7 @@ package com.janoz.aoc.y2022.day16;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.algorithms.BFS;
+import com.janoz.aoc.algorithms.PFABuilder;
 import com.janoz.aoc.algorithms.PathFindingAlgorithm;
 import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.collections.CollectionUtils;
@@ -76,7 +76,8 @@ public class Day16 {
      */
     static void precalculate() {
         Stream.concat(pressures.keySet().stream(),Stream.of("AA")).forEach(n1 -> {
-            PathFindingAlgorithm<Node<Void>> pfa = BFS.forNodes();
+            PathFindingAlgorithm<Node<Void>> pfa = PFABuilder.forNodes(Void.class)
+                    .asBFS();
             pfa.calculate(nodes.get(n1));
             pressures.keySet().stream().filter(n2 -> !n1.equals(n2)).forEach(n2 -> distances.get(n1).put(n2, pfa.getDistance(nodes.get(n2)).intValue()));
         });
@@ -92,7 +93,7 @@ public class Day16 {
             if (rate > 0) pressures.put(name, rate);
             String[] neighbours = m.group(3).split(",");
             Node<Void> node = nodes.get(name);
-            Arrays.stream(neighbours).map(String::trim).map(nodes::get).forEach(neighbour -> new Edge(node, neighbour));
+            Arrays.stream(neighbours).map(String::trim).map(nodes::get).forEach(neighbour -> new Edge<>(node, neighbour));
         });
     }
 

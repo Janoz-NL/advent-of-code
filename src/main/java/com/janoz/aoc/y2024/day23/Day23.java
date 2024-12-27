@@ -49,6 +49,7 @@ public class Day23 {
         result.add(element);
         return result;
     }
+    
     static int part1() {
         Set<String> answers = new HashSet<>();
         computers.values().stream()
@@ -76,7 +77,7 @@ public class Day23 {
         String c2 = line.substring(3);
         Node<String> n1 = computers.get(c1);
         Node<String> n2 = computers.get(c2);
-        new Edge(n1,n2);
-        new Edge(n2,n1);
+        new Edge<>(n1,n2);
+        new Edge<>(n2,n1);
     }
 }
