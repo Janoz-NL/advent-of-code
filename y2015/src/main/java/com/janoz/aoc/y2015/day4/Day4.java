@@ -1,18 +1,24 @@
 package com.janoz.aoc.y2015.day4;
 
+import com.janoz.aoc.input.AocInput;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.function.Predicate;
 
 public class Day4 {
-    public static final String INPUT = "yzbqklnj";
     static MessageDigest md5;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
+        solve(AocInput.of(2015,4));
+    }
+
+    private static void solve(AocInput<String> input) throws NoSuchAlgorithmException {
+        String seed = input.iterator().next();
         md5 = MessageDigest.getInstance("MD5");
-        System.out.println("Part 1 :" + find(INPUT, Day4::validPart1));
-        System.out.println("Part 1 :" + find(INPUT, Day4::validPart2));
+        System.out.println("Part 1 :" + find(seed, Day4::validPart1));
+        System.out.println("Part 1 :" + find(seed, Day4::validPart2));
     }
 
     static int find(String input, Predicate<byte[]> valid) {

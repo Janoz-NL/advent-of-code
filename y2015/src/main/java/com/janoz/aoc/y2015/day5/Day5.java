@@ -2,15 +2,23 @@ package com.janoz.aoc.y2015.day5;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 
 public class Day5 {
     public static void main(String[] args) {
-        System.out.println("Part 1 :" + InputProcessor.asStream("inputs/2015/day5.txt").filter(Day5::validatePart1).count());
-        System.out.println("Part 1 :" + InputProcessor.asStream("inputs/2015/day5.txt").filter(Day5::validatePart2).count());
+        solve(AocInput.of(2015,5));
     }
+
+    static void solve(AocInput<String> input) {
+        List<String> list = input.asList();
+        System.out.println("Part 1 :" + list.stream().filter(Day5::validatePart1).count());
+        System.out.println("Part 2 :" + list.stream().filter(Day5::validatePart2).count());
+    }
+
+
     static final Set<Character> vowelSet = new HashSet<>(Arrays.asList('a','e','i','o','u'));
     static final Set<String> naughtys = new HashSet<>(Arrays.asList("ab","cd","pq","xy"));
 

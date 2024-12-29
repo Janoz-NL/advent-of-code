@@ -1,7 +1,7 @@
 package com.janoz.aoc.y2024.day24;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.input.AocInput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +24,9 @@ public class Day24 {
     static BiFunction<Boolean,Boolean,Boolean> XOR = (a,b) -> a ^ b;
 
     public static void main(String[] args) {
+        AocInput<String> input = AocInput.of(2024,24);
         StopWatch.start();
-        readInput("inputs/2024/day24.txt");
+        readInput(input);
         System.out.println("Part 1 : " + part1());
         System.out.println("Part 2 : " + part2());
         StopWatch.stopPrint();
@@ -161,20 +162,18 @@ public class Day24 {
         nodes.put(s2, n1);
     }
 
-    static void readInput(String file) {
-        Iterator<String> input = InputProcessor.asIterator(file);
-        String line = input.next();
-        while (!line.isEmpty()) {
-            BoolNode node = BoolNode.fromValue(line);
+    static void readInput(AocInput<String> input) {
+        Iterator<String> it = input.iterator();
+        while (it.hasNext()) {
+            BoolNode node = BoolNode.fromValue(it.next());
             nodes.put(node.name,node);
-            line = input.next();
         }
-        do {
-            line = input.next();
-            BoolNode node = BoolNode.fromOp(line);
+        it = input.iterator();
+        while (it.hasNext()) {
+            BoolNode node = BoolNode.fromOp(it.next());
             nodes.put(node.name,node);
             opNodes.put(node.name,node);
-        } while (input.hasNext());
+        }
     }
 
     static class BoolNode {

@@ -5,16 +5,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.input.AocInput;
 
 public class Day6 {
 
+    public static void main(String[] args) {
+        solve(AocInput.of(2015, 6));
+    }
+
     static Set<Point> lights = new HashSet<>();
     static Map<Point,Long> brightness = new HashMap<>();
-    public static void main(String[] args) {
-        InputProcessor.asStream("inputs/2015/day6.txt").forEach(Day6::doAction);
+
+    static void solve(AocInput<String> input) {
+        input.stream().forEach(Day6::doAction);
         System.out.println("Part 1 :" + lights.size());
         System.out.println("Part 2 :" + brightness.values().stream().mapToLong(Long::longValue).sum());
     }

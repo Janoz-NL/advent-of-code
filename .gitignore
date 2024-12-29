@@ -2,3 +2,6 @@
 /target/
 /.idea/
 
+/application.properties
+/inputs/
+/lib/application.properties

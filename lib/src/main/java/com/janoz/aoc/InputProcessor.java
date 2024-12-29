@@ -2,7 +2,6 @@ package com.janoz.aoc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+@Deprecated
 public class InputProcessor<T> implements Iterable<T> {
 
     private final InternalIterator iterator;
@@ -68,7 +68,7 @@ public class InputProcessor<T> implements Iterable<T> {
         @Override
         public boolean hasNext() {
             return next != null &&
-                    (!stopIteratorWhenLineEmpty || next.length()>0);
+                    (!stopIteratorWhenLineEmpty || !next.isEmpty());
         }
 
         @Override

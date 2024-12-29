@@ -3,13 +3,18 @@ package com.janoz.aoc.y2015.day3;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.input.AocInput;
 
 public class Day3 {
 
     public static void main(String[] args) {
-        String directions = InputProcessor.asIterator("inputs/2015/day3.txt").next();
+        AocInput<String> input = AocInput.of(2015, 3);
+        solve(input);
+    }
+
+    static void solve(AocInput<String> input) {
+        String directions = input.iterator().next();
         Set<Point> visited = new HashSet<>();
         Point curPos = Point.ORIGIN;
         visited.add(curPos);
