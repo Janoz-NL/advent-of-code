@@ -1,4 +1,4 @@
-package com.janoz.aoc.y2015;
+package com.janoz.aoc.y2015.day12;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
