@@ -21,7 +21,7 @@ public class Day10 {
     }
 
     static String next(String code) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int count = 1;
         char previous = code.charAt(0);
         for (int i=1;i<code.length();i++) {
