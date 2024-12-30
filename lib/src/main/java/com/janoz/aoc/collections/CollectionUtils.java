@@ -1,10 +1,8 @@
 package com.janoz.aoc.collections;
 
-import com.janoz.aoc.graphs.Node;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -89,5 +87,17 @@ public class CollectionUtils {
                 src.forEachRemaining(i -> action.accept(function.apply(i)));
             }
         };
+    }
+
+    public static <T> List<T> newListWith(List<T> list, T item) {
+        List<T> result = new ArrayList<>(list);
+        result.add(item);
+        return result;
+    }
+
+    public static <T> Set<T> newSetWithout(Set<T> set, T item) {
+        Set<T> result = new HashSet<>(set);
+        result.remove(item);
+        return result;
     }
 }
