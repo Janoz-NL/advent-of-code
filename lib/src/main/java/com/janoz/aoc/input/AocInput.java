@@ -72,6 +72,10 @@ public class AocInput<T> {
         return stream().collect(Collectors.toList());
     }
 
+    public String asString(Function<T,String> mapper) {
+        return stream().map(mapper).collect(Collectors.joining("\n"));
+    }
+
     public static AocInput<String> ofResource(String resource) {
         return new AocInput<>(
                 new InputStreamReader(
