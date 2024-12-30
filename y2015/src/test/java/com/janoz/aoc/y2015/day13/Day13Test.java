@@ -3,8 +3,6 @@ package com.janoz.aoc.y2015.day13;
 import com.janoz.aoc.input.AocInput;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 class Day13Test {
     @Test
     void testExample() {
