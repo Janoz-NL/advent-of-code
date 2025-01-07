@@ -2,8 +2,10 @@ package com.janoz.aoc.collections;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,10 +53,33 @@ class CollectionUtilsTest {
                 .contains(Collections.emptySet());
     }
 
+    @Test
+    void testCombinations() {
+        assertThat(CollectionUtils.combinations(Set.of(
+                Element.A,
+                Element.B,
+                Element.C),0,1)).containsExactlyInAnyOrder(
+                        Collections.emptySet(),
+                        Collections.singleton(Element.A),
+                        Collections.singleton(Element.B),
+                        Collections.singleton(Element.C)
+        );
+
+        assertThat(CollectionUtils.combinations(Set.of(
+                Element.A,
+                Element.B,
+                Element.C),0,2)).containsExactlyInAnyOrder(
+                        Collections.emptySet(),
+                        Collections.singleton(Element.A),
+                        Collections.singleton(Element.B),
+                        Collections.singleton(Element.C),
+                        new HashSet<>(Arrays.asList(Element.B,Element.A)),
+                        new HashSet<>(Arrays.asList(Element.C,Element.A)),
+                        new HashSet<>(Arrays.asList(Element.B,Element.C))
+        );
+    }
 
     private enum Element {
         A,B,C,D,E,F
     }
-
-
 }

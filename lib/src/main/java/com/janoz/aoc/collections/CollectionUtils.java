@@ -89,15 +89,66 @@ public class CollectionUtils {
         };
     }
 
-    public static <T> List<T> newListWith(List<T> list, T item) {
-        List<T> result = new ArrayList<>(list);
+    /**
+     *
+     * @param src source collection
+     * @param item item to be added
+     * @return a new list with the item added
+     * @param <T>
+     */
+    public static <T> List<T> newListWith(Collection<T> src, T item) {
+        List<T> result = new ArrayList<>(src);
         result.add(item);
         return result;
     }
 
-    public static <T> Set<T> newSetWithout(Set<T> set, T item) {
-        Set<T> result = new HashSet<>(set);
+    /**
+     *
+     * @param src source collection
+     * @param item item to be added
+     * @return a new set with the item added
+     * @param <T>
+     */
+    public static <T> Set<T> newSetWith(Collection<T> src, T item) {
+        Set<T> result = new HashSet<>(src);
+        result.add(item);
+        return result;
+    }
+
+    /**
+     *
+     * @param src source collection
+     * @param item item to be removed
+     * @return a new set containing everything except the specific item
+     * @param <T>
+     */
+    public static <T> Set<T> newSetWithout(Collection<T> src, T item) {
+        Set<T> result = new HashSet<>(src);
         result.remove(item);
         return result;
     }
+
+
+    public static <T> Set<Set<T>> combinations(Collection<T> src, int min, int max) {
+        if (max == 0) return Collections.singleton(Collections.emptySet());
+        Set<Set<T>> result = new HashSet<>();
+        int actualMin;
+        if (min == 0) {
+            result.add(Collections.emptySet());
+            actualMin = 1;
+        } else {
+            actualMin = min;
+        }
+
+        Set<T> rest = new HashSet<>(src);
+        for (T item : src) {
+            rest = newSetWithout(rest,item);
+            for(Set<T> l:combinations(rest,actualMin-1,max-1)) {
+                result.add(newSetWith(l,item));
+            }
+            if (rest.size() == min) break;
+        }
+        return result;
+    }
+
 }
