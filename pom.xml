@@ -15,6 +15,7 @@
         <module>y2022</module>
         <module>y2021</module>
         <module>y2015</module>
+        <module>y2025</module>
     </modules>
 
     <properties>
