@@ -103,7 +103,7 @@ public class PFABuilder<NODE> {
         return builder;
     }
 
-        public static PFABuilder<Point> forPoints() {
+    public static PFABuilder<Point> forPoints() {
         PFABuilder<Point> builder = new PFABuilder<>();
         builder.neighbourProducer = Point::neighbourCollection;
         builder.reversedMeighbourProducer = Point::neighbourCollection;
