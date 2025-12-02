@@ -93,6 +93,7 @@ public class AocInput<T> {
     }
 
     public static AocInput<String> of(int year, int day) {
+
         try {
             Properties p = new Properties();
             p.load(new FileReader("./application.properties"));
@@ -100,13 +101,19 @@ public class AocInput<T> {
             File input = new File(directory, String.format("input_%s_%s.txt", year, day));
             if (!input.exists()) {
                 directory.mkdirs();
-                FileOutputStream fos = new FileOutputStream(input);
-                getDownloadStream(year, day, p.getProperty("session")).transferTo(fos);
-                fos.close();
+                try (FileOutputStream fos = new FileOutputStream(input) ) {
+                    getDownloadStream(year, day, p.getProperty("session")).transferTo(fos);
+                } catch (IOException ioe) {
+                    if (!input.delete()) {
+                        input.deleteOnExit();
+                    }
+                    throw ioe;
+                }
             }
             InputStream inputStream = new FileInputStream(input);
             return new AocInput<>(new InputStreamReader(inputStream, StandardCharsets.UTF_8), s -> s);
         } catch (IOException ioe) {
+
             throw new RuntimeException(ioe.getMessage(),ioe);
         }
     }
