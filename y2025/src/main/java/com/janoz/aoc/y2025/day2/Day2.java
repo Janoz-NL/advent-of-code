@@ -2,6 +2,7 @@ package com.janoz.aoc.y2025.day2;
 
 import com.janoz.aoc.Strings;
 import com.janoz.aoc.collections.LongRange;
+import com.janoz.aoc.collections.LongTuple;
 import com.janoz.aoc.input.AocInput;
 
 public class Day2 {
@@ -15,7 +16,7 @@ public class Day2 {
         long sum1 = 0;
         long sum2 = 0;
         for(String pair : pairs) {
-            LongRange l = LongRange.parse(pair);
+            LongRange l = new LongTuple(pair,"-").getRange();
             for (Long j :  l.iterable()) {
                 if (isRepeating(2, j)) {
                     sum1 += j;

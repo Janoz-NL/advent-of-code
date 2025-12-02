@@ -46,4 +46,8 @@ public class LongTuple {
     public LongTuple times(int i) {
         return new LongTuple(l1 * i, l2 * i);
     }
+
+    public LongRange getRange() {
+        return new LongRange(l1,l2);
+    }
 }

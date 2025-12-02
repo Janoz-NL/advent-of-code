@@ -53,12 +53,4 @@ public class LongRange {
     public long getMax() {
         return max;
     }
-
-
-    public static LongRange parse(String input) {
-        int i= input.indexOf('-');
-        long start = Long.parseLong(input.substring(0,i));
-        long end = Long.parseLong(input.substring(i+1));
-        return new LongRange(start,end);
-    }
 }
