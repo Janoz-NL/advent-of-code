@@ -1,7 +1,5 @@
 package com.janoz.aoc.y2024.day6;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,13 +11,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.Point;
-import com.janoz.aoc.geo.ReadOnlyGrid;
-import com.janoz.aoc.graphics.ConsumingAnimationWriter;
-import com.janoz.aoc.graphics.Graphics;
+import com.janoz.aoc.input.AocInput;
 
 public class Day6 {
 
@@ -33,20 +28,10 @@ public class Day6 {
     static int height;
 
     public static void main(String[] args) {
-        init("inputs/2024/day06.txt");
+        init(AocInput.of(2024,6));
         visited = walk();
         System.out.println(visited.size());
         System.out.println(possibleLoops());
-
-        ConsumingAnimationWriter caw = new ConsumingAnimationWriter("target/AOC_2024_06.gif", 50);
-        Consumer<BufferedImage> imageConsumer = caw.imageConsumer();
-        ReadOnlyGrid<Boolean> booleanReadOnlyGrid1 = ReadOnlyGrid.asGrid(width, height, obstacles);
-        imageConsumer.accept(Graphics.toBigImage(booleanReadOnlyGrid1, x1 -> Color.RED, 5, 1, BufferedImage.TYPE_INT_ARGB));
-        walk(null, p -> {
-            ReadOnlyGrid<Boolean> booleanReadOnlyGrid = ReadOnlyGrid.asGrid(width,height, Collections.singleton(p));
-            imageConsumer.accept(Graphics.toBigImage(booleanReadOnlyGrid, x -> Color.BLUE, 5, 1, BufferedImage.TYPE_INT_ARGB));
-        });
-        caw.close();
     }
 
     static Set<Point> walk() {
@@ -104,9 +89,9 @@ public class Day6 {
         return false;
     }
 
-    static void init(String file) {
+    static void init(AocInput<String> input) {
         obstacles = new HashSet<>();
-        BoundingBox bb = BoundingBox.readGrid(InputProcessor.asIterator(file), (p, c) -> {
+        BoundingBox bb = BoundingBox.readGrid(input.iterator(), (p, c) -> {
             if (c == '^') start = p;
             if (c == '#') obstacles.add(p);
         });

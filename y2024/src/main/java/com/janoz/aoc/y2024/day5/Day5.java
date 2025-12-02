@@ -1,6 +1,5 @@
 package com.janoz.aoc.y2024.day5;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,8 +11,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.collections.AlwaysHashMap;
+import com.janoz.aoc.input.AocInput;
 import com.janoz.aoc.math.IntMatrixUtils;
 
 public class Day5 {
@@ -27,14 +26,14 @@ public class Day5 {
     final static List<int[]> wrongs = new ArrayList<>();
 
     public static void main(String[] args) {
-        BufferedReader reader = InputProcessor.getReaderFromResource("inputs/2024/day05.txt");
-        new InputProcessor<>(reader, s -> s.split("\\|")).stream().forEach(sa -> {
+        AocInput<String> input = AocInput.of(2024,5);
+        input.addMapper(s -> s.split("\\|")).stream().forEach(sa -> {
             int i1 = Integer.parseInt(sa[0]);
             int i2 = Integer.parseInt(sa[1]);
             beforeRule.get(i1).add(i2);
             afterRule.get(i2).add(i1);
         });
-        System.out.println(new InputProcessor<>(reader, s -> IntMatrixUtils.readLine(s,",")).stream().mapToInt(Day5::check).sum());
+        System.out.println(input.addMapper(s -> IntMatrixUtils.readLine(s,",")).stream().mapToInt(Day5::check).sum());
         System.out.println(wrongs.stream().mapToInt(Day5::sort).sum());
     }
 

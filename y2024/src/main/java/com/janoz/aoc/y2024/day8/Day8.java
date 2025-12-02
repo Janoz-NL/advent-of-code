@@ -9,12 +9,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.geo.BoundingBox;
 import com.janoz.aoc.geo.Direction;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.input.AocInput;
 
 public class Day8 {
 
@@ -23,7 +23,7 @@ public class Day8 {
     public static void main(String[] args) {
         StopWatch.start();
         boundingPredicate = BoundingBox.readGrid(
-                InputProcessor.asIterator("inputs/2024/day08.txt"),
+                AocInput.of(2024,8).iterator(),
                 (p,c) -> antennas.get(c).add(p)).inBoundsPredicate();
         System.out.println(calcAntiNodes());
         StopWatch.stopPrint();

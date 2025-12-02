@@ -3,13 +3,13 @@ package com.janoz.aoc.y2024.day1;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.collections.LongTuple;
+import com.janoz.aoc.input.AocInput;
 
 public class Day1 {
 
     public static void main(String[] args) {
-        read("inputs/2024/day01.txt");
+        read(AocInput.of(2024,1));
         System.out.println(solve());
         System.out.println(solve2());
     }
@@ -17,8 +17,8 @@ public class Day1 {
     private static final List<Long> left = new ArrayList<>();
     private static final List<Long> right = new ArrayList<>();
 
-    static void read(String file) {
-        InputProcessor.asStream(file, LongTuple::new).forEach(t -> {
+    static void read(AocInput<String> input) {
+        input.addMapper(LongTuple::new).stream().forEach(t -> {
             left.add(t.getLeft());
             right.add(t.getRight());
         });

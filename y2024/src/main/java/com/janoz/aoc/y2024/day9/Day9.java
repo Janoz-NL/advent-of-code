@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.input.AocInput;
 
 public class Day9 {
 
     public static void main(String[] args) {
         StopWatch.start();
-        String filesystem = InputProcessor.asIterator("inputs/2024/day09.txt").next();
+        String filesystem = AocInput.of(2024,9).asString(s->s);
         List<Node> nodes = parse(filesystem);
         List<Node> nodesPart1 = nodes;
         List<Node> nodesPart2 = deepCopy(nodes);

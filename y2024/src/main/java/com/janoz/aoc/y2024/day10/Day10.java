@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Point;
+import com.janoz.aoc.input.AocInput;
 
 public class Day10 {
 
@@ -18,7 +18,7 @@ public class Day10 {
     private static Predicate<Point> inBounds;
 
     public static void main(String[] args) {
-        init(InputProcessor.asIterator("inputs/2024/day10.txt"));
+        init(AocInput.of(2024,10).iterator());
         System.out.println(part1());
         System.out.println(part2());
     }

@@ -2,12 +2,12 @@ package com.janoz.aoc.y2024.day3;
 
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 
 public class Day3 {
 
     public static void main(String[] args) {
-        String data = InputProcessor.asStream("inputs/2024/day03.txt").collect(Collectors.joining("#"));
+        String data = AocInput.of(2024,3).stream().collect(Collectors.joining("#"));
 
         Day3 part1 = new Day3(data);
         while (part1.findNextMultiplication()) {}

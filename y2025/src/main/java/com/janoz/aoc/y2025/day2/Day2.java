@@ -9,15 +9,19 @@ import com.janoz.aoc.input.AocInput;
 public class Day2 {
 
     public static void main(String[] args) {
+//        StopWatch.start();
+//        solve(AocInput.of(2025,2));
+//        StopWatch.stopPrint();
+
+
         StopWatch.start();
-        solve(AocInput.of(2025,2));
+        long part1 = solveParalel1(AocInput.of(2025, 2));
         StopWatch.stopPrint();
+        System.out.println(part1);
         StopWatch.start();
-        System.out.println(solveParalel1(AocInput.of(2025,2)));
+        long part2 = solveParalel2(AocInput.of(2025, 2));
         StopWatch.stopPrint();
-        StopWatch.start();
-        System.out.println(solveParalel2(AocInput.of(2025,2)));
-        StopWatch.stopPrint();
+        System.out.println(part2);
 
     }
 
@@ -57,7 +61,7 @@ public class Day2 {
                 .parallel()
                 .filter(l -> {
                     String s = String.valueOf(l);
-                    for (int k=2; k<=s.length(); k++)
+                    for (int k=s.length(); k>1; k--)
                         if (isRepeating(k, l)) {
                         return true;
                     }

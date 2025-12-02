@@ -1,17 +1,18 @@
 package com.janoz.aoc.y2024.day2;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 import com.janoz.aoc.math.IntMatrixUtils;
 
 public class Day2 {
 
     public static void main(String[] args) {
-        System.out.println(solve("inputs/2024/day02.txt"));
+        System.out.println(solve(AocInput.of(2024,2)));
     }
 
 
-    static int solve(String file) {
-        return InputProcessor.asStream(file, IntMatrixUtils::readLine).mapToInt(Day2::isDamperSave).sum();
+    static int solve(AocInput<String> input) {
+        return input.stream().map(IntMatrixUtils::readLine).mapToInt(Day2::isDamperSave).sum();
+        //return InputProcessor.asStream(file, IntMatrixUtils::readLine).mapToInt(Day2::isDamperSave).sum();
     }
 
     static int isSave(int[] input) {

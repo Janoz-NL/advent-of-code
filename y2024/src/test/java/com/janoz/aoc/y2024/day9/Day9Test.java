@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import com.janoz.aoc.InputProcessor;
-
 import org.junit.jupiter.api.Test;
 
 public class Day9Test {
@@ -52,13 +50,5 @@ public class Day9Test {
         Day9.compactDefrag(nodes);
         assertThat(Day9.fileSystemToString(nodes)).isEqualTo("00992111777.44.333....5555.6666.....8888");
         assertThat(Day9.checksum(nodes)).isEqualTo(2858L);
-    }
-
-    @Test
-    void testPart2() {
-        String filesystem = InputProcessor.asIterator("inputs/2024/day09.txt").next();
-        List<Day9.Node> nodes = Day9.parse(filesystem);
-        Day9.compactDefrag(nodes);
-        assertThat(Day9.checksum(nodes)).isLessThan(6469637179774L);
     }
 }

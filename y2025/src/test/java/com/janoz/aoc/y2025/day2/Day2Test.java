@@ -1,7 +1,12 @@
 package com.janoz.aoc.y2025.day2;
 
+import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.input.AocInput;
+import com.janoz.aoc.y2025.day1.Day1;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 
 class Day2Test {
@@ -14,4 +19,16 @@ class Day2Test {
     public void runTest() {
         Day2.solve(AocInput.ofString(TEST_INPUT));
     }
+
+    @Test
+    public void runChallange1() throws FileNotFoundException {
+        StopWatch.start();
+        long part1 = Day2.solveParalel1(AocInput.ofFile(new File("../challenges/aoc-2025-day-2-challenge-1.txt")));
+        StopWatch.stopPrint();
+        StopWatch.start();
+        long part2 = Day2.solveParalel2(AocInput.ofFile(new File("../challenges/aoc-2025-day-2-challenge-1.txt")));
+        StopWatch.stopPrint();
+        System.out.printf("%d\t%d%n", part1, part2);
+    }
+
 }

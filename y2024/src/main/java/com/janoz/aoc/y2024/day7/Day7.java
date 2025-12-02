@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
+import com.janoz.aoc.input.AocInput;
 
 public class Day7 {
 
     public static void main(String[] args) {
         StopWatch.start();
-        long answer = InputProcessor.asStream("inputs/2024/aoc-2024-day-07-challenge-3.txt").mapToLong( s -> {
+        long answer = AocInput.of(2024,7).stream().mapToLong(s -> {
             String[] elements = s.split(":");
             List<Long> vals = Arrays.stream(elements[1].trim().split("\\s+")).map(Long::parseLong).collect(Collectors.toList());
             long result = Long.parseLong(elements[0]);
