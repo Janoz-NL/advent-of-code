@@ -64,6 +64,10 @@ public class AocInput<T> {
         return getIterator();
     }
 
+    public Iterable<T> iterable() {
+        return stream()::iterator;
+    }
+
     public Stream<T> stream() {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator(),0),false);
     }

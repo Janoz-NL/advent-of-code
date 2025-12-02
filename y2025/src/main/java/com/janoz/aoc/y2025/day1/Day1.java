@@ -1,18 +1,18 @@
 package com.janoz.aoc.y2025.day1;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 
 public class Day1 {
 
     public static void main(String[] args) {
-        solve("inputs/2025/day01.txt");
+        solve(AocInput.of(2025,1));
     }
 
-    static void solve(String file) {
+    static void solve(AocInput<String> input) {
         long at0 = 0;
         long pass0 = 0;
         int position = 50;
-        for (int amount : InputProcessor.asIterable(file, Day1::parse)) {
+        for (int amount : input.addMapper(Day1::parse).iterable()) {
             if (amount == 0) continue;
             pass0 += Math.abs(amount/100);
             amount = amount % 100;
