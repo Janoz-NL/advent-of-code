@@ -3,6 +3,7 @@ package com.janoz.aoc.input;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.Spliterators;
 import java.util.function.Function;
@@ -80,12 +80,9 @@ public class AocInput<T> {
         return stream().map(mapper).collect(Collectors.joining("\n"));
     }
 
-    public static AocInput<String> ofResource(String resource) {
-        return new AocInput<>(
-                new InputStreamReader(
-                        Objects.requireNonNull(
-                                AocInput.class.getClassLoader().getResourceAsStream(resource))),
-                s->s);
+    public static AocInput<String> ofFile(File input) throws FileNotFoundException {
+        InputStream inputStream = new FileInputStream(input);
+        return new AocInput<>(new InputStreamReader(inputStream, StandardCharsets.UTF_8), s -> s);
     }
 
     public static AocInput<String> ofString(String input) {
@@ -110,10 +107,8 @@ public class AocInput<T> {
                     throw ioe;
                 }
             }
-            InputStream inputStream = new FileInputStream(input);
-            return new AocInput<>(new InputStreamReader(inputStream, StandardCharsets.UTF_8), s -> s);
+            return ofFile(input);
         } catch (IOException ioe) {
-
             throw new RuntimeException(ioe.getMessage(),ioe);
         }
     }
