@@ -1,5 +1,6 @@
 package com.janoz.aoc.y2025.day2;
 
+import com.janoz.aoc.StopWatch;
 import com.janoz.aoc.Strings;
 import com.janoz.aoc.collections.LongRange;
 import com.janoz.aoc.collections.LongTuple;
@@ -8,7 +9,16 @@ import com.janoz.aoc.input.AocInput;
 public class Day2 {
 
     public static void main(String[] args) {
+        StopWatch.start();
         solve(AocInput.of(2025,2));
+        StopWatch.stopPrint();
+        StopWatch.start();
+        System.out.println(solveParalel1(AocInput.of(2025,2)));
+        StopWatch.stopPrint();
+        StopWatch.start();
+        System.out.println(solveParalel2(AocInput.of(2025,2)));
+        StopWatch.stopPrint();
+
     }
 
     public static void solve(AocInput<String> input) {
@@ -31,8 +41,37 @@ public class Day2 {
         System.out.println(sum2);
     }
 
+    public static long solveParalel1(AocInput<String> input) {
+        return Strings.streamCSV(input.asString(s->s))
+                .map(s -> new LongTuple(s,"-").getRange())
+                .flatMapToLong(LongRange::stream)
+                .parallel()
+                .filter(l -> isRepeating(2, l))
+                .sum();
+    }
+
+    public static long solveParalel2(AocInput<String> input) {
+        return Strings.streamCSV(input.asString(s->s))
+                .map(s -> new LongTuple(s,"-").getRange())
+                .flatMapToLong(LongRange::stream)
+                .parallel()
+                .filter(l -> {
+                    String s = String.valueOf(l);
+                    for (int k=2; k<=s.length(); k++)
+                        if (isRepeating(k, l)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .sum();
+    }
+
     static boolean isRepeating(int times, long i) {
         String s = String.valueOf(i);
+        return isRepeating(times, s);
+    }
+
+    static boolean isRepeating(int times, String s) {
         if (s.length() % times != 0) return false;
         int partLength = s.length() / times;
         for (int j = 0; j < partLength; j++) {
