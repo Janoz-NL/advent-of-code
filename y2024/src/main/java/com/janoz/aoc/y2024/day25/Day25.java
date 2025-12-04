@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 
 public class Day25 {
 
@@ -13,8 +13,8 @@ public class Day25 {
     static List<int[]> locks = new ArrayList<>();
 
     public static void main(String[] args) {
-        Iterator<String> input = InputProcessor.asIterator("inputs/2024/day25.txt");
-        while (input.hasNext()) readPattern(input);
+        AocInput<String> input = AocInput.of(2024,25);
+        while (input.hasNextPart()) readPattern(input.iterator());
         System.out.println(keys.stream()
                 .mapToLong(k -> locks.stream()
                         .filter(l -> fit(k, l))

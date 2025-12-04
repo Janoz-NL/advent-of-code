@@ -8,17 +8,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.collections.AlwaysHashMap;
 import com.janoz.aoc.graphs.Edge;
 import com.janoz.aoc.graphs.Node;
+import com.janoz.aoc.input.AocInput;
 
 public class Day23 {
 
     static Map<String, Node<String>> computers = new AlwaysHashMap<>((k) -> new Node<>(k));
 
     public static void main(String[] args) {
-        InputProcessor.asStream("inputs/2024/day23.txt").forEach(Day23::read);
+        AocInput.of(2024,23).stream().forEach(Day23::read);
         System.out.println("Part 1: " + part1());
         System.out.println("Part 2: " + part2());
     }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.janoz.aoc.InputProcessor;
+import com.janoz.aoc.input.AocInput;
 
 public class Day22 {
 
@@ -13,7 +13,7 @@ public class Day22 {
     public static final int HASH_SPACE = DELTA_RANGE * DELTA_RANGE * DELTA_RANGE * DELTA_RANGE;
     static long[] score = new long[HASH_SPACE];
     public static void main(String[] args) {
-        initials = InputProcessor.asStream("inputs/2024/day22.txt",Long::parseLong).collect(Collectors.toList());
+        initials = AocInput.of(2024,22).stream().map(Long::parseLong).collect(Collectors.toList());
         System.out.println("Part 1: " + initials.stream().mapToLong(Day22::processSecretNumber).sum());
         System.out.println("Part 2: " + Arrays.stream(score).max().orElseThrow());
     }
