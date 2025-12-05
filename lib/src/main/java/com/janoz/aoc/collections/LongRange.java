@@ -42,6 +42,11 @@ public class LongRange {
         return Optional.of(new LongRange(Math.max(this.min, other.min), Math.min(this.max, other.max)));
     }
 
+    public boolean touches(LongRange other) {
+        return
+                this.max >= other.min-1 && this.min <= other.max+1;
+    }
+
     public boolean contains(long v) {
         return v<=max && v>=min;
     }
