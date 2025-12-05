@@ -1,9 +1,7 @@
 package com.janoz.aoc.geo;
 
-import com.janoz.aoc.collections.IntRange;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
