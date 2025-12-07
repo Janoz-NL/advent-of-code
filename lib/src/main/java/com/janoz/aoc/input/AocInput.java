@@ -81,16 +81,27 @@ public class AocInput<T> {
     }
 
     public static AocInput<String> ofFile(File input) throws FileNotFoundException {
-        InputStream inputStream = new FileInputStream(input);
-        return new AocInput<>(new InputStreamReader(inputStream, StandardCharsets.UTF_8), s -> s);
+        return ofFile(input, String::trim);
     }
 
     public static AocInput<String> ofString(String input) {
-        return new AocInput<>(new StringReader(input), s->s);
+        return ofString(input, String::trim);
     }
 
     public static AocInput<String> of(int year, int day) {
+        return of(year,day, String::trim);
+    }
 
+    public static AocInput<String> ofFile(File input, Function<String,String> mapper) throws FileNotFoundException {
+        InputStream inputStream = new FileInputStream(input);
+        return new AocInput<>(new InputStreamReader(inputStream, StandardCharsets.UTF_8), mapper);
+    }
+
+    public static AocInput<String> ofString(String input, Function<String,String> mapper) {
+        return new AocInput<>(new StringReader(input),mapper);
+    }
+
+    public static AocInput<String> of(int year, int day, Function<String,String> mapper) {
         try {
             Properties p = new Properties();
             p.load(new FileReader("./application.properties"));
@@ -107,7 +118,7 @@ public class AocInput<T> {
                     throw ioe;
                 }
             }
-            return ofFile(input);
+            return ofFile(input, mapper);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe.getMessage(),ioe);
         }
@@ -135,7 +146,7 @@ public class AocInput<T> {
 
         @Override
         public boolean hasNext() {
-            return next != null && !next.isEmpty();
+            return next != null && !next.isBlank();
         }
 
         public boolean hasNextPart() {
@@ -152,7 +163,7 @@ public class AocInput<T> {
         private void getNext() {
             try {
                 next = input.readLine();
-                if (next != null) next = next.trim();
+               // if (next != null) next = next.trim();
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage(),e);
             }
