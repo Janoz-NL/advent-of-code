@@ -151,6 +151,16 @@ public class Point3D {
     }
 
     public long manhattanDistance(Point3D other) {
-        return Math.abs(x -other.x) + Math.abs(y - other.y) + Math.abs(z - other.z);
+        return
+                Math.abs(x -other.x) +
+                Math.abs(y - other.y) +
+                Math.abs(z - other.z);
     }
+    public long squareDistance(Point3D other) {
+        return
+                ((x - other.x) * (x - other.x)) +
+                ((y - other.y) * (y - other.y)) +
+                ((z - other.z) * (z - other.z));
+    }
+
 }

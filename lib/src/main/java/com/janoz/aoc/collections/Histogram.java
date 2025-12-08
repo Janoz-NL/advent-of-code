@@ -3,11 +3,9 @@ package com.janoz.aoc.collections;
 import com.janoz.aoc.math.Operations;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -43,17 +41,29 @@ public class Histogram<K, N extends Number & Comparable<N>> {
         return backingMap.entrySet();
     }
 
+    /**
+     * @param comparatorWhenAmountEqual comperator to sort keys when they have the same ammount. Because
+     *                                  the sortorder is reversed (biggest first) the comperator is also
+     *                                  applied reversed. Biggest first! (default comparators sort from
+     *                                  small to big)
+     * @return a sorted list of keys, with the most frequent first.
+     */
     public List<K> sorted(Comparator<K> comparatorWhenAmountEqual) {
+        return sortedStream(comparatorWhenAmountEqual).toList();
+    }
+
+    public Stream<K> sortedStream(Comparator<K> comparatorWhenAmountEqual) {
         TreeSet<K> result = new TreeSet<>((o1, o2) -> {
-            int comp = backingMap.get(o1).compareTo(backingMap.get(o2));
+            int comp = backingMap.get(o2).compareTo(backingMap.get(o1));
             if (comp == 0) {
-                return comparatorWhenAmountEqual.compare(o1,o2);
+                return comparatorWhenAmountEqual.compare(o2,o1);
             }
             return comp;
         });
         result.addAll(backingMap.keySet());
-        return new ArrayList<>(result);
+        return result.stream();
     }
+
 
     public static <K> Histogram<K, Long> longHistogram() {
         return new Histogram<>(Operations.longOperations());

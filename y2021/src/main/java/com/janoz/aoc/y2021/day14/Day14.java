@@ -31,8 +31,8 @@ public class Day14 {
         histogram.inc(startPattern.charAt(startPattern.length()-1));
         patternHistoram.entrySet().forEach(e -> histogram.inc(e.getKey().charAt(0), e.getValue()));
         List<Character> sorted = histogram.sorted(Character::compareTo);
-        BigInteger min = histogram.get(sorted.get(0));
-        BigInteger max = histogram.get(sorted.get(sorted.size()-1));
+        BigInteger max = histogram.get(sorted.get(0));
+        BigInteger min = histogram.get(sorted.get(sorted.size()-1));
         return max.add(min.negate());
     }
 
