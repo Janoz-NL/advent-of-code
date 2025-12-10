@@ -21,4 +21,16 @@ class Day9Test {
     void test() {
         Day9.printResult(Day9.solve(AocInput.ofString(INPUT)));
     }
+
+    @Test
+    void testSoultaker() {
+       assertThat(Day9.solve(AocInput.ofString("1,1\n" +
+               "9,1\n" +
+               "9,9\n" +
+               "7,9\n" +
+               "7,3\n" +
+               "3,3\n" +
+               "3,9\n" +
+               "1,9")).getRight()).isEqualTo(27);
+    }
 }
