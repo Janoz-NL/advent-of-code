@@ -44,7 +44,54 @@ public class Day9 {
     }
 
     static boolean fits(Square s) {
-        return edges.stream().noneMatch(s::contains);
+        if (edges.stream().noneMatch(s::contains)) {
+            return isInside(s.centerish());
+        }
+        return false;
+    }
+
+    static boolean isInside(Point p) {
+        StraightLine left = null;
+        StraightLine right = null;
+        StraightLine top = null;
+        StraightLine bottom = null;
+
+        for (StraightLine edge : edges) {
+            if (edge.horizontal) {
+                if (p.x > edge.min && p.x < edge.max) {
+                    if (edge.start.y < p.y) {
+                        //above
+                        if (top == null || top.start.y < edge.start.y) top = edge;
+                    } else {
+                        //below
+                        if (bottom == null || bottom.start.y > edge.start.y) bottom = edge;
+                    }
+                }
+            } else {
+                if (p.y > edge.min && p.y < edge.max) {
+                    if (edge.start.x < p.x) {
+                        //left
+                        if (left == null || left.start.x < edge.start.x) left = edge;
+                    } else {
+                        //right
+                        if (right == null || right.start.x > edge.start.x) right = edge;
+                    }
+                }
+            }
+        }
+        //closes edges determined
+        if (top != null && bottom != null && left != null && right != null) {
+            if (!top.emptyTop())
+                return false;
+            if (bottom.emptyTop())
+                return false;
+            if (left.emptyRight())
+                return false;
+            if (!right.emptyRight())
+                return false;
+            return true;
+        }
+        return false;
     }
 
     static void initEdges() {
@@ -78,16 +125,20 @@ public class Day9 {
         boolean contains(StraightLine l) {
             return l.hasPointsInside(this);
         }
+
+        Point centerish() {
+            return new Point((minx+maxx)/2, (miny+maxy)/2);
+        }
     }
 
     static class StraightLine {
-        final Point p;
+        final Point start;
         final int min;
         final int max;
         final boolean horizontal;
 
         StraightLine(Point p1, Point p2) {
-            this.p = p1;
+            this.start = p1;
             horizontal = p1.y == p2.y;
             if (horizontal) {
                 min = Math.min(p1.x, p2.x);
@@ -104,9 +155,23 @@ public class Day9 {
          */
         boolean hasPointsInside(Square s) {
             if (horizontal)
-                return p.y > s.miny && p.y < s.maxy && min < s.maxx && max > s.minx;
+                return start.y > s.miny && start.y < s.maxy && min < s.maxx && max > s.minx;
             else
-                return p.x > s.minx && p.x < s.maxx && min < s.maxy && max > s.miny;
+                return start.x > s.minx && start.x < s.maxx && min < s.maxy && max > s.miny;
+        }
+
+        /**
+         * Only vertical
+         */
+        boolean emptyRight() {
+            return min == start.y;
+        }
+
+        /**
+         * only horizontal
+         */
+        boolean emptyTop() {
+            return min == start.x;
         }
     }
 }
