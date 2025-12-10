@@ -13,7 +13,7 @@ public class PFABuilder<NODE> {
 
     private Predicate<NODE> targetPredicate=n->false;
     private BiPredicate<NODE,NODE> validMovePredicate = (from,to) -> true;
-    private BiFunction<NODE, NODE, Long> distanceCalculator;
+    private BiFunction<NODE, NODE, Long> distanceCalculator = (from,to) -> 1L;
     private Function<NODE, Collection<NODE>> neighbourProducer;
     private Function<NODE, Collection<NODE>> reversedMeighbourProducer;
     private Function<NODE, Function<NODE,Long>> aStarHeuristicConstructor;
