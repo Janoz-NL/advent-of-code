@@ -2,7 +2,6 @@ package com.janoz.aoc.y2022.day14;
 
 import com.janoz.aoc.InputProcessor;
 import com.janoz.aoc.StopWatch;
-import com.janoz.aoc.geo.GrowingGrid;
 import com.janoz.aoc.geo.Line;
 import com.janoz.aoc.geo.Point;
 
@@ -91,6 +90,6 @@ public class Day14b {
                 })
                 .collect(Collectors.toList())).forEach(points ->
                         IntStream.range(1,points.size()).forEach(i ->
-                                new Line(points.get(i-1), points.get(i)).draw().forEach(p -> fall.add(p))));
+                                Line.of(points.get(i-1), points.get(i)).draw().forEach(p -> fall.add(p))));
     }
 }
