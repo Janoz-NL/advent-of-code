@@ -1,8 +1,10 @@
 package com.janoz.aoc.algorithms;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -97,6 +99,10 @@ public class PFABuilder<NODE> {
         return new AStar<>(validMovePredicate,neighbourProducer,reversedMeighbourProducer,validToAtDistancePredicate,targetPredicate,heuristic);
     }
 
+    public PathFindingAlgorithm<NODE> asDefault() {
+        return new NoAlgorithmPFA(validMovePredicate, neighbourProducer);
+    }
+
     public static PFABuilder<Point> forPoints(int width, int height) {
         PFABuilder<Point> builder = forPoints();
         builder.addValidToPredicate(Point.boundsPredicate(width,height));
@@ -124,4 +130,39 @@ public class PFABuilder<NODE> {
         return new PFABuilder<>();
     }
 
+    private class NoAlgorithmPFA extends PathFindingAlgorithm<NODE> {
+        public NoAlgorithmPFA(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer) {
+            super(validMovePredicate, neighbourProducer);
+        }
+
+        @Override
+        public Long calculate(Collection<NODE> starts) {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+
+        @Override
+        public Long getDistance(NODE node) {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+
+        @Override
+        public Set<NODE> getVisited() {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+
+        @Override
+        public Collection<NODE> getReachableFrom(NODE node) {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+
+        @Override
+        public Collection<NODE> getReachableTo(NODE node) {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+
+        @Override
+        public void setAlgorithmCallback(Consumer<NODE> algorithmCallback) {
+            throw new UnsupportedOperationException("No default algorithm defined.");
+        }
+    }
 }

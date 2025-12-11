@@ -12,11 +12,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
+public class Dijkstra<NODE> extends PathFindingAlgorithm<NODE> {
 
     private final Map<NODE,Long> distanceMap= new AlwaysHashMap<>(() -> Long.MAX_VALUE);
-    private final BiPredicate<NODE, NODE> validMovePredicate;
-    private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<Step> validStepPredicate;
@@ -25,8 +23,7 @@ public class Dijkstra<NODE> implements PathFindingAlgorithm<NODE> {
 
 
     Dijkstra(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiFunction<NODE, NODE, Long> distanceCalculator, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut) {
-        this.validMovePredicate = validMovePredicate;
-        this.neighbourProducer = neighbourProducer;
+        super(validMovePredicate,neighbourProducer);
         this.reversedMeighbourProducer = reversedMeighbourProducer;
         this.distanceCalculator = distanceCalculator;
         this.validStepPredicate = step -> validToAtDistancePredicate.test(step.to.node,step.to.distance);

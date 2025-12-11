@@ -11,21 +11,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class BFS<NODE> implements PathFindingAlgorithm<NODE> {
+public class BFS<NODE> extends PathFindingAlgorithm<NODE> {
 
     private final Map<NODE,Long> distanceMap= new HashMap<>();
-    private final BiPredicate<NODE, NODE> validMovePredicate;
-    private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
-
     private final BiPredicate<NODE, Long> validToAtDistancePredicate;
-
     private final Predicate<NODE> earlyOut;
     private Consumer<NODE> algorithmCallback = node -> {};
 
     BFS(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer, Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut) {
-        this.validMovePredicate = validMovePredicate;
-        this.neighbourProducer = neighbourProducer;
+        super(validMovePredicate, neighbourProducer);
         this.reversedMeighbourProducer = reversedMeighbourProducer;
         this.validToAtDistancePredicate = validToAtDistancePredicate;
         this.earlyOut = earlyOut;

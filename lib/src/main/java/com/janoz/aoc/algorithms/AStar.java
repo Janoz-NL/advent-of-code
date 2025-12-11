@@ -12,11 +12,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
+public class AStar<NODE> extends PathFindingAlgorithm<NODE>{
 
     private final HashMap<NODE,Long> distanceMap = new AlwaysHashMap<>(() -> Long.MAX_VALUE);
-    private final BiPredicate<NODE, NODE> validMovePredicate;
-    private final Function<NODE, Collection<NODE>> neighbourProducer;
     private final Function<NODE, Collection<NODE>> reversedMeighbourProducer;
     private final BiFunction<NODE, NODE, Long> distanceCalculator;
     private final Predicate<Step> validStepPredicate;
@@ -27,9 +25,8 @@ public class AStar<NODE> implements PathFindingAlgorithm<NODE>{
     private Consumer<NODE> algorithmCallback = node -> {};
 
     AStar(BiPredicate<NODE, NODE> validMovePredicate, Function<NODE, Collection<NODE>> neighbourProducer,Function<NODE, Collection<NODE>> reversedMeighbourProducer, BiPredicate<NODE, Long> validToAtDistancePredicate, Predicate<NODE> earlyOut, Function<NODE, Long> heuristic) {
-        this.validMovePredicate = validMovePredicate;
+        super(validMovePredicate, neighbourProducer);
         this.distanceCalculator = (f,t) -> 1L;
-        this.neighbourProducer = neighbourProducer;
         this.reversedMeighbourProducer = reversedMeighbourProducer;
         this.validStepPredicate = step -> validToAtDistancePredicate.test(step.to.node,step.to.distance);
         this.earlyOut = earlyOut;
